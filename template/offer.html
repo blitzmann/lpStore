@@ -1,0 +1,37 @@
+[onload;file='header.html';getbody] 
+
+    <div class='container'>
+        <div class='col-lg-6 col-md-offset-3 input-group search-global'>
+            <input type='text' class='form-control input-lg' id='search' placeholder='Search for faction, corporation, item...'>
+            <span class='input-group-btn'>
+                <button class='btn btn-default' type='button'><span class='glyphicon glyphicon-search'></span></button>
+            </span>
+        </div>
+        
+        <div class='col-lg-8 col-md-offset-2 browse'>
+            <h3 class='nav'>[onload.offerName]</h3>
+            <ul class='nav nav-tabs nav-justified'>
+              <li class='active'><a href='#offer'>LP Offer</a></li>
+              <li><a href='#stores'>Stores</a></li>
+              <li><a href='#similar'>Similar</a></li>
+            </ul>
+            
+            
+        </div>
+        <div style='margin-top: 5em;' class='col-lg-8 col-md-offset-2'>
+            <h2>Todo</h2>
+            <ul>
+                <li>json:</li>
+                <ul>
+                    <li>faction: get factions and their corps. * returns all</li>
+                    <li>lpoffer: get lpoffer info including price invoice. Can be used with dialog box.</li>
+                    <li>item: return corps that carry item</li>
+                    <li>search: varchar search for corps, factions, etc. Returns name, id, type</li>
+                    <li>Have available apis and options automatically displayed for <tt>/json</tt></li>
+                </ul>
+                <li></li>
+            </ul>
+        </div>
+   </div><!-- /.container -->
+
+[onload;file='footer.html';getbody]
