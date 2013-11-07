@@ -13,7 +13,7 @@ class DB extends PDO {
      * See the example files in the config/ directory for more info.
      * Only driver invocation is supported
      */
-    function __construct(array $dsn_cfg, array $info) {
+    function __construct(array $dsn_cfg, array $info, bool $debug = null) {
         $dsn = $dsn_cfg['driver'].':'.http_build_query($dsn_cfg['dsn_opts'], '', ';');
         
         parent::__construct($dsn, $info['uname'], $info['passwd'], array(

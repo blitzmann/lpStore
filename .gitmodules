@@ -1,0 +1,3 @@
+[submodule "emdr"]
+	path = emdr
+	url = https://github.com/blitzmann/emdr-py.git
