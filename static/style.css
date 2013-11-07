@@ -1,21 +1,31 @@
-    h1, h2, h3, h4 , h5, h6, legend {
-        font-family: "open sans condensed";
-    } 
+    /* prevents content from noticably shifting due to scrollbars */
+    html { overflow-y: scroll; }
+    h1, h2, h3, h4 , h5, h6, legend { font-family: "open sans condensed"; } 
     
-    h1 { text-align: center; }
+    /* h1 is main title of project */
+    h1 { text-align: center; padding-bottom: 30px; border-bottom: 1px solid #eee; font-size: 42px; }
     h1 > a { color: inherit; }
     h1 > a:hover { color: inherit; text-decoration: none; }
     
+    /* 
+        h2 is used as the scondary title 
+        (the content of the page, ie: faction, corporation, offer)
+    */
+    h2 {  }
+    
+    
+    table { width: 100%; }
     .browse { margin-top: 2em; }
     .browse > #pri_blk, .browse > #sec_blk { text-align: center; }
     
-    h3 { font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; }
+    h3 { text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; }
     /* 
         Header that is directly folled by a tabbed navigation
         Not possible to select A when the flow is A ~ B. Must use this special class. 
     */
     h3.nav { border: 0px; }
     
+    .tab-content { margin-top: 1em; }
     .search-global{ margin-top: 2em; }
     ::-webkit-input-placeholder { font-style: italic; }
     :-moz-placeholder { font-style: italic; }
