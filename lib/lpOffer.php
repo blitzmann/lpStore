@@ -39,6 +39,7 @@ class lpOffer {
     
     ## Details for manufacturing
     public $manDetails = array();
+    public $manTypeID = null;
     
     public $noCache  = array(); # store typeID => name of items with no price cache
     
@@ -49,9 +50,12 @@ class lpOffer {
         take place.
         
         lpOffer isn't meant to return anything, but rather collect info and store 
-        in class properties for access.        
+        in class properties for access.       
+
+        $DB must always be given even if lpstore initiates class, because
+        lpStore doesn't handle blueprints.
     */
-    public function __construct($offerID, $emdr, $DB = null) {
+    public function __construct($offerID, $emdr, $DB) {
         $this->DB      = $DB;
         $this->emdr    = $emdr;
         $this->offerID = $offerID;
@@ -60,56 +64,62 @@ class lpOffer {
     /*
         calc() takes care of initializing calculation functions
         It is also responsible for gathering data for items if needed.
+        
+        $mode is used to switch between calculation modes (sell or buy orders)
     */
-    # use $mode to determine if it's sell/buy
+    
     public function calc($mode) {  
-        /*
-        if ($mode !== 'sell' || $mode !== 'buy') {
-            # @todo: do actual error
-            die('HORRIBLE ERROR: Market Mode not valid. Plz fix');
-        }
-        */
-        if ($this->offerDetails === null) {
-            $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0]; }
+        try {
+            if ($mode !== 'sell' && $mode !== 'buy') {
+                throw Exception('Market Mode not valid.');
+            }
             
-        if ($this->reqDetails === null) {
-            $this->reqDetails = $this->DB->qa($this->sql['rDetails'], array($this->offerID)); }
-        
-        if (strstr($this->offerDetails['typeName'], " Blueprint")) {
-            # If this is a bpc, set the flag and run bpc function
-            $this->bpc = true; 
-            $this->bpc();
-        } else {
-            # if this is not a blueprint, go ahead and set price via given known typeID
-            try {
-                $price = new Price($this->emdr->get($this->offerDetails['typeID']));
-                $this->cached      = true;
-                $this->price       = $price->sell[0];
-                $this->totalVolume = $price->sell[1];
-                $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
-            } catch (Exception $e) {
-                array_push($this->noCache, $this->offerDetails['typeName']); }
-        }
-        
-        foreach ($this->reqDetails AS &$reqItem) {
-            try {
-                $price = new Price($this->emdr->get($reqItem['typeID']));
-                $reqItem['price'] = $price->sell[0]; 
-            } catch (Exception $e) {
-                array_push($this->noCache, $reqItem['typeName']); }
-        }
-        
-        # calculate total cost
-        $this->totalCost = $this->offerDetails['iskCost'];
-        foreach ($this->reqDetails AS &$reqItem) {
-            $this->totalCost += ($reqItem['quantity'] * $reqItem['price']); }
+            if ($this->offerDetails === null) {
+                $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0]; }
             
-        foreach ($this->manDetails AS &$manItem) {
-            $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
-        
-        # calculate profits / isk/lp
-        $this->profit = ($this->price * $this->offerDetails['quantity'] - $this->totalCost);
-        $this->lp2isk = $this->profit / $this->offerDetails['lpCost']; 
+            if (empty($this->offerDetails)) { throw Exception('No offer details available.'); }
+            
+            if ($this->reqDetails === null) {
+                $this->reqDetails = $this->DB->qa($this->sql['rDetails'], array($this->offerID)); }
+            
+            if (strstr($this->offerDetails['typeName'], " Blueprint")) {
+                # If this is a bpc, set the flag and run bpc function
+                $this->bpc = true; 
+                $this->bpc();
+            } else {
+                # if this is not a blueprint, go ahead and set price via given known typeID
+                try {
+                    $price = new Price($this->emdr->get($this->offerDetails['typeID']));
+                    $this->cached      = true;
+                    $this->price       = $price->sell[0];
+                    $this->totalVolume = $price->sell[1];
+                    $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
+                } catch (Exception $e) {
+                    array_push($this->noCache, $this->offerDetails['typeName']); }
+            }
+            
+            foreach ($this->reqDetails AS &$reqItem) {
+                try {
+                    $price = new Price($this->emdr->get($reqItem['typeID']));
+                    $reqItem['price'] = $price->sell[0]; 
+                } catch (Exception $e) {
+                    array_push($this->noCache, $reqItem['typeName']); }
+            }
+            
+            # calculate total cost
+            $this->totalCost = $this->offerDetails['iskCost'];
+            foreach ($this->reqDetails AS &$reqItem) {
+                $this->totalCost += ($reqItem['quantity'] * $reqItem['price']); }
+                
+            foreach ($this->manDetails AS &$manItem) {
+                $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
+            
+            # calculate profits / isk/lp
+            $this->profit = ($this->price * $this->offerDetails['quantity'] - $this->totalCost);
+            $this->lp2isk = $this->profit / $this->offerDetails['lpCost'];
+        } catch (Exception $e) {
+            die($e);
+        }
     }
 
     private function totalCost() {
@@ -120,29 +130,10 @@ class lpOffer {
         foreach ($this->manDetails AS &$manItem) {
             $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
     }
-    
-    /*# holder for old code.
-    function FIX(){
-            $totalCost = $offer['iskCost'];
 
-            $manReqItems = array();
-
-               
-            else {
-                $name = $offer['quantity']." x ".$offer['typeName']; }
-               
-            if (!$cached) {
-                $lp2isk = 'N/A';
-                $profit = 0; }
-            else {
-                $profit = ($price['orders'][$marketMode][0]*$offer['quantity'] - $totalCost);
-                $lp2isk = $profit / $offer['lpCost']; 
-            }
-    }
-    */
     /*
         bpc() finds the pricing info for the manufactured item, which lpOffer()
-        will use to calculate isk/lp. it also sets required building materials
+        will use to calculate isk/lp. It also sets required building materials
     */
     private function bpc() {
         if (!$this->bpc) { return; } # Something's gone wrong, don't do this if not a BPC
@@ -150,34 +141,39 @@ class lpOffer {
         # Do this in template
         // $name =  "1 x ".$offer['typeName']." Copy (".$offer['quantity']." run".($offer['quantity'] > 1 ? "s" : null).")"; 
 
-        $manTypeID = $DB->q1($this->sql['manTypeID'], array($offer['typeID']));
+        $this->manTypeID = $this->DB->q1($this->sql['manTypeID'], array($this->offerDetails['typeID']));
         
-        // set pricing info as the manufactured item
-        if ($price = $emdr->get($manTypeID)) {
-            $price  = json_decode($price, true); 
-            $timeDiff = (time() - $price['orders']['generatedAt'])/60/60; // time difference in hours
-            $cached = true;
-        }
+        # set pricing info per the manufactured item
+        try {
+            $price = new Price($this->emdr->get($this->manTypeID));
+            $this->cached      = true;
+            $this->price       = $price->sell[0];
+            $this->totalVolume = $price->sell[1];
+            $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
+        } catch (Exception $e) {
+            array_push($this->noCache, $this->offerDetails['typeName']); }
         
-        // Here we merge bill of materials for blueprints (remembering to multiple qnt with # of BPC runs)
-        $manReqItems = array_merge(
+        # Here we merge bill of materials for blueprints
+        # Queries multiply qty with # of BPC runs
+        $this->manDetails = array_merge(
             // Get minerals needed
-            $DB->qa($this->sql['manMinerals'], array($offer['quantity'], $manTypeID, $manTypeID, $manTypeID)),
+            $this->DB->qa($this->sql['manMinerals'], array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
             // Get extra items needed
-            $DB->qa($this->sql['manExtra'], array($offer['quantity'], $manTypeID))); // append material needs to req items      
+            $this->DB->qa($this->sql['manExtra'], array($this->offerDetails['quantity'], $this->manTypeID))
+        );
         
-        foreach ($manReqItems AS $reqItem) {
-            if ($reqItem['quantity'] <= 0) {
+        # set price info for manufacturing materials
+        foreach ($this->manDetails AS &$manItem) {
+            # this sometimes happens for some reason
+            if ($manItem['quantity'] <= 0) { 
                 continue; }
-
-            if ($rprice = $emdr->get($reqItem['typeID'])) {
-                $rprice = json_decode($rprice, true);
-                $totalCost = $totalCost + ($rprice['orders']['sell'][0] * $reqItem['quantity']);
-            }
+            
+            try {
+                $price = new Price($this->emdr->get($manItem['typeID']));
+                $manItem['price'] = $price->sell[0]; 
+            } catch (Exception $e) {
+                array_push($this->noCache, $manItem['typeName']); }
         }
-        // one day this will display them all, but for now, just note that materials are needed...
-        array_push($req, "Manufacturing Materials");
-  
     }
     
     /*
@@ -190,6 +186,8 @@ class lpOffer {
         'manTypeID'=>'SELECT `ProductTypeID` FROM `invBlueprintTypes` WHERE `blueprintTypeID` = ?',
         
         # I don't remember where I stole this from. It's one hell of a query tho
+        # It's also very expensive. @todo: find a more efficient method
+        # If no method exists, consider caching query results in Redis
         'manMinerals'=><<<'SQL'
 SELECT t.typeID, t.typeName, ROUND(greatest(0,sum(t.quantity)) * (1 + (b.wasteFactor / 100))) * ? AS quantity
 FROM
