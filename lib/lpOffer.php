@@ -22,6 +22,7 @@ class lpOffer {
     
     private $DB;
     private $emdr;
+    private $bpcCache;
     
     ## Details from database
     public $offerDetails;
@@ -59,6 +60,11 @@ class lpOffer {
         $this->DB      = $DB;
         $this->emdr    = $emdr;
         $this->offerID = $offerID;
+        
+        # Redis DB specifically for BPC Material caching. 
+        $this->bpcCache = new Redis();
+        $this->bpcCache->connect('localhost', 6379);
+        $this->bpcCache->select(1); # @todo: put this in a config setting
     }
     
     /*
@@ -153,15 +159,25 @@ class lpOffer {
         } catch (Exception $e) {
             array_push($this->noCache, $this->offerDetails['typeName']); }
         
-        # Here we merge bill of materials for blueprints
-        # Queries multiply qty with # of BPC runs
-        $this->manDetails = array_merge(
-            // Get minerals needed
-            $this->DB->qa($this->sql['manMinerals'], array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
-            // Get extra items needed
-            $this->DB->qa($this->sql['manExtra'], array($this->offerDetails['quantity'], $this->manTypeID))
-        );
-        
+        # find cached result of BOC manufacturing materials
+        if ($details = $this->bpcCache->get($this->offerDetails['typeID'])) {
+            $this->manDetails = json_decode($details, true); }
+        else {
+            # Here we merge bill of materials for blueprints
+            # Queries multiply qty with # of BPC runs
+            $this->manDetails = array_merge(
+                // Get minerals needed
+                $this->DB->qa($this->sql['manMinerals'], array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
+                // Get extra items needed
+                $this->DB->qa($this->sql['manExtra'], array($this->offerDetails['quantity'], $this->manTypeID))
+            );
+            
+            # Cache results
+            $this->bpcCache->set($this->offerDetails['typeID'], json_encode($this->manDetails));
+            # @todo: fix this: add database name to Redis cache to determine expiratory
+            $this->bpcCache->setTimeout($this->offerDetails['typeID'], 60*60*24*5); # set expire to 5 days
+        }
+
         # set price info for manufacturing materials
         foreach ($this->manDetails AS &$manItem) {
             # this sometimes happens for some reason
