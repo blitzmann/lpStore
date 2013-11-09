@@ -159,23 +159,22 @@ class lpOffer {
         } catch (Exception $e) {
             array_push($this->noCache, $this->offerDetails['typeName']); }
         
-        # find cached result of BOC manufacturing materials
-        if ($details = $this->bpcCache->get($this->offerDetails['typeID'])) {
-            $this->manDetails = json_decode($details, true); }
-        else {
-            # Here we merge bill of materials for blueprints
-            # Queries multiply qty with # of BPC runs
+        # find cached result of BPC manufacturing materials
+        try {
+            $details = json_decode($this->bpcCache->get($this->offerDetails['typeID']), true);
+            if (empty($details) || $details['version'] != $this->DB->dbname) {  
+                throw new Exception("BPC details either not available or expired."); }
+
+            $this->manDetails = $details['manDetails']; 
+        } catch (Exception $e) {
             $this->manDetails = array_merge(
-                // Get minerals needed
                 $this->DB->qa($this->sql['manMinerals'], array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
-                // Get extra items needed
                 $this->DB->qa($this->sql['manExtra'], array($this->offerDetails['quantity'], $this->manTypeID))
             );
             
             # Cache results
-            $this->bpcCache->set($this->offerDetails['typeID'], json_encode($this->manDetails));
-            # @todo: fix this: add database name to Redis cache to determine expiratory
-            $this->bpcCache->setTimeout($this->offerDetails['typeID'], 60*60*24*5); # set expire to 5 days
+            $store = array('version'=>$this->DB->dbname, 'manDetails'=>$this->manDetails);
+            $this->bpcCache->set($this->offerDetails['typeID'], json_encode($store));
         }
 
         # set price info for manufacturing materials

@@ -1,13 +1,14 @@
 <?php
 
 # @todo: fix this whole file.
-
+# @todo: allow return of 1 row, so that you do not need index such as 
+// $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0];
 class DB extends PDO {
     /**
      * Count how many times the e/ea functions are used
      */
-    var $qs = array();
-
+    //var $qs = array();
+    public $dbname;
     /**
      * We do our own connection stuff using a config file array.
      * See the example files in the config/ directory for more info.
@@ -15,6 +16,7 @@ class DB extends PDO {
      */
     function __construct(array $dsn_cfg, array $info, bool $debug = null) {
         $dsn = $dsn_cfg['driver'].':'.http_build_query($dsn_cfg['dsn_opts'], '', ';');
+        $this->dbname = $dsn_cfg['dsn_opts']['dbname'];
         
         parent::__construct($dsn, $info['uname'], $info['passwd'], array(
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -50,7 +52,7 @@ class DB extends PDO {
           
         $time = sprintf('%01.002fms (%0.5fs)', ($end - $start) * 1000, $end - $start);
 
-        $this->qs[] = array($query, $params, $time);
+       // $this->qs[] = array($query, $params, $time);
         return $prep;
     }
 
@@ -72,7 +74,7 @@ class DB extends PDO {
          
         $time = sprintf('%01.002fms (%0.5fs)', ($end - $start) * 1000, $end - $start);
         
-        $this->qs[] = array($query, $params, $time);
+        //$this->qs[] = array($query, $params, $time);
         return $prep;
     }
 
