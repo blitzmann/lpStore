@@ -34,7 +34,7 @@
                 <li>More cacheing</li>
                 <ul>
                     <li><del>BPC calculations, or rather the queries to obtain the materials, are expensive. Cache the results of these (since they don't change, except perhaps on expansions).</del> <ins>Done.</ins></li>
-                    <li>Oddly enough, the next big time hog is Redis. Although it's very fast, it's being called hundreds of times for entire stores. Perhaps cache the prices of like items (req items) in an array? Look into how many items are actually shared in req items of offers. This may or may not be worth it. Although, will proabbyl help with BPC calcs as a lot of them use the same minerals. Perhaps use EMDR class the cache prices.</li>
+                    <li><del>Oddly enough, the next big time hog is Redis. Although it's very fast, it's being called hundreds of times for entire stores. Perhaps cache the prices of like items (req items) in an array? Look into how many items are actually shared in req items of offers. This may or may not be worth it. Although, will proabbyl help with BPC calcs as a lot of them use the same minerals. Perhaps use EMDR class the cache prices.</del> <ins>Done - prices cached in EMDR class.</ins></li>
                 </ul>
             </ul>
         </div>
