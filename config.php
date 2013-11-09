@@ -20,6 +20,6 @@ $emdrVersion = 1;
 
 $emdr = new EMDR(10000002, $emdrVersion); # Jita for testing
 
-$TBS = new clsTinyButStrong;
+$TBS = new Template('templates', 'clean');
 
 ?>

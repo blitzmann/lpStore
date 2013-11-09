@@ -10,6 +10,6 @@ $offerName = $DB->q1("
     FROM `lpOffers`
     NATURAL JOIN `invTypes` WHERE `lpOffers`.`offerID` = ?", array($offerID));
 
-$TBS->LoadTemplate('template/offer.html');
+$TBS->LoadTemplate('offer.html');
 $TBS->Show();
 ?>

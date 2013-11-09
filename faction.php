@@ -17,7 +17,7 @@ $corps = $DB->qa("
     GROUP BY a.corporationID 
     ORDER BY c.itemName ASC", array($factionID));
 
-$TBS->LoadTemplate('template/faction.html');
+$TBS->LoadTemplate('faction.html');
 $TBS->MergeBlock('corp_blk', $corps);
 
 $TBS->Show();

@@ -15,7 +15,7 @@ $offers = $DB->qa('
             WHERE a.corporationID = ?
             ORDER BY c.`lpCost` , c.iskCost, b.typeName', array($corpID));      
 
-$TBS->LoadTemplate('template/corporation.html');
+$TBS->LoadTemplate('corporation.html');
 $TBS->MergeBlock('offers_blk', $offers);
 $TBS->Show();
 ?>

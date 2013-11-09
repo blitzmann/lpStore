@@ -11,7 +11,7 @@ ksort($factions);
 $primary   = array_slice($factions, 0, 4, true);
 $secondary = array_slice($factions, 4, null, true);
 
-$TBS->LoadTemplate('template/index.html');
+$TBS->LoadTemplate('index.html');
 $TBS->MergeBlock('pri_blk', $primary);
 $TBS->MergeBlock('sec_blk', $secondary);
 

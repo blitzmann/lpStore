@@ -7,6 +7,6 @@ require_once 'json.php';
 $typeID = $_GET['typeID'];
 $typeName = $DB->q1("SELECT `typeName` FROM  `invTypes` WHERE  `typeID` = ?", array($typeID));
 
-$TBS->LoadTemplate('template/item.html');
+$TBS->LoadTemplate('item.html');
 $TBS->Show();
 ?>
