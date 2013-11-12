@@ -10,7 +10,7 @@ function __autoload($class) {
 }
 
 $dsn_config = parse_ini_file('/home/http/private/db-eve-latest.ini', true);
-$DB         = new DB($dsn_config, parse_ini_file('/home/http/private/auth-eve.ini'));
+$DB         = new Db($dsn_config, parse_ini_file('/home/http/private/auth-eve.ini'));
 
 define('DATABASE', $dsn_config['dsn_opts']['dbname']); 
 define('LPDB',     '0.7.1'); # https://forums.eveonline.com/default.aspx?g=posts&m=2508255
@@ -18,7 +18,7 @@ define('LPDB',     '0.7.1'); # https://forums.eveonline.com/default.aspx?g=posts
 $regions = json_decode(file_get_contents(dirname(__FILE__).'/emdr/regions.json'),true);
 $emdrVersion = 1;
 
-$emdr = new EMDR(10000002, $emdrVersion); # Jita for testing
+$emdr = new Emdr(10000002, $emdrVersion); # Jita for testing
 
 $TBS = new Template('templates', 'clean');
 

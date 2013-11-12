@@ -3,12 +3,18 @@
 # @todo: fix this whole file.
 # @todo: allow return of 1 row, so that you do not need index such as 
 // $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0];
-class DB extends PDO {
+class Db extends PDO {
     /**
      * Count how many times the e/ea functions are used
      */
     //var $qs = array();
     public $dbname;
+    
+    private static function getInstance() {
+        if (Db::$instance == null) Db::$instance = new Db();
+        return Db::$instance;
+    }
+    
     /**
      * We do our own connection stuff using a config file array.
      * See the example files in the config/ directory for more info.

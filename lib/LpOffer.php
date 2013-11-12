@@ -18,7 +18,7 @@
     @todo: allow switching req and man costs between sell and buy?
 */
 
-class lpOffer {
+class LpOffer {
     
     private $DB;
     private $emdr;
@@ -64,7 +64,9 @@ class lpOffer {
         # Redis DB specifically for BPC Material caching. 
         $this->bpcCache = new Redis();
         $this->bpcCache->connect('localhost', 6379);
-        $this->bpcCache->select(1); # @todo: put this in a config setting
+        $this->bpcCache->select(Config::lpStoreRedis);
+        
+        # @todo: list orderDetails to variables
     }
     
     /*
@@ -81,12 +83,12 @@ class lpOffer {
             }
             
             if ($this->offerDetails === null) {
-                $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0]; }
+                $this->offerDetails = $this->DB->qa(Sql::oDetails, array($this->offerID))[0]; }
             
             if (empty($this->offerDetails)) { throw Exception('No offer details available.'); }
             
             if ($this->reqDetails === null) {
-                $this->reqDetails = $this->DB->qa($this->sql['rDetails'], array($this->offerID)); }
+                $this->reqDetails = $this->DB->qa(Sql::rDetails, array($this->offerID)); }
             
             if (strstr($this->offerDetails['typeName'], " Blueprint")) {
                 # If this is a bpc, set the flag and run bpc function
@@ -147,7 +149,7 @@ class lpOffer {
         # Do this in template
         // $name =  "1 x ".$offer['typeName']." Copy (".$offer['quantity']." run".($offer['quantity'] > 1 ? "s" : null).")"; 
 
-        $this->manTypeID = $this->DB->q1($this->sql['manTypeID'], array($this->offerDetails['typeID']));
+        $this->manTypeID = $this->DB->q1(Sql::manTypeID, array($this->offerDetails['typeID']));
         
         # set pricing info per the manufactured item
         try {
@@ -168,8 +170,8 @@ class lpOffer {
             $this->manDetails = $details['manDetails']; 
         } catch (Exception $e) {
             $this->manDetails = array_merge(
-                $this->DB->qa($this->sql['manMinerals'], array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
-                $this->DB->qa($this->sql['manExtra'], array($this->offerDetails['quantity'], $this->manTypeID))
+                $this->DB->qa(Sql::manMinerals, array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
+                $this->DB->qa(Sql::manExtra, array($this->offerDetails['quantity'], $this->manTypeID))
             );
             
             # Cache results
@@ -189,57 +191,7 @@ class lpOffer {
             } catch (Exception $e) {
                 array_push($this->noCache, $manItem['typeName']); }
         }
-    }
-    
-    /*
-        Having SQL throughout the class is ugly as shit. 
-        @todo: look into possibly setting up class full of SQL const and call from SQL::QUERYNAME
-    */
-    private $sql = array (
-        'oDetails'=>'SELECT a.*, b.`typeName` FROM `lpOffers` a NATURAl JOIN `invTypes` b WHERE `offerID` = ? LIMIT 0,1',
-        'rDetails'=>'SELECT a.*, b.typeName FROM lpOfferRequirements a NATURAL JOIN invTypes b WHERE `offerID` = ?',
-        'manTypeID'=>'SELECT `ProductTypeID` FROM `invBlueprintTypes` WHERE `blueprintTypeID` = ?',
-        
-        # I don't remember where I stole this from. It's one hell of a query tho
-        # It's also very expensive. @todo: find a more efficient method
-        # If no method exists, consider caching query results in Redis
-        'manMinerals'=><<<'SQL'
-SELECT t.typeID, t.typeName, ROUND(greatest(0,sum(t.quantity)) * (1 + (b.wasteFactor / 100))) * ? AS quantity
-FROM
-   (SELECT invTypes.typeid typeID, invTypes.typeName typeName, quantity 
-    FROM invTypes, invTypeMaterials, invBlueprintTypes
-    WHERE invTypeMaterials.materialTypeID = invTypes.typeID AND
-          invBlueprintTypes.productTypeID = invTypeMaterials.typeID AND
-          invTypeMaterials.TypeID = ?
-    UNION 
-    SELECT invTypes.typeid typeid, invTypes.typeName name, invTypeMaterials.quantity * r.quantity * - 1 quantity
-    FROM invTypes, invTypeMaterials, ramTypeRequirements r, invBlueprintTypes bt 
-    WHERE invTypeMaterials.materialTypeID=invTypes.typeID AND
-          invTypeMaterials.TypeID =r.requiredTypeID AND
-          r.typeID = bt.blueprintTypeID AND
-          r.activityID = 1 AND 
-          bt.productTypeID = ? AND 
-          r.recycle = 1
-   ) t
-INNER JOIN invBlueprintTypes b ON (b.productTypeID = ?)
-GROUP BY t.typeid, t.typeName
-SQL
-,       'manExtra'=><<<'SQL'
-SELECT t.typeID AS typeID,  t.typeName AS     typeName,
-(r.quantity * ?) AS quantity
-FROM ramTypeRequirements r,
-invTypes t,
-invBlueprintTypes bt,
-invGroups g
-WHERE r.requiredTypeID = t.typeID
-AND r.typeID = bt.blueprintTypeID
-AND r.activityID = 1
-AND bt.productTypeID = ?
-AND g.categoryID != 16
-AND t.groupID = g.groupID
-SQL
-    );
- 
+    } 
 }
 
 ?>

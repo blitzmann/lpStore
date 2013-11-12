@@ -524,7 +524,7 @@ public function DataClose() {
 
 // *********************************************
 
-class clsTinyButStrong {
+class TinyButStrong {
 
 // Public properties
 public $Source = '';

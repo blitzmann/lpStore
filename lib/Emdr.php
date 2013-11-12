@@ -22,7 +22,7 @@
     18 BPCs, 752 calls to EMDR::get()) dropped by 0.3 seconds on average.
 */
 
-class EMDR extends Redis {
+class Emdr extends Redis {
 
     public  $regionID;
     private $version;
@@ -36,6 +36,7 @@ class EMDR extends Redis {
         $this->version  = $emdrVersion;
 
         parent::connect('localhost', 6379) or die ("Could not connect to Redis server");
+        parent::select(Config::emdrRedis);
     }
     
     public function get($typeID) {

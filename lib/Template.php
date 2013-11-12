@@ -7,7 +7,7 @@
     switching may be used if desired simply by changing Template::name
 */
 
-class Template extends clsTinyButStrong {
+class Template extends TinyButStrong {
     
     public $dir;
     public $name;
@@ -15,7 +15,8 @@ class Template extends clsTinyButStrong {
     public function __construct($tplDir, $tplName) {
         parent::__construct();
         
-       # Sets base template directory, and then template name
+        # Sets base template directory, and then template name
+        # @todo: check if path exists
         $this->dir  = $tplDir;
         $this->name = $tplName;
     }
