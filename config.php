@@ -16,9 +16,8 @@ define('DATABASE', $dsn_config['dsn_opts']['dbname']);
 define('LPDB',     '0.7.1'); # https://forums.eveonline.com/default.aspx?g=posts&m=2508255
 
 $regions = json_decode(file_get_contents(dirname(__FILE__).'/emdr/regions.json'),true);
-$emdrVersion = 1;
 
-$emdr = new Emdr(10000002, $emdrVersion); # Jita for testing
+Emdr::setRegion(10000002);
 
 $TBS = new Template('templates', 'clean');
 

@@ -1,14 +1,13 @@
 <?php
 
 /*
-    Simple helper class that extends Redis
-    Only does a connection to the Redis server and formats a key
+    EMDR singleton class for getting prices from a Redis database.
     
-    Added caching as well. Although accessing Redis values is very fast, doing 
-    them hundreds or times adds up. The class implements a simple caching in the 
-    form of 
+    Added in-class caching as well. Although accessing Redis values is very fast,
+    doing them hundreds or times adds up. The class implements a simple caching 
+    in the form of 
         
-        typeID => Redis string
+        regionID => typeID => Redis string
     
     Whenever we request info with EMDR::get(), we first check to see if the 
     price has already been fetched from the cache array and return it if true.
@@ -22,31 +21,41 @@
     18 BPCs, 752 calls to EMDR::get()) dropped by 0.3 seconds on average.
 */
 
-class Emdr extends Redis {
+class Emdr {
 
-    public  $regionID;
-    private $version;
-    private $cache;
+    protected static $regionID;
+    private   static $cache = array();
+    private   static $instance = null;
+    private $_redis;
+    
+    function __construct() { }
 
-    public function __construct($regionID, $emdrVersion = 1)
-    {
-        parent::__construct();
-        
-        $this->regionID = $regionID;
-        $this->version  = $emdrVersion;
-
-        parent::connect('localhost', 6379) or die ("Could not connect to Redis server");
-        parent::select(Config::emdrRedis);
+    public static function getInstance() {
+        if (self::$instance == null) {
+            self::$instance = new RedisCache();
+        }
+        return self::$instance;
     }
     
-    public function get($typeID) {
-        if (isset($this->cache[$typeID])) {
-            return $this->cache[$typeID]; }
-        else {
-            $string = 'emdr-'.$this->version.'-'.$this->regionID.'-'.$typeID;
-            return $this->cache[$typeID] = parent::get($string);
-        }
+    public static function setRegion($regionID){
+        self::$regionID = $regionID;
     }
+    
+    public static function get($typeID) {
+        # Check in cache
+        if (isset(self::$cache[self::$regionID][$typeID])) {
+            return self::$cache[self::$regionID][$typeID]; }
+
+        # not in cache
+        $emdr = Emdr::getInstance();
+        $string = 'emdr-'.Config::emdrVersion.'-'.self::$regionID.'-'.$typeID;
+        
+        $data = $emdr->get($string);
+        self::$cache[self::$regionID][$typeID] = $data;
+        return $data;
+    }
+
+    protected function __clone() { }
 }
 
 ?>

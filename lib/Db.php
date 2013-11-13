@@ -1,166 +1,125 @@
 <?php
 
-# @todo: fix this whole file.
-# @todo: allow return of 1 row, so that you do not need index such as 
-// $this->offerDetails = $this->DB->qa($this->sql['oDetails'], array($this->offerID))[0];
-class Db extends PDO {
-    /**
-     * Count how many times the e/ea functions are used
-     */
-    //var $qs = array();
-    public $dbname;
+/*
+    Handle DB connection and queries
+    Lots of inspiration from zKillboard <https://github.com/EVE-KILL/zKillboard>,
+    specifically introducing me to the singleton concept.
+*/
+class Db {
     
+    protected static $instance = null;
+
+    private $pdo = null;
+    
+    protected static $dbName     = null;
+    protected static $queryCount = 0;
+
     private static function getInstance() {
-        if (Db::$instance == null) Db::$instance = new Db();
+        if (Db::$instance == null) {
+            Db::$instance = new Db(); }
         return Db::$instance;
     }
     
     /**
-     * We do our own connection stuff using a config file array.
-     * See the example files in the config/ directory for more info.
-     * Only driver invocation is supported
+     * Creates and returns a PDO object.
+     *
+     * @static
+     * @return PDO
      */
-    function __construct(array $dsn_cfg, array $info, bool $debug = null) {
-        $dsn = $dsn_cfg['driver'].':'.http_build_query($dsn_cfg['dsn_opts'], '', ';');
-        $this->dbname = $dsn_cfg['dsn_opts']['dbname'];
+    protected static function getConn() {
+        if (Db::getInstance()->pdo != null) {
+            return Db::getInstance()->pdo; }
         
-        parent::__construct($dsn, $info['uname'], $info['passwd'], array(
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                #PDO::ATTR_PERSISTENT => true
-        ));
+        $dsnCfg = Config::getDbDsn();
+        $dbAuth = Config::getDbAuth();
         
-        if ( isset($dsn_cfg['schema']) ) {
-            $this->query('SET search_path = '.$dsn_cfg['schema']);
+        $dsn = $dsnCfg['driver'].':'.http_build_query($dsnCfg['dsn_opts'], '', ';');
+        self::$dbName = $dsnCfg['dsn_opts']['dbname'];
+        
+        try {
+            Db::getInstance()->pdo = new PDO($dsn, $dbAuth['uname'], $dbAuth['passwd'], array(
+                PDO::ATTR_PERSISTENT => true,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+            );
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
+        # Don't want this floating around all willy nilly
+        $dbAuth = null;
 
-        unset($info); # unset authentication details
+        return Db::getInstance()->pdo;
     }
+    
     /**
-     * Queries without the suck.
-     * First parameter is the query, anything after that are taken as SQL parameters.
-     * @return PDOStatement Executed statement handle
+     * @static Prepares PDO statement
+     * @param $query string SQL query
+     * @param $params array (optional) A key/value array of parameters
+     * @return Returns PDOStatement.
      */
-    function e() {
-        $start = microtime(true);
-        // Get input, first function parameter is the SQL query, all the rest are SQL parameters
-        $params = func_get_args();
-        assert('count($params) >= 2');
-
-        $query = array_shift($params);
-        $prep = $this->prepare($query);
+    public static function p($query, $params = array()) {
+        //self::queryCount += 1;
+        if (strpos($query, ";") !== false) {
+            throw new Exception("Semicolons are not allowed in queries.  Use parameters instead."); }
+        
+        $conn = self::getConn();
+        $prep = $conn->prepare($query);
         $prep->execute($params);
-        
-        $end = microtime(true);
-        
-        //$ex_prep = $this->prepare("EXPLAIN ".$query);
-        //$ex_prep->execute($params);
-          
-        $time = sprintf('%01.002fms (%0.5fs)', ($end - $start) * 1000, $end - $start);
 
-       // $this->qs[] = array($query, $params, $time);
         return $prep;
     }
 
     /**
-     * Exec-array - like mysql_query but safe.
-     * @param $query string SQL query to execute
-     * @param $params array Values to fill the ?s in the SQL with
-     * @return PDOStatement Executed statement handle
+     * @static Fetch all
+     * @param $query string SQL query
+     * @param $params array (optional) A key/value array of parameters
+     * @param $fetch int (optional) Passed directly to PDOStatement::fetchAll.
+     * @return Return value from fetching a row. Returns empty array if no rows.
      */
-    function ea($query, array $params) {
-        $start = microtime(true);
-
-        $prep = $this->prepare($query);
-        $prep->execute($params) || error_log(sprintf('Execution of "%s" failed', $query));
-        $end = microtime(true);
-          
-       // $ex_prep = $this->prepare("EXPLAIN ".$query);
-       // $ex_prep->execute($params)  || error_log(sprintf('Execution of "%s" failed', $query));
-         
-        $time = sprintf('%01.002fms (%0.5fs)', ($end - $start) * 1000, $end - $start);
-        
-        //$this->qs[] = array($query, $params, $time);
-        return $prep;
+    public static function q($query, $params = array(), $fetch = PDO::FETCH_ASSOC) {
+        return self::p($query, $params)->fetchAll($fetch);
     }
 
     /**
-     * Query - Shorthand for execute-fetch1row.
+     * @static Query Row
      * @param $query string SQL query
-     * @param $params mixed Either a scalar or array of them to use as query parameters
-     * @param $fetch_style mixed Passed directly to PDOStatement::fetch.
-     * @return mixed Return value from fetching a row. Default $fetch_style is an assoc array.
+     * @param $parameters array (optional) A key/value array of parameters
+     * @param $fetch int Passed directly to PDOStatement::fetch.
+     * @return Returns the first row of the result set. Returns null if row does not exist.
      */
-    function q($query, $params, $fetch_style = PDO::FETCH_NUM) {
-        if ( is_scalar($params) ) {
-            return $this->e($query, $params)->fetch($fetch_style);
-        }
-        else {
-            return $this->ea($query, $params)->fetch($fetch_style);
-        }
-    }
-
-    /**
-     * Shorthand for execute-fetch1stcolumn
-     * @param $query string SQL query
-     * @param $params mixed Either a scalar or array of them to use as query parameters
-     * @return mixed Contents of the first column of the result
-     */
-    function q1($query, $params) {
-        if ( is_scalar($params) ) {
-            return $this->e($query, $params)->fetchColumn();
-        }
-        else {
-            return $this->ea($query, $params)->fetchColumn();
-        }
+    public static function qRow($query, $params = array(), $fetch = PDO::FETCH_ASSOC) {
+        $result = self::p($query, $params)->fetch($fetch);
+        if (!empty($result)){
+            return $result; }
+        return null;
     }
     
     /**
-     * Added by Ryan H. - this was a quick hack to get something working.
-     *
-     * Fetch all rows returned from database.
+     * @static Query column
      * @param $query string SQL query
-     * @param $params mixed Either a scalar or array of them to use as query parameters
-     * @param $fetch_style mixed Passed directly to PDOStatement::fetch.
-     * @return mixed Return value from fetching a row. Default $fetch_style is an assoc array.
+     * @param $params array (optional) A key/value array of parameters.
+     * @param $column mixed The 0-indexed column of result or the name of the field to return
+     * @return Returns the value of $column in the first row of the resultset. Returns null if there is no column/row.
      */
-    function qa($query, $params, $fetch_style = PDO::FETCH_ASSOC) {
-        if ( is_scalar($params) ) {
-            return $this->e($query, $params)->fetchAll($fetch_style);
+    public static function qColumn($query, $params = array(), $column = 0) {
+        if (is_int($column)) {
+            $result = self::p($query, $params)->fetchColumn($column); 
+            if (!$result) { return null; }
+            return $result;
         }
         else {
-            return $this->ea($query, $params)->fetchAll($fetch_style);
-        }
-    }
-    
-    /**
-     * Added by Ryan H. - function is dead, hopefully I can get it working...
-     *
-     * Explains query. This was going to be used in debug and be added to the $qs array.
-     * @param $query string SQL query
-     * @param $params mixed Either a scalar or array of them to use as query parameters
-     * @param $fetch_style mixed Passed directly to PDOStatement::fetch.
-     * @return mixed Return value from fetching a row. Default $fetch_style is an assoc array.
-     */
-    function explain($query, $params, $fetch_style = PDO::FETCH_ASSOC) {
-        if ( is_scalar($params) ) {
-            $params = func_get_args();
-            assert('count($params) >= 2');
-            $query = array_shift($params);
-            $prep = $this->prepare("EXPLAIN ".$query);
-            return $prep->execute($params)->fetchAll($fetch_style);
-        }
-        else {
-            $prep = $this->prepare("EXPLAIN ".$query);
-            return $prep->execute($params)->fetchAll($fetch_style) || error_log(sprintf('Execution of "%s" failed', $query));
+            $result = self::qRow($query, $params); 
+            if (!$result || !isset($result[$column])) { return null; }
+            return $result[$column];
         }
     }
 
-    /**
-     * Syntactic sugar - calls SQL functions as if they were class methods.
-     * Requires > PHP 5.2.5; see php bug #43663
-     */
-    function __call($funcname, array $params) {
-        return $this->ea('SELECT '.$funcname.'('.str_repeat('?,', count($params)-1).'?)', $params);
+    public static function getQueryCount() {
+        return self::$queryCount;
     }
+    
+    public static function getDbName() {
+        return self::$dbName;
+    }
+    
+    protected function __clone() { }
 }

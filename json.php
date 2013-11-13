@@ -28,21 +28,21 @@ SEARCH
 );
 
 function doJson($request, $query){
-    global $DB, $json_sql;
+    global $json_sql;
     $query = ($query === '*' ? '%' : $query);
     
     $json = array();
     switch ($request) {
         # @todo: should this really return corps?
         case 'faction':
-            foreach ($DB->qa($json_sql[$request], array($query)) AS $result){
+            foreach (Db::q($json_sql[$request], array($query)) AS $result){
                 if (!isset($json[$result['factionID']]['name'])) {
                     $json[$result['factionID']]['name'] = $result['facName']; }
                 $json[$result['factionID']]['corps'][$result['corporationID']] = $result['corpName']; }
             break;
         case 'search':
             $query = '%'.$query.'%'; // Add wildcards
-            foreach ($DB->qa($json_sql[$request], array($query)) AS $result){
+            foreach (Db::q($json_sql[$request], array($query)) AS $result){
                 $json[] = array(
                     'value' => $result['itemName'],
                     'id' => $result['corporationID']

@@ -2,11 +2,9 @@
 
 /*
     Class can either be initialized as a stand alone object, 
-    in which case $DB must be passed and the class will pull 
-    the data from the DB and calculate offer details, or it 
-    can be initialized via lpStore in which case lpStore will 
-    supply details for the offer and lpOffer simply calculates
-    prices.
+    in which case the class will pull the data from the DB and calculate offer 
+    details, or it can be initialized via lpStore in which case lpStore will
+    supply details fortheoffer and lpOffer simply calculates prices.
     
     The reason for this is to cut down on the number of queries. 
     If we initialized lpOffer() by itself for every LP Store 
@@ -19,9 +17,7 @@
 */
 
 class LpOffer {
-    
-    private $DB;
-    private $emdr;
+
     private $bpcCache;
     
     ## Details from database
@@ -52,13 +48,8 @@ class LpOffer {
         
         lpOffer isn't meant to return anything, but rather collect info and store 
         in class properties for access.       
-
-        $DB must always be given even if lpstore initiates class, because
-        lpStore doesn't handle blueprints.
     */
-    public function __construct($offerID, $emdr, $DB) {
-        $this->DB      = $DB;
-        $this->emdr    = $emdr;
+    public function __construct($offerID) {
         $this->offerID = $offerID;
         
         # Redis DB specifically for BPC Material caching. 
@@ -83,12 +74,12 @@ class LpOffer {
             }
             
             if ($this->offerDetails === null) {
-                $this->offerDetails = $this->DB->qa(Sql::oDetails, array($this->offerID))[0]; }
+                $this->offerDetails = Db::q(Sql::oDetails, array($this->offerID))[0]; }
             
             if (empty($this->offerDetails)) { throw Exception('No offer details available.'); }
             
             if ($this->reqDetails === null) {
-                $this->reqDetails = $this->DB->qa(Sql::rDetails, array($this->offerID)); }
+                $this->reqDetails = Db::q(Sql::rDetails, array($this->offerID)); }
             
             if (strstr($this->offerDetails['typeName'], " Blueprint")) {
                 # If this is a bpc, set the flag and run bpc function
@@ -97,7 +88,7 @@ class LpOffer {
             } else {
                 # if this is not a blueprint, go ahead and set price via given known typeID
                 try {
-                    $price = new Price($this->emdr->get($this->offerDetails['typeID']));
+                    $price = new Price(Emdr::get($this->offerDetails['typeID']));
                     $this->cached      = true;
                     $this->price       = $price->sell[0];
                     $this->totalVolume = $price->sell[1];
@@ -108,7 +99,7 @@ class LpOffer {
             
             foreach ($this->reqDetails AS &$reqItem) {
                 try {
-                    $price = new Price($this->emdr->get($reqItem['typeID']));
+                    $price = new Price(Emdr::get($reqItem['typeID']));
                     $reqItem['price'] = $price->sell[0]; 
                 } catch (Exception $e) {
                     array_push($this->noCache, $reqItem['typeName']); }
@@ -149,11 +140,11 @@ class LpOffer {
         # Do this in template
         // $name =  "1 x ".$offer['typeName']." Copy (".$offer['quantity']." run".($offer['quantity'] > 1 ? "s" : null).")"; 
 
-        $this->manTypeID = $this->DB->q1(Sql::manTypeID, array($this->offerDetails['typeID']));
+        $this->manTypeID = Db::qColumn(Sql::manTypeID, array($this->offerDetails['typeID']));
         
         # set pricing info per the manufactured item
         try {
-            $price = new Price($this->emdr->get($this->manTypeID));
+            $price = new Price(Emdr::get($this->manTypeID));
             $this->cached      = true;
             $this->price       = $price->sell[0];
             $this->totalVolume = $price->sell[1];
@@ -164,18 +155,18 @@ class LpOffer {
         # find cached result of BPC manufacturing materials
         try {
             $details = json_decode($this->bpcCache->get($this->offerDetails['typeID']), true);
-            if (empty($details) || $details['version'] != $this->DB->dbname) {  
+            if (empty($details) || $details['version'] != Db::getDbName()) {  
                 throw new Exception("BPC details either not available or expired."); }
 
             $this->manDetails = $details['manDetails']; 
         } catch (Exception $e) {
             $this->manDetails = array_merge(
-                $this->DB->qa(Sql::manMinerals, array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
-                $this->DB->qa(Sql::manExtra, array($this->offerDetails['quantity'], $this->manTypeID))
+                Db::q(Sql::manMinerals, array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
+                Db::q(Sql::manExtra, array($this->offerDetails['quantity'], $this->manTypeID))
             );
             
             # Cache results
-            $store = array('version'=>$this->DB->dbname, 'manDetails'=>$this->manDetails);
+            $store = array('version'=>Db::getDbName(), 'manDetails'=>$this->manDetails);
             $this->bpcCache->set($this->offerDetails['typeID'], json_encode($store));
         }
 
@@ -186,7 +177,7 @@ class LpOffer {
                 continue; }
             
             try {
-                $price = new Price($this->emdr->get($manItem['typeID']));
+                $price = new Price(Emdr::get($manItem['typeID']));
                 $manItem['price'] = $price->sell[0]; 
             } catch (Exception $e) {
                 array_push($this->noCache, $manItem['typeName']); }
