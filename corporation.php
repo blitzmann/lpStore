@@ -7,15 +7,11 @@ require_once 'json.php';
 $corpID   = $_GET['corporation'];
 $corpName = Db::qColumn("SELECT `itemName` FROM `invUniqueNames` WHERE `itemID` = ?", array($corpID));
 
-$offers = Db::q('
-            SELECT a . * , b.typeName, c.*
-            FROM lpStore a
-            NATURAL JOIN lpOffers c
-            INNER JOIN invTypes b ON ( c.typeID = b.typeID ) 
-            WHERE a.corporationID = ?
-            ORDER BY c.`lpCost` , c.iskCost, b.typeName', array($corpID));      
+$lpStore = new LpStore($corpID);    
+
+
 
 $TBS->LoadTemplate('corporation.html');
-$TBS->MergeBlock('offers_blk', $offers);
+$TBS->MergeBlock('offers_blk', $lpStore->offers);
 $TBS->Show();
 ?>

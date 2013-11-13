@@ -24,7 +24,7 @@ class LpStore {
             else {
                 $this->offers[$offer['offerID']]->reqDetails = array(); }
             
-            //$this->offers[$offer['offerID']]->calc('sell');
+            $this->offers[$offer['offerID']]->calc('sell');
         }
     }
 }

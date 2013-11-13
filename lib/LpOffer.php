@@ -40,6 +40,9 @@ class LpOffer {
     
     public $noCache  = array(); # store typeID => name of items with no price cache
     
+    public function __get($field) {
+        return $this->offerDetails[$field]; }
+    
     /*
         Class is initiated with very basic information. Absolutely no calculation 
         is done at this point. This is becasue class may be initialized by itself 
