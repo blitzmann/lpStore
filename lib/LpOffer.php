@@ -4,7 +4,7 @@
     Class can either be initialized as a stand alone object, 
     in which case the class will pull the data from the DB and calculate offer 
     details, or it can be initialized via lpStore in which case lpStore will
-    supply details fortheoffer and lpOffer simply calculates prices.
+    supply details for the offer and lpOffer simply calculates prices.
     
     The reason for this is to cut down on the number of queries. 
     If we initialized lpOffer() by itself for every LP Store 
@@ -119,15 +119,6 @@ class LpOffer {
         } catch (Exception $e) {
             die($e);
         }
-    }
-
-    private function totalCost() {
-        $this->totalCost = $this->offerDetails['iskCost'];
-        foreach ($this->reqDetails AS &$reqItem) {
-            $this->totalCost += ($reqItem['quantity'] * $reqItem['price']); }
-            
-        foreach ($this->manDetails AS &$manItem) {
-            $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
     }
 
     /*

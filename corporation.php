@@ -5,9 +5,9 @@ require_once 'json.php';
 
 # @todo: filter
 $corpID   = $_GET['corporation'];
-$corpName = $DB->q1("SELECT `itemName` FROM `invUniqueNames` WHERE `itemID` = ?", array($corpID));
+$corpName = Db::qColumn("SELECT `itemName` FROM `invUniqueNames` WHERE `itemID` = ?", array($corpID));
 
-$offers = $DB->qa('
+$offers = Db::q('
             SELECT a . * , b.typeName, c.*
             FROM lpStore a
             NATURAL JOIN lpOffers c

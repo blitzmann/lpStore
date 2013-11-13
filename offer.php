@@ -5,7 +5,7 @@ require_once 'json.php';
 
 # @todo: filter
 $offerID = $_GET['offerID'];
-$offerName = $DB->q1("
+$offerName = Db::qColumn("
     SELECT `invTypes`.`typeName` 
     FROM `lpOffers`
     NATURAL JOIN `invTypes` WHERE `lpOffers`.`offerID` = ?", array($offerID));

@@ -5,9 +5,9 @@ require_once 'json.php';
 
 # @todo: filter
 $factionID = $_GET['factionID'];
-$factionName = $DB->q1("SELECT `itemName` FROM  `invUniqueNames` WHERE  `itemID` = ?", array($factionID));
+$factionName = Db::qColumn("SELECT `itemName` FROM  `invUniqueNames` WHERE  `itemID` = ?", array($factionID));
 
-$corps = $DB->qa("
+$corps = Db::q("
     SELECT a.corporationID, b.factionID, c.itemName AS corpName, d.itemName AS facName, count(*) AS num
     FROM `lpStore` a 
     INNER JOIN crpNPCCorporations b ON (b.corporationID = a.corporationID) 
