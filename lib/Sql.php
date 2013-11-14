@@ -11,40 +11,29 @@ abstract class Sql {
     # Given typeID and assuming it's a BPC, return typeID of related BPC
     const manTypeID = 'SELECT `ProductTypeID` FROM `invBlueprintTypes` WHERE `blueprintTypeID` = ?';
 
-    # Given BPC typeID and number of runs, find mineral requirements for BPCs
-    # @todo: find a more efficient method if possible
-    const manMinerals = <<<'SQL'
-SELECT t.typeID, t.typeName, ROUND(greatest(0,sum(t.quantity)) * (1 + (b.wasteFactor / 100))) * ? AS quantity
-FROM
-   (SELECT invTypes.typeid typeID, invTypes.typeName typeName, quantity 
-    FROM invTypes, invTypeMaterials, invBlueprintTypes
-    WHERE invTypeMaterials.materialTypeID = invTypes.typeID AND
-          invBlueprintTypes.productTypeID = invTypeMaterials.typeID AND
-          invTypeMaterials.TypeID = ?
-    UNION 
-    SELECT invTypes.typeid typeid, invTypes.typeName name, invTypeMaterials.quantity * r.quantity * - 1 quantity
-    FROM invTypes, invTypeMaterials, ramTypeRequirements r, invBlueprintTypes bt 
-    WHERE invTypeMaterials.materialTypeID=invTypes.typeID AND
-          invTypeMaterials.TypeID =r.requiredTypeID AND
-          r.typeID = bt.blueprintTypeID AND
-          r.activityID = 1 AND 
-          bt.productTypeID = ? AND 
-          r.recycle = 1
-   ) t
-INNER JOIN invBlueprintTypes b ON (b.productTypeID = ?)
-GROUP BY t.typeid, t.typeName
-SQL;
+    # Given BPC typeID, material requirements for BPCs (incorporating waste factor)
+    # Would people be more interested in materials per run? 
+    const manMaterials = <<<'SQL'
+SELECT typeID, typeName, SUM(quantity) * :quantity AS quantity
+FROM (
+    SELECT t.typeID, t.typeName, ROUND(m.quantity * 1.1) as quantity
+    FROM invTypeMaterials AS m
+    INNER JOIN invTypes AS t ON m.materialTypeID = t.typeID
+    WHERE m.typeID = :productID
     
-    # Given BPC typeID and number of runs, find extra requirements for BPCs
-    const manExtra = <<<'SQL'
-SELECT t.typeID AS typeID, t.typeName AS typeName, (r.quantity * ?) AS quantity
-FROM ramTypeRequirements r, invTypes t, invBlueprintTypes bt, invGroups g
-WHERE r.requiredTypeID = t.typeID AND
-    r.typeID = bt.blueprintTypeID AND
-    r.activityID = 1 AND
-    bt.productTypeID = ? AND 
-    g.categoryID != 16 AND 
-    t.groupID = g.groupID
+    UNION
+
+    SELECT t.typeID, t.typeName , r.quantity
+    FROM ramTypeRequirements r, invTypes t, invBlueprintTypes bt, invGroups g
+    WHERE 
+        r.requiredTypeID = t.typeID AND
+        r.typeID = bt.blueprintTypeID AND
+        r.activityID = 1 AND
+        g.categoryID != 16 AND 
+        t.groupID = g.groupID AND
+        bt.productTypeID = :productID 
+) foo
+GROUP BY `typeID`
 SQL;
     
     # Given corpID, gather all required items for store offers
@@ -68,6 +57,7 @@ ORDER BY
     `lpOffers`.iskCost, 
     `invTypes`.`typeName`
 SQL;
+   
    
 }
 ?>

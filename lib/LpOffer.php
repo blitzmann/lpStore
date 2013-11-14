@@ -154,11 +154,10 @@ class LpOffer {
 
             $this->manDetails = $details['manDetails']; 
         } catch (Exception $e) {
-            $this->manDetails = array_merge(
-                Db::q(Sql::manMinerals, array($this->offerDetails['quantity'], $this->manTypeID, $this->manTypeID, $this->manTypeID)),
-                Db::q(Sql::manExtra, array($this->offerDetails['quantity'], $this->manTypeID))
-            );
-            
+            $this->manDetails = Db::q(Sql::manMaterials, array(
+                                        ':productID' => $this->manTypeID,
+                                        ':quantity'  => $this->offerDetails['quantity']));
+
             # Cache results
             $store = array('version'=>Db::getDbName(), 'manDetails'=>$this->manDetails);
             $this->bpcCache->set($this->offerDetails['typeID'], json_encode($store));
