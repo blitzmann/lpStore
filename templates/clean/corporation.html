@@ -14,15 +14,19 @@
                     <table class='table table-striped table-hover table-condensed'>
                         <tr><th>Offer</th><th>LP Cost</th><th>ISK Cost</th><th>ISK/LP</th></tr>
                         <tr>
-                            <td><a href='[onshow.BASE_PATH]offer/[offers_blk.offerID]'>[offers_blk.offerDetails.typeName;block=tr]</a></td>
-                            <td>[offers_blk.offerDetails.lpCost]</td>
-                            <td>[offers_blk.offerDetails.iskCost]</td>
+                            <td><a href='[onshow.BASE_PATH]offer/[offers_blk.offerID]'>[offers_blk.offerDetails.quantity]x [offers_blk.offerDetails.typeName;block=tr]</a></td>
+                            <td>[offers_blk.offerDetails.lpCost;frm='0,000.']</td>
+                            <td>[offers_blk.offerDetails.iskCost;frm='0,000.']</td>
                             <td>[offers_blk.lp2isk;frm='0,000.']</td>
                         </tr>
                     </table>
                 </div>
                 <div class='tab-pane' id='info'>
-                    <pre>Corp info here</pre>
+                    <div class="panel panel-default">
+  <div class="panel-body">
+    Basic panel example
+  </div>
+</div>
                 </div>
                 <div class='tab-pane' id='systems'>
                     <pre>List systems here, along with typeahead input for current system</pre>

@@ -5,11 +5,14 @@ require_once 'json.php';
 
 # @todo: filter
 $offerID = $_GET['offerID'];
-$offerName = Db::qColumn("
-    SELECT `invTypes`.`typeName` 
-    FROM `lpOffers`
-    NATURAL JOIN `invTypes` WHERE `lpOffers`.`offerID` = ?", array($offerID));
+$offer = new LpOffer($offerID);
+$offer->calc('sell');
+
+//var_dump($offer);
 
 $TBS->LoadTemplate('offer.html');
+$TBS->MergeBlock('reqDetails', $offer->reqDetails);
+$TBS->MergeBlock('manDetails', $offer->manDetails);
+
 $TBS->Show();
 ?>

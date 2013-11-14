@@ -3,7 +3,7 @@
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
-            <h3 class='nav'>[onload.offerName]</h3>
+            <h3 class='nav'>[onload.offer.offerDetails.typeName]</h3>
             <ul class='nav nav-tabs nav-justified' id='tabs'>
                 <li class='active'><a data-toggle='tab' href='#offer'>LP Offer</a></li>
                 <li><a data-toggle='tab' href='#stores'>Stores</a></li>
@@ -11,7 +11,18 @@
             </ul>
             <div class='tab-content'>
                 <div class='tab-pane active' id='offer'>
-                    <pre>Show offer information here</pre>
+                    <table class='table table-condensed table-striped table-hover'>
+                        <tr><th colspan='6'>Offer Requirements</th></tr>
+                        <tr>
+                            <td>[reqDetails.quantity]x [reqDetails.typeName;block=tr]</td>
+                            <td>[reqDetails.price;frm='0,000.00']</td>
+                        </tr>
+                        <tr><th colspan='6'>Manufacturing Requirements</th></tr>
+                        <tr>
+                            <td>[manDetails.quantity]x [manDetails.typeName;block=tr]</td>
+                            <td>[manDetails.price;frm='0,000.00']</td>
+                        </tr>
+                    </table>
                 </div>
                 <div class='tab-pane' id='stores'>
                     <pre>Show different stores containing this particular offer</pre>
