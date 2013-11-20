@@ -35,29 +35,7 @@ FROM (
 ) foo
 GROUP BY `typeID`
 SQL;
-    
-    # Given corpID, gather all required items for store offers
-    const cReqItems = <<<'SQL'
-SELECT      a.typeID, a.quantity, b.typeName, a.offerID
-FROM        lpOfferRequirements a
-INNER JOIN  invTypes b ON (b.typeID = a.typeID)
-INNER JOIN  lpStore c ON (a.offerID = c.offerID)
-WHERE       c.corporationID = ?
-SQL;
-    
-    # Given corpID, gather all corp offers
-    const cOffers = <<<'SQL'
-SELECT `lpStore`.* , `invTypes`.`typeName`, `lpOffers`.*
-FROM lpStore
-NATURAL JOIN lpOffers
-NATURAL JOIN invTypes
-WHERE `lpStore`.`corporationID` = ?
-ORDER BY 
-    `lpOffers`.`lpCost`, 
-    `lpOffers`.iskCost, 
-    `invTypes`.`typeName`
-SQL;
-   
+  
    
 }
 ?>

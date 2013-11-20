@@ -7,29 +7,24 @@ class LpStore {
     
     function __construct($corpID) {
         $this->corpID = $corpID;
+
+        $req = (new Query_CorpReqItems($corpID))->execute();
         
-        # set required item details for each offer
-        # @todo: set to false if no items.
-        $reqCont = array();
-
-        foreach (Db::q(Sql::cReqItems, array($corpID)) AS $item) {  
-            $reqCont[$item['offerID']][] = $item; 
-        }
-
-        foreach (Db::q(Sql::cOffers, array($corpID)) AS $offer) {
-            $this->offers[$offer['offerID']] = new LpOffer($offer['offerID']);
-            $this->offers[$offer['offerID']]->offerDetails = $offer;
-            if (isset($reqCont[$offer['offerID']])) {
-                $this->offers[$offer['offerID']]->reqDetails = $reqCont[$offer['offerID']]; }
-            else {
-                $this->offers[$offer['offerID']]->reqDetails = array(); }
+        foreach ((new Query_CorpOffers($corpID))->execute() AS $o) {
+            $this->offers[$o['offerID']] = new LpOffer($o['offerID']);
+            $this->offers[$o['offerID']]->offerDetails = $o;
             
-            $this->offers[$offer['offerID']]->calc('sell');
+            if (isset($req[$o['offerID']])) {
+                $this->offers[$o['offerID']]->reqDetails = $req[$o['offerID']]; }
+            else {
+                $this->offers[$o['offerID']]->reqDetails = array(); }
+            
+            $this->offers[$o['offerID']]->calc('sell');
         }
     }
     
     public function getStations() {
-        return Db::q("SELECT a.`stationName`, b.`security` FROM `staStations` a INNER JOIN `mapSolarSystems` b ON (b.`solarSystemID` = a.`solarSystemID`) WHERE a.`corporationID` = :corpID", array('corpID'=>$this->corpID));
+        return (new Query_CorpStations($this->corpID))->execute();
     }
 }
 
