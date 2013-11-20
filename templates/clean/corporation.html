@@ -7,13 +7,18 @@
             <ul class='nav nav-tabs nav-justified'>
               <li class='active'><a href='#store' data-toggle="tab">LP Store</a></li>
               <li><a href='#info' data-toggle="tab">Info</a></li>
-              <li><a href='#systems' data-toggle="tab">Systems</a></li>
+              <li><a href='#stations' data-toggle="tab">Stations</a></li>
             </ul>
             <div class='tab-content'>
                 <div class='tab-pane active' id='store'>
-                    <table class='table table-striped table-hover table-condensed'>
-                        <tr><th>Offer</th><th>LP Cost</th><th>ISK Cost</th><th>ISK/LP</th></tr>
+                    <table class='table table-striped table-hover table-condensed' id='offerList'>
+                        <tr><th colspan='2'>Offer</th><th>LP Cost</th><th>ISK Cost</th><th>ISK/LP</th></tr>
                         <tr>
+                            <td class='typeImg'>
+                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[offers_blk.offerDetails.typeID]_32.png");'>
+                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[offers_blk.offerDetails.typeID]_32.png' />
+                                </div>
+                            </td>
                             <td><a href='[onshow.BASE_PATH]offer/[offers_blk.offerID]'>[offers_blk.offerDetails.quantity]x [offers_blk.offerDetails.typeName;block=tr]</a></td>
                             <td>[offers_blk.offerDetails.lpCost;frm='0,000.']</td>
                             <td>[offers_blk.offerDetails.iskCost;frm='0,000.']</td>
@@ -22,14 +27,16 @@
                     </table>
                 </div>
                 <div class='tab-pane' id='info'>
-                    <div class="panel panel-default">
-  <div class="panel-body">
-    Basic panel example
-  </div>
-</div>
+                    <pre>Corp info here</pre>
                 </div>
-                <div class='tab-pane' id='systems'>
-                    <pre>List systems here, along with typeahead input for current system</pre>
+                <div class='tab-pane' id='stations'>
+                    <table class='table table-striped table-hover table-condensed' id='stationList'>
+                        <tr><th>Station</th><th>Security</th>
+                        <tr>
+                            <td>[stations.stationName;block=tr]</td>
+                            <td>[stations.security;frm='0,000.0']</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

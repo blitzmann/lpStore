@@ -27,6 +27,10 @@ class LpStore {
             $this->offers[$offer['offerID']]->calc('sell');
         }
     }
+    
+    public function getStations() {
+        return Db::q("SELECT a.`stationName`, b.`security` FROM `staStations` a INNER JOIN `mapSolarSystems` b ON (b.`solarSystemID` = a.`solarSystemID`) WHERE a.`corporationID` = :corpID", array('corpID'=>$this->corpID));
+    }
 }
 
 ?>

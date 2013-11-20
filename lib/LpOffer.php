@@ -31,8 +31,11 @@ class LpOffer {
     public $price    = null;  # pricing info for item (if blueprint, pricing info of manufactured item)
     public $timeDiff = null;  # between now and when price was cached
     public $totalCost = 0;    # total cost of offer (init isk/req/man)
-    public $profit    = 0;    # profit of offer after subtraction total cost
+    public $margin    = 0;    # profit of offer after subtraction total cost
+    public $profit    = 0;    # pure profit of selling the offer
     public $lp2isk    = 0;    # isk/lp after all calculations
+    
+    
     
     ## Details for manufacturing
     public $manDetails = array();
@@ -103,7 +106,8 @@ class LpOffer {
             foreach ($this->reqDetails AS &$reqItem) {
                 try {
                     $price = new Price(Emdr::get($reqItem['typeID']));
-                    $reqItem['price'] = $price->sell[0]; 
+                    $reqItem['price']    = $price->sell[0];
+                    $reqItem['totPrice'] = $reqItem['price']* $reqItem['quantity']; 
                 } catch (Exception $e) {
                     array_push($this->noCache, $reqItem['typeName']); }
             }
@@ -117,7 +121,8 @@ class LpOffer {
                 $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
             
             # calculate profits / isk/lp
-            $this->profit = ($this->price * $this->offerDetails['quantity'] - $this->totalCost);
+            $this->profit = $this->price * $this->offerDetails['quantity'];
+            $this->margin = $this->profit - $this->totalCost;
             $this->lp2isk = $this->profit / $this->offerDetails['lpCost'];
         } catch (Exception $e) {
             die($e);
@@ -171,11 +176,31 @@ class LpOffer {
             
             try {
                 $price = new Price(Emdr::get($manItem['typeID']));
-                $manItem['price'] = $price->sell[0]; 
+                $manItem['price']    = $price->sell[0]; 
+                $manItem['totPrice'] = $manItem['price']*$manItem['quantity']; 
             } catch (Exception $e) {
                 array_push($this->noCache, $manItem['typeName']); }
         }
-    } 
+    }
+    
+    public function getSimilar() {
+        return Db::q('
+            SELECT `lpOffers`.*, `invTypes`.`typeName` 
+            FROM `lpOffers` 
+            NATURAL JOIN `lpStore` 
+            NATURAL JOIN `invTypes` 
+            WHERE `typeID` = :typeID GROUP BY `offerID`', 
+            array(':typeID'=>$this->offerDetails['typeID']));
+    }
+    
+    public function getStores() {
+        return Db::q('
+            SELECT s.*, u.`itemName` 
+            FROM `lpStore` s 
+            INNER JOIN `invUniqueNames` u ON (u.`itemID` = s.`corporationID`) 
+            WHERE `offerID` = :offerID', 
+            array(':offerID'=>$this->offerID));
+    }
 }
 
 ?>

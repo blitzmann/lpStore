@@ -11,30 +11,75 @@
             </ul>
             <div class='tab-content'>
                 <div class='tab-pane active' id='offer'>
-                    <table class='table table-condensed table-striped table-hover'>
-                        <tr><th colspan='6'>Offer Requirements</th></tr>
+                    <div style="border: 0px solid black;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -khtml-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            width: 64px;
+            height: 64px;
+            background: url('http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_64.png');">
+                </div>
+                    <table class='table table-striped table-hover' id='offerReqs'>
+                        <tr><th colspan='2'>Offer</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
-                            <td>[reqDetails.quantity]x [reqDetails.typeName;block=tr]</td>
+                            <td class='typeImg'>
+                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_32.png");'>
+                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_32.png' />
+                                </div>
+                            </td>
+                            <td>[onload.offer.offerDetails.typeName]</td>
+                            <td>[onload.offer.offerDetails.quantity]x</td>
+                            <td>[onload.offer.price;frm='0,000.00']</td>
+                            <td>[onload.offer.profit;frm='0,000.00']</td>
+                        </tr>
+                        <tr><th colspan='2'>Offer Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
+                        <tr>
+                            <td class='typeImg'>
+                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[reqDetails.typeID]_32.png");'>
+                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[reqDetails.typeID]_32.png' />
+                                </div>
+                            </td>
+                            <td>[reqDetails.typeName;block=tr]</td>
+                            <td>[reqDetails.quantity]x</td>
                             <td>[reqDetails.price;frm='0,000.00']</td>
+                            <td>-[reqDetails.totPrice;frm='0,000.00']</td>
                         </tr>
-                        <tr><th colspan='6'>Manufacturing Requirements</th></tr>
+                        <tr><th colspan='2'>Manufacturing Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
-                            <td>[manDetails.quantity]x [manDetails.typeName;block=tr]</td>
+                            <td class='typeImg'><img src='http://image.eveonline.com/Type/[manDetails.typeID]_32.png' /></td>
+                            <td>[manDetails.typeName;block=tr]</td>
+                            <td>[manDetails.quantity]x</td>
                             <td>[manDetails.price;frm='0,000.00']</td>
+                            <td>-[manDetails.totPrice;frm='0,000.00']</td>
                         </tr>
-                    </table>
+                        <tr>
+                            <td colspan='5'>Offer ISK Cost: [onload.offer.offerDetails.iskCost;frm='0,000.00']</td>
+                        </tr>
+                        <tr>
+                            <td colspan='5'>TOTAL Cost: [onload.offer.totalCost;frm='0,000.00']</td>
+                        </tr>
+                        <tr>
+                            <td colspan='5'>Margin: [onload.offer.margin;frm='0,000.00']</td>
+                        </tr>
+                        </table>
                 </div>
                 <div class='tab-pane' id='stores'>
-                    <table class='table table-condensed table-striped table-hover'>
+                    <table class='table table-condensed table-striped table-hover' id='offerStores'>
                         <tr>
+                            <td class='typeImg'><img src='http://image.eveonline.com/Corporation/[stores.corporationID]_32.png' /></td>
                             <td>[stores.itemName;block=tr]</td>
                         </tr>
                     </table>
                 </div>
                 <div class='tab-pane' id='similar'>
-                    <table class='table table-condensed table-striped table-hover'>
+                    <table class='table table-condensed table-striped table-hover' id='offerSimilar'>
+                        <tr><th>ID</th><th>Offer</th><th>LP Cost</th><th>ISK Cost</th></tr>
                         <tr>
                             <td>[similar.offerID;block=tr]</td>
+                            <td>[similar.typeName]</td>
+                            <td>[similar.lpCost;frm='0,000.00']</td>
+                            <td>[similar.iskCost;frm='0,000.00']</td>
                         </tr>
                     </table>
                 </div>

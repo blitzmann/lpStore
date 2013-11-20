@@ -13,5 +13,6 @@ $lpStore = new LpStore($corpID);
 
 $TBS->LoadTemplate('corporation.html');
 $TBS->MergeBlock('offers_blk', $lpStore->offers);
+$TBS->MergeBlock('stations', $lpStore->getStations());
 $TBS->Show();
 ?>

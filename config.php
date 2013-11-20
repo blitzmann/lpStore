@@ -6,7 +6,7 @@ $ABS_PATH  = str_replace('\\', '/', dirname(__FILE__)) . '/';
 $BASE_PATH = '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/';
 
 function __autoload($class) {
-    require_once 'lib/'.$class.'.php';
+   require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
 }
 
 $dsn_config = parse_ini_file('/home/http/private/db-eve-latest.ini', true);
