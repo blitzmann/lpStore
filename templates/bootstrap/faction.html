@@ -1,14 +1,16 @@
-[onload;file='header.html';getbody] 
-[onload;file='navbar.html';getbody] 
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
-            <h3>[onload.factionName]</h3>
+            <h3><?= $this->factionName ?></h3>
             <ul id='corp_blk'>
-                <li><a href='[onshow.BASE_PATH]corporation/[corp_blk.corporationID;block=li]/'>[corp_blk.corpName;block=li]</a></li>
+                <?php foreach ($this->corps as $info):  ?>
+                    <li><a href='<?= BASE_PATH ?>corporation/<?= $info['corporationID'] ?>/'><?= $info['corpName'] ?></a></li>
+                <?php endforeach; ?>
             </ul>
             
         </div>
    </div><!-- /.container -->
 
-[onload;file='footer.html';getbody]
+<?php include ('footer.html') ?>

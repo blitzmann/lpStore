@@ -1,26 +1,24 @@
 <?php
 
+// comment this out for local debug copy
+require_once 'Savant3.php';
+
 # taken from http://stackoverflow.com/a/12583387/788054
 # TBS cannot use DEFINE(), so these are variables
-$ABS_PATH  = str_replace('\\', '/', dirname(__FILE__)) . '/';
-$BASE_PATH = '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/';
+define('ABS_PATH', str_replace('\\', '/', dirname(__FILE__)) . '/');
+define('BASE_PATH', '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/');
 
 function __autoload($class) {
    require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
 }
 
-$siteTime = new Timer();
 
-//$dsn_config = parse_ini_file('/home/http/private/db-eve-latest.ini', true);
-$Db = Db::getInstance();
+$tpl = new Savant3();
+$tpl->addPath('template', 'templates/bootstrap');
 
-//define('DATABASE', $dsn_config['dsn_opts']['dbname']); 
-define('LPDB',     '0.7.1'); # https://forums.eveonline.com/default.aspx?g=posts&m=2508255
+$tpl->siteTime = new Timer();
+
+# https://forums.eveonline.com/default.aspx?g=posts&m=2508255
 
 $regions = json_decode(file_get_contents(dirname(__FILE__).'/emdr/regions.json'),true);
-
 Emdr::setRegion(10000002);
-
-$TBS = new Template('templates', 'bootstrap');
-$TBS->SetOption('methods_allowed', true);
-?>

@@ -10,7 +10,7 @@
     }); 
     </script>
     <div id='footer'>
-        [onshow.siteTime.stop();frm='0,000.00']ms | TBS: v[onshow..version] | [onshow.Db.getQueryCount] qs | Using [onshow.Db.getDbName] / <a href='https://forums.eveonline.com/default.aspx?g=posts&m=2508255'>LPDB</a> v[onshow.Db.getLpDbVersion]
+        <?= $this->siteTime->stop() ?> ms | <?= Db::$queryCount ?> qs | Using <?= Db::$dbName ?> / <a href='https://forums.eveonline.com/default.aspx?g=posts&m=2508255'>LPDB</a> v<?= Db::getLpDbVersion() ?>
     </div>
   </body>
 </html>

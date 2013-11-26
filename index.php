@@ -1,5 +1,6 @@
 <?php
 
+# get rid of this, use new query classes
 require_once 'config.php'; 
 require_once 'json.php';
 
@@ -8,12 +9,7 @@ require_once 'json.php';
 $factions = doJson("faction", "*");
 ksort($factions);
 
-$primary   = array_slice($factions, 0, 4, true);
-$secondary = array_slice($factions, 4, null, true);
+$tpl->primary   = array_slice($factions, 0, 4, true);
+$tpl->secondary = array_slice($factions, 4, null, true);
 
-$TBS->LoadTemplate('index.html');
-$TBS->MergeBlock('pri_blk', $primary);
-$TBS->MergeBlock('sec_blk', $secondary);
-
-$TBS->Show();
-?>
+$tpl->display('index.html');

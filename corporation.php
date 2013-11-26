@@ -1,18 +1,11 @@
 <?php
 
 require_once 'config.php'; 
-require_once 'json.php';
 
 # @todo: filter
-$corpID   = $_GET['corporation'];
-$corpName = Db::qColumn("SELECT `itemName` FROM `invUniqueNames` WHERE `itemID` = ?", array($corpID));
+$corpID = $_GET['corporation'];
 
-$lpStore = new LpStore($corpID);    
+$tpl->corpName = Db::qColumn("SELECT `itemName` FROM `invUniqueNames` WHERE `itemID` = ?", array($corpID));
+$tpl->lpStore = new LpStore($corpID);    
 
-
-
-$TBS->LoadTemplate('corporation.html');
-$TBS->MergeBlock('offers_blk', $lpStore->offers);
-$TBS->MergeBlock('stations', $lpStore->getStations());
-$TBS->Show();
-?>
+$tpl->display('corporation.html');

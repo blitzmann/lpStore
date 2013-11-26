@@ -1,13 +1,12 @@
 <?php
 
 require_once 'config.php'; 
-require_once 'json.php';
 
 # @todo: filter
 $factionID = $_GET['factionID'];
-$factionName = Db::qColumn("SELECT `itemName` FROM  `invUniqueNames` WHERE  `itemID` = ?", array($factionID));
 
-$corps = Db::q("
+$tpl->factionName = Db::qColumn("SELECT `itemName` FROM  `invUniqueNames` WHERE  `itemID` = ?", array($factionID));
+$tpl->corps = Db::q("
     SELECT a.corporationID, b.factionID, c.itemName AS corpName, d.itemName AS facName, count(*) AS num
     FROM `lpStore` a 
     INNER JOIN crpNPCCorporations b ON (b.corporationID = a.corporationID) 
@@ -17,8 +16,4 @@ $corps = Db::q("
     GROUP BY a.corporationID 
     ORDER BY c.itemName ASC", array($factionID));
 
-$TBS->LoadTemplate('faction.html');
-$TBS->MergeBlock('corp_blk', $corps);
-
-$TBS->Show();
-?>
+$tpl->display('faction.html');

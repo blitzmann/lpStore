@@ -11,8 +11,8 @@ class Db {
 
     private $pdo = null;
     
-    protected static $dbName     = null;
-    protected static $queryCount = 0;
+    public static $dbName     = null;
+    public static $queryCount = 0;
 
     public static function getInstance() {
         if (Db::$instance == null) {
@@ -113,14 +113,6 @@ class Db {
         }
     }
 
-    public static function getQueryCount() {
-        return self::$queryCount;
-    }
-    
-    public static function getDbName() {
-        return self::$dbName;
-    }
-    
     public static function getLpDbVersion() {
         return self::qColumn("
             SELECT table_comment

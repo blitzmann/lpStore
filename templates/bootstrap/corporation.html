@@ -1,9 +1,9 @@
-[onload;file='header.html';getbody] 
-[onload;file='navbar.html';getbody] 
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
-            <h3 class='nav'>[onload.corpName]</h3>
+            <h3 class='nav'><?= $this->corpName ?></h3>
             <ul class='nav nav-tabs nav-justified'>
               <li class='active'><a href='#store' data-toggle="tab">LP Store</a></li>
               <li><a href='#info' data-toggle="tab">Info</a></li>
@@ -13,19 +13,21 @@
                 <div class='tab-pane active' id='store'>
                     <table class='table table-striped table-hover table-condensed' id='offerList'>
                         <tr><th colspan='2'>Offer</th><th>Items Req</th><th>LP Cost</th><th>ISK Cost</th><th>ISK/LP</th><th>Volume</th></tr>
-                        <tr>
-                            <td class='typeImg'>
-                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[offers_blk.offerDetails.typeID]_32.png");'>
-                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[offers_blk.offerDetails.typeID]_32.png' />
-                                </div>
-                            </td>
-                            <td><a href='[onshow.BASE_PATH]offer/[offers_blk.offerID]'>[offers_blk.offerDetails.quantity]x [offers_blk.offerDetails.typeName;block=tr]</a></td>
-                            <td>[offers_blk.getReqCount]</td>
-                            <td>[offers_blk.offerDetails.lpCost;frm='0,000.']</td>
-                            <td>[offers_blk.offerDetails.iskCost;frm='0,000.']</td>
-                            <td>[offers_blk.lp2isk;frm='0,000.']</td>
-                            <td>[offers_blk.totVolume;frm='0,000.']</td>
-                        </tr>
+                        <?php foreach ($this->lpStore->offers AS $id => $offer): ?>
+                            <tr>
+                                <td class='typeImg'>
+                                    <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png");'>
+                                        <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' />
+                                    </div>
+                                </td>
+                                <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->quantity ?>x <?= $offer->typeName ?></a></td>
+                                <td><?= count($offer->reqDetails) ?></td>
+                                <td><?= $offer->lpCost ?></td>
+                                <td><?= $offer->iskCost ?></td>
+                                <td><?= $offer->lp2isk ?></td>
+                                <td><?= $offer->totVolume ?></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
                 <div class='tab-pane' id='info'>
@@ -34,15 +36,17 @@
                 <div class='tab-pane' id='stations'>
                     <table class='table table-striped table-hover table-condensed' id='stationList'>
                         <tr><th>Station</th><th>Region</th><th>Security</th></tr>
+                        <?php foreach($this->lpStore->getStations() AS $station): ?>
                         <tr>
-                            <td>[stations.stationName;block=tr]</td>
-                            <td>[stations.regionName]</td>
-                            <td>[stations.security;frm='0,000.0']</td>
+                            <td><?= $station['stationName'] ?></td>
+                            <td><?= $station['regionName'] ?></td>
+                            <td><?= $station['security'] ?></td>
                         </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
             </div>
         </div>
    </div><!-- /.container -->
 
-[onload;file='footer.html';getbody]
+<?php include ('footer.html') ?>

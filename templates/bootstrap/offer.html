@@ -1,9 +1,9 @@
-[onload;file='header.html';getbody] 
-[onload;file='navbar.html';getbody] 
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
-            <h3 class='nav'>[onload.offer.offerDetails.typeName]</h3>
+            <h3 class='nav'><?= $this->offer->typeName ?></h3>
             <ul class='nav nav-tabs nav-justified' id='tabs'>
                 <li class='active'><a data-toggle='tab' href='#offer'>LP Offer</a></li>
                 <li><a data-toggle='tab' href='#stores'>Stores</a></li>
@@ -26,67 +26,86 @@
                         <tr><th colspan='2'>Offer</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
                             <td class='typeImg'>
-                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_32.png");'>
-                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_32.png' />
+                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_32.png");'>
+                                    <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_32.png' />
                                 </div>
                             </td>
-                            <td>[onload.offer.offerDetails.typeName]</td>
-                            <td>[onload.offer.offerDetails.quantity]x</td>
-                            <td>[onload.offer.price;frm='0,000.00']</td>
-                            <td>[onload.offer.profit;frm='0,000.00']</td>
+                            <td><?= $this->offer->typeName ?></td>
+                            <td><?= $this->offer->quantity?>x</td>
+                            <td><?= $this->offer->price ?></td>
+                            <td><?= $this->offer->profit ?></td>
                         </tr>
+                        
+                        <?php if (!empty($this->offer->reqDetails)): ?>
                         <tr><th colspan='2'>Offer Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
-                        <tr>
-                            <td class='typeImg'>
-                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/[reqDetails.typeID]_32.png");'>
-                                    <img width='32' height='32' src='http://image.eveonline.com/Type/[reqDetails.typeID]_32.png' />
-                                </div>
-                            </td>
-                            <td>[reqDetails.typeName;block=tr]</td>
-                            <td>[reqDetails.quantity]x</td>
-                            <td>[reqDetails.price;frm='0,000.00']</td>
-                            <td>-[reqDetails.totPrice;frm='0,000.00']</td>
-                        </tr>
+                        
+                        <?php foreach ($this->offer->reqDetails AS $item): ?>
+                            <tr>
+                                <td class='typeImg'>
+                                    <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png");'>
+                                        <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' />
+                                    </div>
+                                </td>
+                                <td><?= $item['typeName'] ?></td>
+                                <td><?= $item['quantity'] ?>x</td>
+                                <td><?= $item['price'] ?></td>
+                                <td>-<?= $item['totPrice'] ?></td>
+                            </tr>
+                        <?php endforeach; endif; ?>
+                        
+                        <?php if (!empty($this->offer->manDetails)): ?>
+
                         <tr><th colspan='2'>Manufacturing Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
+
+                        <?php foreach ($this->offer->manDetails AS $item): ?>
                         <tr>
-                            <td class='typeImg'><img src='http://image.eveonline.com/Type/[manDetails.typeID]_32.png' /></td>
-                            <td>[manDetails.typeName;block=tr]</td>
-                            <td>[manDetails.totQty]x</td>
-                            <td>[manDetails.price;frm='0,000.00']</td>
-                            <td>-[manDetails.totPrice;frm='0,000.00']</td>
+                            <td class='typeImg'><img src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' /></td>
+                            <td><?= $item['typeName'] ?></td>
+                            <td><?= $item['totQty'] ?>x</td>
+                            <td><?= $item['price'] ?></td>
+                            <td><?= $item['totPrice'] ?></td>
+                        </tr>
+                        
+                        <?php endforeach; endif; ?>
+                        
+                        <tr>
+                            <td colspan='5'>Offer ISK Cost: <?= $this->offer->iskCost ?></td>
                         </tr>
                         <tr>
-                            <td colspan='5'>Offer ISK Cost: [onload.offer.offerDetails.iskCost;frm='0,000.00']</td>
+                            <td colspan='5'>TOTAL Cost: <?= $this->offer->totalCost ?></td>
                         </tr>
                         <tr>
-                            <td colspan='5'>TOTAL Cost: [onload.offer.totalCost;frm='0,000.00']</td>
-                        </tr>
-                        <tr>
-                            <td colspan='5'>Margin: [onload.offer.margin;frm='0,000.00']</td>
+                            <td colspan='5'>Margin: <?= $this->offer->margin ?></td>
                         </tr>
                         </table>
                 </div>
                 <div class='tab-pane' id='stores'>
                     <table class='table table-condensed table-striped table-hover' id='offerStores'>
+                        
+                        <?php foreach ($this->offer->getStores() AS $store): ?>
                         <tr>
-                            <td class='typeImg'><img src='http://image.eveonline.com/Corporation/[stores.corporationID]_32.png' /></td>
-                            <td><a href='[onshow.BASE_PATH]corporation/[stores.corporationID]'>[stores.itemName;block=tr]</a></td>
+                            <td class='typeImg'><img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' /></td>
+                            <td><a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'><?= $store['itemName'] ?></a></td>
                         </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
                 <div class='tab-pane' id='similar'>
                     <table class='table table-condensed table-striped table-hover' id='offerSimilar'>
                         <tr><th>ID</th><th>Offer</th><th>LP Cost</th><th>ISK Cost</th></tr>
+                        
+                        <?php foreach ($this->offer->getSimilar() AS $offer): ?>
                         <tr>
-                            <td><a href='[onshow.BASE_PATH]offer/[similar.offerID]'>[similar.offerID;block=tr]</a></td>
-                            <td>[similar.typeName]</td>
-                            <td>[similar.lpCost;frm='0,000.00']</td>
-                            <td>[similar.iskCost;frm='0,000.00']</td>
+                            <td><a href='<?= BASE_PATH ?>offer/<?= $offer['offerID'] ?>/'><?= $offer['offerID'] ?></a></td>
+                            <td><?= $offer['typeName'] ?></td>
+                            <td><?= $offer['lpCpst'] ?></td>
+                            <td><?= $offer['iskCost'] ?></td>
                         </tr>
+                        <?php endforeach; ?>
                     </table>
                 </div>
             </div>
         </div>
    </div><!-- /.container -->
 
-[onload;file='footer.html';getbody]
+<?php include ('footer.html') ?>

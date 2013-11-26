@@ -29,8 +29,8 @@ class Query_OfferMaterials {
         $key   = get_class().','.$this->productID;
         $cache = json_decode($this->bpcCache->get($key), true);
         
-        if (empty($cache) || empty($cache['manDetails']) || $cache['version'] != Db::getDbName()) { 
-            $cache = array('version'=>Db::getDbName(), 'manDetails'=>$this->performQuery());
+        if (empty($cache) || empty($cache['manDetails']) || $cache['version'] != Db::$dbName) { 
+            $cache = array('version'=>Db::$dbName, 'manDetails'=>$this->performQuery());
             $this->bpcCache->set($key, json_encode($cache));
         }
         
