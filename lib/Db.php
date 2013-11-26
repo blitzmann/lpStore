@@ -14,7 +14,7 @@ class Db {
     protected static $dbName     = null;
     protected static $queryCount = 0;
 
-    private static function getInstance() {
+    public static function getInstance() {
         if (Db::$instance == null) {
             Db::$instance = new Db(); }
         return Db::$instance;
@@ -57,7 +57,7 @@ class Db {
      * @return Returns PDOStatement.
      */
     public static function p($query, $params = array()) {
-        //self::queryCount += 1;
+        self::$queryCount += 1;
         if (strpos($query, ";") !== false) {
             throw new Exception("Semicolons are not allowed in queries.  Use parameters instead."); }
         
@@ -119,6 +119,15 @@ class Db {
     
     public static function getDbName() {
         return self::$dbName;
+    }
+    
+    public static function getLpDbVersion() {
+        return self::qColumn("
+            SELECT table_comment
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE table_schema = :dbName
+            AND table_name =  :tblName",
+            array(':dbName' => self::$dbName, ':tblName' => 'lpStore'));
     }
     
     protected function __clone() { }

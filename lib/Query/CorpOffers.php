@@ -12,7 +12,7 @@ class Query_CorpOffers {
         @return Returns Db::q array of rows
     */
     function execute() {
-        $result = Db::q('
+        $results = Db::q('
             SELECT `lpStore`.* , `invTypes`.`typeName`, `lpOffers`.*
             FROM lpStore
             NATURAL JOIN lpOffers
@@ -24,7 +24,11 @@ class Query_CorpOffers {
                 `invTypes`.`typeName`', 
             array(':corpID' => $this->corpID));
         
-        return $result;
+        foreach ($results AS &$result) {
+            // $result['icon'] = EveIcon::getIcon($result['typeID']); 
+        }
+            
+        return $results;
     }
 
 }

@@ -13,9 +13,10 @@ class Query_CorpStations {
     */
     function execute() {
         $result = Db::q("
-                SELECT a.`stationName`, b.`security` 
+                SELECT a.`stationName`, b.`security`, c.`regionName` 
                 FROM `staStations` a 
-                INNER JOIN `mapSolarSystems` b ON (b.`solarSystemID` = a.`solarSystemID`) 
+                INNER JOIN `mapSolarSystems` b ON (b.`solarSystemID` = a.`solarSystemID`)
+                INNER JOIN `mapRegions` c ON (a.`regionID` = c.`regionID`)
                 WHERE a.`corporationID` = :corpID
                 ORDER BY a.`stationName` ASC", 
                 array(':corpID'=>$this->corpID));

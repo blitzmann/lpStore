@@ -22,7 +22,7 @@ class LpOffer {
     
     ## Details from database
     public $offerDetails;
-    public $reqDetails; # null = standalone, array() = no items via lpStore
+    public $reqDetails;
     
     ## Properties of the offer itself
     public $offerID;
@@ -34,9 +34,7 @@ class LpOffer {
     public $margin    = 0;    # profit of offer after subtraction total cost
     public $profit    = 0;    # pure profit of selling the offer
     public $lp2isk    = 0;    # isk/lp after all calculations
-    
-    
-    
+    public $totVolume = 0; 
     ## Details for manufacturing
     public $manDetails = array();
     public $manTypeID = null;
@@ -47,23 +45,18 @@ class LpOffer {
         return $this->offerDetails[$field]; }
     
     /*
-        Class is initiated with very basic information. Absolutely no calculation 
-        is done at this point. This is becasue class may be initialized by itself 
-        or as part of lpStore, and lpStore injects offer details before calcs 
-        take place.
+        Class is initiated with basic information. lpStore is able to pass along 
+        details of the offer, in which case {offer|req}Details are set to 
+        something other than null. 
         
         lpOffer isn't meant to return anything, but rather collect info and store 
         in class properties for access.       
     */
-    public function __construct($offerID) {
-        $this->offerID = $offerID;
-        
-        # Redis DB specifically for BPC Material caching. 
-        $this->bpcCache = new Redis();
-        $this->bpcCache->connect('localhost', 6379);
-        $this->bpcCache->select(Config::lpStoreRedis);
-        
-        # @todo: list orderDetails to variables
+    public function __construct($offerID, $offerDetails = null, $reqDetails = null) {
+        $this->offerID      = $offerID;
+        $this->offerDetails = $offerDetails;
+        $this->reqDetails   = $reqDetails;
+        # @todo: list orderDetails to variables ?
     }
     
     /*
@@ -90,14 +83,14 @@ class LpOffer {
             if (strstr($this->offerDetails['typeName'], " Blueprint")) {
                 # If this is a bpc, set the flag and run bpc function
                 $this->bpc = true; 
-                $this->bpc();
+                $this->bpcCalc();
             } else {
                 # if this is not a blueprint, go ahead and set price via given known typeID
                 try {
                     $price = new Price(Emdr::get($this->offerDetails['typeID']));
                     $this->cached      = true;
                     $this->price       = $price->sell[0];
-                    $this->totalVolume = $price->sell[1];
+                    $this->totVolume   = $price->sell[1];
                     $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
                 } catch (Exception $e) {
                     array_push($this->noCache, $this->offerDetails['typeName']); }
@@ -118,7 +111,7 @@ class LpOffer {
                 $this->totalCost += ($reqItem['quantity'] * $reqItem['price']); }
                 
             foreach ($this->manDetails AS &$manItem) {
-                $this->totalCost += ($manItem['quantity'] * $manItem['price']); }
+                $this->totalCost += ($manItem['totQty'] * $manItem['price']); }
             
             # calculate profits / isk/lp
             $this->profit = $this->price * $this->offerDetails['quantity'];
@@ -133,13 +126,17 @@ class LpOffer {
         bpc() finds the pricing info for the manufactured item, which lpOffer()
         will use to calculate isk/lp. It also sets required building materials
     */
-    private function bpc() {
+    private function bpcCalc() {
         if (!$this->bpc) { return; } # Something's gone wrong, don't do this if not a BPC
         
         # Do this in template
         // $name =  "1 x ".$offer['typeName']." Copy (".$offer['quantity']." run".($offer['quantity'] > 1 ? "s" : null).")"; 
 
-        $this->manTypeID = Db::qColumn(Sql::manTypeID, array($this->offerDetails['typeID']));
+        $this->manTypeID = Db::qColumn('
+            SELECT `ProductTypeID` 
+            FROM `invBlueprintTypes` 
+            WHERE `blueprintTypeID` = :typeID', 
+            array(':typeID' => $this->offerDetails['typeID']));
         
         # set pricing info per the manufactured item
         try {
@@ -152,54 +149,23 @@ class LpOffer {
             array_push($this->noCache, $this->offerDetails['typeName']); }
         
         # find cached result of BPC manufacturing materials
-        try {
-            $details = json_decode($this->bpcCache->get($this->offerDetails['typeID']), true);
-            if (empty($details) || $details['version'] != Db::getDbName()) {  
-                throw new Exception("BPC details either not available or expired."); }
-
-            $this->manDetails = $details['manDetails']; 
-        } catch (Exception $e) {
-            $this->manDetails = Db::q(Sql::manMaterials, array(
-                                        ':productID' => $this->manTypeID,
-                                        ':quantity'  => $this->offerDetails['quantity']));
-
-            # Cache results
-            $store = array('version'=>Db::getDbName(), 'manDetails'=>$this->manDetails);
-            $this->bpcCache->set($this->offerDetails['typeID'], json_encode($store));
-        }
-
-        # set price info for manufacturing materials
-        foreach ($this->manDetails AS &$manItem) {
-            # this sometimes happens for some reason
-            if ($manItem['quantity'] <= 0) { 
-                continue; }
-            
-            try {
-                $price = new Price(Emdr::get($manItem['typeID']));
-                $manItem['price']    = $price->sell[0]; 
-                $manItem['totPrice'] = $manItem['price']*$manItem['quantity']; 
-            } catch (Exception $e) {
-                array_push($this->noCache, $manItem['typeName']); }
-        }
+        $this->manDetails = (new Query_OfferMaterials($this->manTypeID, $this->offerDetails['quantity']))->execute();
     }
     
     public function getSimilar() {
-        return Db::q('
-            SELECT `lpOffers`.*, `invTypes`.`typeName` 
-            FROM `lpOffers` 
-            NATURAL JOIN `lpStore` 
-            NATURAL JOIN `invTypes` 
-            WHERE `typeID` = :typeID GROUP BY `offerID`', 
-            array(':typeID'=>$this->offerDetails['typeID']));
+        return (new Query_OfferStores($this->offerDetails['typeID']))->execute();
     }
     
     public function getStores() {
-        return Db::q('
-            SELECT s.*, u.`itemName` 
-            FROM `lpStore` s 
-            INNER JOIN `invUniqueNames` u ON (u.`itemID` = s.`corporationID`) 
-            WHERE `offerID` = :offerID', 
-            array(':offerID'=>$this->offerID));
+        return (new Query_OfferStores($this->offerID))->execute();
+    }
+    
+    public function getReqCount() {
+        return count($this->reqDetails);
+    }
+    
+    public function getManCount() {
+        return count($this->manDetails);
     }
 }
 
