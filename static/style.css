@@ -56,11 +56,12 @@
     
     .imgRound img{ display:none; }
     
-    #offerList td:nth-child(1n+3), #offerList th:nth-child(1n+3), { text-align: right; }
-    #stationList td:nth-child(2), #stationList th:nth-child(2) { text-align: right; }
+    #offerList td:nth-child(1n+3), #offerList th:nth-child(1n+2) { text-align: right; }
+    #stationList td:nth-child(1n+2), #stationList th:nth-child(1n+    2) { text-align: right; }
     #offerSimilar td:nth-child(1n+3), #offerSimilar th:nth-child(1n+3) { text-align: right; }
     #offerReqs td:nth-child(1n+3), #offerReqs th:nth-child(1n+3) { text-align: right; }
 
+    #footer { margin-bottom: 5em; }
     /*
     .tab-content {
         border: 1px solid #ddd;

@@ -9,16 +9,18 @@ function __autoload($class) {
    require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
 }
 
-$dsn_config = parse_ini_file('/home/http/private/db-eve-latest.ini', true);
-$DB         = new Db($dsn_config, parse_ini_file('/home/http/private/auth-eve.ini'));
+$siteTime = new Timer();
 
-define('DATABASE', $dsn_config['dsn_opts']['dbname']); 
+//$dsn_config = parse_ini_file('/home/http/private/db-eve-latest.ini', true);
+$Db = Db::getInstance();
+
+//define('DATABASE', $dsn_config['dsn_opts']['dbname']); 
 define('LPDB',     '0.7.1'); # https://forums.eveonline.com/default.aspx?g=posts&m=2508255
 
 $regions = json_decode(file_get_contents(dirname(__FILE__).'/emdr/regions.json'),true);
 
 Emdr::setRegion(10000002);
 
-$TBS = new Template('templates', 'clean');
-
+$TBS = new Template('templates', 'bootstrap');
+$TBS->SetOption('methods_allowed', true);
 ?>

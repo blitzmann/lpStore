@@ -20,6 +20,8 @@
             height: 64px;
             background: url('http://image.eveonline.com/Type/[onload.offer.offerDetails.typeID]_64.png');">
                 </div>
+                <h3>BLUE LP / BLUE ISK | GREEN ISK/HR</h3>
+                <h3>BLUE LP | GREEN ISK/HR | BLUE ISK</h3>
                     <table class='table table-striped table-hover' id='offerReqs'>
                         <tr><th colspan='2'>Offer</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
@@ -49,7 +51,7 @@
                         <tr>
                             <td class='typeImg'><img src='http://image.eveonline.com/Type/[manDetails.typeID]_32.png' /></td>
                             <td>[manDetails.typeName;block=tr]</td>
-                            <td>[manDetails.quantity]x</td>
+                            <td>[manDetails.totQty]x</td>
                             <td>[manDetails.price;frm='0,000.00']</td>
                             <td>-[manDetails.totPrice;frm='0,000.00']</td>
                         </tr>
@@ -68,7 +70,7 @@
                     <table class='table table-condensed table-striped table-hover' id='offerStores'>
                         <tr>
                             <td class='typeImg'><img src='http://image.eveonline.com/Corporation/[stores.corporationID]_32.png' /></td>
-                            <td>[stores.itemName;block=tr]</td>
+                            <td><a href='[onshow.BASE_PATH]corporation/[stores.corporationID]'>[stores.itemName;block=tr]</a></td>
                         </tr>
                     </table>
                 </div>
@@ -76,7 +78,7 @@
                     <table class='table table-condensed table-striped table-hover' id='offerSimilar'>
                         <tr><th>ID</th><th>Offer</th><th>LP Cost</th><th>ISK Cost</th></tr>
                         <tr>
-                            <td>[similar.offerID;block=tr]</td>
+                            <td><a href='[onshow.BASE_PATH]offer/[similar.offerID]'>[similar.offerID;block=tr]</a></td>
                             <td>[similar.typeName]</td>
                             <td>[similar.lpCost;frm='0,000.00']</td>
                             <td>[similar.iskCost;frm='0,000.00']</td>
