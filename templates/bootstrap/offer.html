@@ -76,17 +76,17 @@
                             <td><?= $item['typeName'] ?></td>
                             <td><?= number_format($item['totQty']) ?>x</td>
                             <td><?= number_format($item['price'],2) ?></td>
-                            <td><?= number_format($item['totPrice'],2) ?></td>
+                            <td>-<?= number_format($item['totPrice'],2) ?></td>
                         </tr>
                         
                         <?php endforeach; endif; ?>
                         <tfoot>
 
                         <tr>
-                            <td colspan='4'>Offer ISK Cost</td><td><?= number_format($this->offer->iskCost) ?></td>
+                            <td colspan='4'>Offer ISK Cost</td><td>-<?= number_format($this->offer->iskCost) ?></td>
                         </tr>
                         <tr>
-                            <td colspan='4'>Total Cost</td><td><?= number_format($this->offer->totalCost,2) ?></td>
+                            <td colspan='4'>Total Cost</td><td>-<?= number_format($this->offer->totalCost,2) ?></td>
                         </tr>
                         <tr>
                             <td colspan='4'>Profit</td><td><?= number_format($this->offer->margin,2) ?></td>
