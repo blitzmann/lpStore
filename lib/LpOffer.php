@@ -116,7 +116,7 @@ class LpOffer {
             # calculate profits / isk/lp
             $this->profit = $this->price * $this->offerDetails['quantity'];
             $this->margin = $this->profit - $this->totalCost;
-            $this->lp2isk = $this->profit / $this->offerDetails['lpCost'];
+            $this->lp2isk = $this->margin / $this->offerDetails['lpCost'];
         } catch (Exception $e) {
             die($e);
         }
