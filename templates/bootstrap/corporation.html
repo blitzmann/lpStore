@@ -20,7 +20,7 @@
                                         <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' />
                                     </div>
                                 </td>
-                                <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->quantity ?>x <?= $offer->typeName ?></a></td>
+                                <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->getDisplayName() ?></a></td>
                                 <td><?= count($offer->reqDetails) ?></td>
                                 <td><?= $offer->lpCost ?></td>
                                 <td><?= $offer->iskCost ?></td>

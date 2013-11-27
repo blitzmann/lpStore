@@ -167,6 +167,35 @@ class LpOffer {
     public function getManCount() {
         return count($this->manDetails);
     }
+    
+    /*
+        This gets the name of the item being used as the basis for pricing data. 
+        Basically, if blueprint, gets the name of the manufactured object
+        
+        @todo: possibly find a better way to handle blueprints in general.
+    */
+    public function getProductName() {
+        if ($this->bpc) {
+            return str_replace('Blueprint', '', $this->typeName); }
+        
+        return $this->typeName;
+    }
+    
+    /*
+        This is the display name for the offer. If BPC, do a little bit of work
+        (add # runs)
+        
+        @todo: Possibly replace offer qty with 1 for BPCs and add a different 
+        property to the class for # runs. This way, we can get rid of special 
+        cases like this
+        
+    */
+    public function getDisplayName() {
+        if ($this->bpc) {
+            return '1 x '.$this->typeName.' Copy ('.$this->quantity.' run'.($this->quantity > 1 ? 's' : null).')'; }
+        
+        return $this->quantity.'x '.$this->typeName;
+    }
 }
 
 ?>
