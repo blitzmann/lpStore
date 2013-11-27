@@ -2,7 +2,7 @@
 <?php include ('navbar.html') ?>
 
     <div class='container'>
-        <div class='col-lg-10 col-md-offset-1 browse'>
+        <div class='col-lg-10 col-md-offset-1'>
             <h3 class='nav'><?= $this->offer->typeName ?></h3>
             <ul class='nav nav-tabs nav-justified' id='tabs'>
                 <li class='active'><a data-toggle='tab' href='#offer'>LP Offer</a></li>
@@ -83,7 +83,7 @@
                         <tfoot>
 
                         <tr>
-                            <td colspan='4'>Offer ISK Cost</td><td>-<?= number_format($this->offer->iskCost) ?></td>
+                            <td colspan='4'>Offer ISK Cost</td><td>-<?= number_format($this->offer->iskCost,2) ?></td>
                         </tr>
                         <tr>
                             <td colspan='4'>Total Cost</td><td>-<?= number_format($this->offer->totalCost,2) ?></td>

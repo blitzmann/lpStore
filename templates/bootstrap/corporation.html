@@ -2,7 +2,7 @@
 <?php include ('navbar.html') ?>
 
     <div class='container'>
-        <div class='col-lg-10 col-md-offset-1 browse'>
+        <div class='col-lg-10 col-md-offset-1'>
             <h3 class='nav'><?= $this->corpName ?></h3>
             <ul class='nav nav-tabs nav-justified'>
               <li class='active'><a href='#store' data-toggle="tab">LP Store</a></li>
@@ -21,10 +21,10 @@
                                     </div>
                                 </td>
                                 <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->getDisplayName() ?></a></td>
-                                <td><?= count($offer->reqDetails) ?></td>
-                                <td><?= $offer->lpCost ?></td>
-                                <td><?= $offer->iskCost ?></td>
-                                <td><?= $offer->totVolume ?></td>
+                                <td><?= count($offer->reqDetails) ?><?= ($offer->bpc) ? ' + '.count($offer->manDetails) : null ?></td>
+                                <td><?= number_format($offer->lpCost) ?></td>
+                                <td><?= number_format($offer->iskCost) ?></td>
+                                <td><?= number_format($offer->totVolume) ?></td>
                                 <td><?= number_format($offer->lp2isk) ?></td>
                             </tr>
                         <?php endforeach; ?>

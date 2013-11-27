@@ -65,9 +65,11 @@
 
     .offerBrief > div > h4 { font-size: 24px; text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; border-top: 1px solid #eee; }
     .offerBrief > div.cost { color: #3a87ad; }
-    .offerBrief > div.lp2isk { color: #468847; }
-    
+    .offerBrief > div.lp2isk  > h4{ font-size: 32px;  color: #468847; }
+
     #footer { margin-bottom: 5em; text-align: center;}
+    
+    .alert { margin-bottom: 10px !important; }
     /*
     .tab-content {
         border: 1px solid #ddd;
