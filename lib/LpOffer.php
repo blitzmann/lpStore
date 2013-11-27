@@ -143,7 +143,7 @@ class LpOffer {
             $price = new Price(Emdr::get($this->manTypeID));
             $this->cached      = true;
             $this->price       = $price->sell[0];
-            $this->totalVolume = $price->sell[1];
+            $this->totVolume = $price->sell[1];
             $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
         } catch (Exception $e) {
             array_push($this->noCache, $this->offerDetails['typeName']); }
