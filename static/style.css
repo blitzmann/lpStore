@@ -40,6 +40,8 @@
     .table-condensed td { padding: 6px 5px 6px 0px !important; }
     .table-condensed td.typeImg{ padding: 0px 5px 0px 0px !important; width: 42px; }
 
+    tfoot td { text-align: right; }
+    tfoot td:first-child { font-weight: bold; }
     /*
         We want pretty rounded corners on offer imgs.
         We also need to kill off the actual img, otherwise it overwrites the div
@@ -61,6 +63,10 @@
     #offerSimilar td:nth-child(1n+3), #offerSimilar th:nth-child(1n+3) { text-align: right; }
     #offerReqs td:nth-child(1n+3), #offerReqs th:nth-child(1n+3) { text-align: right; }
 
+    .offerBrief > div > h4 { font-size: 24px; text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; border-top: 1px solid #eee; }
+    .offerBrief > div.cost { color: #3a87ad; }
+    .offerBrief > div.lp2isk { color: #468847; }
+    
     #footer { margin-bottom: 5em; }
     /*
     .tab-content {

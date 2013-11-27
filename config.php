@@ -15,6 +15,7 @@ function __autoload($class) {
 
 $tpl = new Savant3();
 $tpl->addPath('template', 'templates/bootstrap');
+$tpl->addPath('resource', 'lib');
 
 $tpl->siteTime = new Timer();
 
