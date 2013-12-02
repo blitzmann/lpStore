@@ -4,11 +4,14 @@
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1'>
             <h3><?= $this->factionName ?></h3>
-            <ul id='corp_blk'>
+            <div class='list-group' id='corp_list'>
                 <?php foreach ($this->corps as $info):  ?>
-                    <li><a href='<?= BASE_PATH ?>corporation/<?= $info['corporationID'] ?>/'><?= $info['corpName'] ?></a></li>
+                    <a class="col-md-4 list-group-item" href='<?= BASE_PATH ?>corporation/<?= $info['corporationID'] ?>/'>
+                        <img width='32' height='32' src='http://image.eveonline.com/Corporation/<?= $info['corporationID'] ?>_32.png' />
+                        <?= $info['corpName'] ?>
+                    </a>
                 <?php endforeach; ?>
-            </ul>
+            </div>
             
         </div>
    </div><!-- /.container -->
