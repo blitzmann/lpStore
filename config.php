@@ -7,6 +7,7 @@ require_once 'Savant3.php';
 # TBS cannot use DEFINE(), so these are variables
 define('ABS_PATH', str_replace('\\', '/', dirname(__FILE__)) . '/');
 define('BASE_PATH', '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/');
+define('MARKET_MODE', 'sell'); // cheap and lazy. Will fix with user prefs
 
 function __autoload($class) {
    require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');

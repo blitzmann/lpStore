@@ -4,7 +4,24 @@
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
             <h3><?= $this->typeName ?></h3>
-            <pre>Item info Here... Stores carrying item as LP offer, and different offers available.</pre>
+            <table class='table table-striped table-hover table-condensed' id='offerList'>
+                <tr><th colspan='2'>Offer</th><th>Items Req</th><th>LP Cost</th><th>ISK Cost</th><th>Volume</th><th>ISK/LP</th></tr>
+                <?php foreach ($this->offers AS $offer): ?>
+                    <tr>
+                        <td class='typeImg'>
+                            <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png");'>
+                                <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' />
+                            </div>
+                        </td>
+                        <td><a href='<?= BASE_PATH ?>offer/<?= $offer->offerID ?>/'><?= $offer->getDisplayName() ?></a></td>
+                        <td><?= count($offer->reqDetails) ?><?= ($offer->bpc) ? ' + '.count($offer->manDetails) : null ?></td>
+                        <td><?= number_format($offer->lpCost) ?></td>
+                        <td><?= number_format($offer->iskCost) ?></td>
+                        <td><?= number_format($offer->totVolume) ?></td>
+                        <td><?= number_format($offer->lp2isk) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
             
         </div>
    </div><!-- /.container -->

@@ -49,8 +49,7 @@ class LpOffer {
         details of the offer, in which case {offer|req}Details are set to 
         something other than null. 
         
-        lpOffer isn't meant to return anything, but rather collect info and store 
-        in class properties for access.       
+        lpOffer is meant to collect info and store in class properties for access.
     */
     public function __construct($offerID, $offerDetails = null, $reqDetails = null) {
         $this->offerID      = $offerID;
@@ -64,9 +63,11 @@ class LpOffer {
         It is also responsible for gathering data for items if needed.
         
         $mode is used to switch between calculation modes (sell or buy orders)
+        
+        Returns self
     */
     
-    public function calc($mode) {  
+    public function calc($mode) {
         try {
             if ($mode !== 'sell' && $mode !== 'buy') {
                 throw Exception('Market Mode not valid.');
@@ -120,6 +121,8 @@ class LpOffer {
         } catch (Exception $e) {
             die($e);
         }
+        
+        return $this;
     }
 
     /*
