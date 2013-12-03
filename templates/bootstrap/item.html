@@ -1,12 +1,12 @@
-[onload;file='header.html';getbody] 
-[onload;file='navbar.html';getbody] 
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1 browse'>
-            <h3>[onload.typeName]</h3>
+            <h3><?= $this->typeName ?></h3>
             <pre>Item info Here... Stores carrying item as LP offer, and different offers available.</pre>
             
         </div>
    </div><!-- /.container -->
 
-[onload;file='footer.html';getbody]
+<?php include ('footer.html') ?>

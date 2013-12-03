@@ -3,10 +3,18 @@
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
-        $('#search').typeahead([{
+        var search = $('#search').typeahead([{
             name: 'search',
-            remote: 'json/search/%QUERY.json'
+            remote: 'json/search/%QUERY.json',
+            limit: 20
         }]);
+        
+        // Attach initialized event to it
+        search.on('typeahead:selected',function(evt,data){
+            //var data = JSON.stringify(data);
+            window.location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
+            //console.log(data.id); //selected datum object
+        });
     }); 
     </script>
     <hr />

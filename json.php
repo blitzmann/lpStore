@@ -18,12 +18,18 @@ $json_sql = array(
     ORDER BY facName, corpName ASC
 FAC
 , 'search' => <<<'SEARCH'
-    SELECT a.*, b.itemName 
+    SELECT a.corporationID AS id, b.itemName AS name, 'corporation' AS type
     FROM lpStore a 
     INNER JOIN invUniqueNames b ON (a.corporationID = b.itemID AND b.groupID = 2) 
-    WHERE itemName LIKE ?
+    WHERE itemName LIKE :query
     GROUP BY a.corporationID 
-    ORDER BY b.itemName ASC LIMIT 0,20
+    
+    UNION
+    
+    SELECT a.typeID AS id, b.typeName AS name, 'item' AS type
+    FROM lpOffers a 
+    INNER JOIN invTypes b ON (a.typeID = b.typeID) 
+    WHERE typeName LIKE :query
 SEARCH
 );
 
@@ -42,10 +48,11 @@ function doJson($request, $query){
             break;
         case 'search':
             $query = '%'.$query.'%'; // Add wildcards
-            foreach (Db::q($json_sql[$request], array($query)) AS $result){
+            foreach (Db::q($json_sql[$request], array(':query' => $query)) AS $result){
                 $json[] = array(
-                    'value' => $result['itemName'],
-                    'id' => $result['corporationID']
+                    'value' => $result['name'],
+                    'id' => $result['id'],
+                    'type' => $result['type']
                 );
             }
             break;

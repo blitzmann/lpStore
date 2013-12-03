@@ -77,7 +77,8 @@
     */
     #corp_list a.list-group-item { margin-right: -1px; padding: 2px 5px 2px 5px; border-radius: 0px; }
     #corp_list a > img { margin-right: 5px; } 
-
+    #corp_list { margin-left: 3px; } /* to compensate for the -1 margin of the items * 3 columns */
+    
     /*
     .tab-content {
         border: 1px solid #ddd;

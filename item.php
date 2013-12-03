@@ -5,8 +5,6 @@ require_once 'json.php';
 
 # @todo: filter
 $typeID = $_GET['typeID'];
-$typeName = $DB->q1("SELECT `typeName` FROM  `invTypes` WHERE  `typeID` = ?", array($typeID));
+$tpl->typeName = Db::qColumn("SELECT `typeName` FROM  `invTypes` WHERE  `typeID` = ?", array($typeID));
 
-$TBS->LoadTemplate('item.html');
-$TBS->Show();
-?>
+$tpl->display('item.html');
