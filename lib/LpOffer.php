@@ -153,6 +153,9 @@ class LpOffer {
         
         # find cached result of BPC manufacturing materials
         $this->manDetails = (new Query_OfferMaterials($this->manTypeID, $this->offerDetails['quantity']))->execute();
+        
+        # set market group to BPs (doesn't happen automatically since you can't find LP Store BPs on market)
+        $this->offerDetails['marketRoot'] = '2';
     }
     
     public function getSimilar() {

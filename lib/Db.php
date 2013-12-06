@@ -68,6 +68,7 @@ class Db {
         return $prep;
     }
 
+    
     /**
      * @static Fetch all
      * @param $query string SQL query

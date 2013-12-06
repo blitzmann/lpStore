@@ -13,7 +13,15 @@ class Query_CorpOffers {
     */
     function execute() {
         $results = Db::q('
-            SELECT `lpStore`.* , `invTypes`.`typeName`, `lpOffers`.*
+            SELECT `lpStore`.* , `invTypes`.`typeName`, `lpOffers`.*, 
+                (
+                    SELECT linkid 
+                    FROM graphMarket
+                    WHERE latch = 2
+                    AND origid = 1
+                    AND seq = 1
+                    AND destid = `invTypes`.`marketGroupID`
+                ) AS marketRoot
             FROM lpStore
             NATURAL JOIN lpOffers
             NATURAL JOIN invTypes
