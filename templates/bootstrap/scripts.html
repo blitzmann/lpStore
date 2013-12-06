@@ -1,0 +1,19 @@
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
+    <script>
+    $(document).ready(function() { 
+        var search = $('#search').typeahead([{
+            name: 'search',
+            remote: 'json/search/%QUERY.json',
+            limit: 20
+        }]);
+        
+        // Attach initialized event to it
+        search.on('typeahead:selected',function(evt,data){
+            //var data = JSON.stringify(data);
+            window.location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
+            //console.log(data.id); //selected datum object
+        });
+    }); 
+    </script>
