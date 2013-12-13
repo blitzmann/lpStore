@@ -14,7 +14,8 @@
     h2 {  }
     
     fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
-    
+    label { font-weight: normal; }
+    input ~ small { margin-left: 1em; color: #3a87ad;}
     table { width: 100%; }
     .browse { margin-top: 2em; }
     .browse > #pri_blk, .browse > #sec_blk { text-align: center; }

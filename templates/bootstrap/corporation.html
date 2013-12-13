@@ -12,7 +12,7 @@
             <div class='tab-content'>
                 <div class='tab-pane active' id='store'>
                     <label class='checkbox'>
-                        <input type='checkbox' class='toggle' id='filterToggle' value='true' data-toggle='filtering' /> Filtering Options
+                        <input type='checkbox' class='toggle' id='filterToggle' value='true' data-toggle='filtering' /> Filtering Options <small id='filterInfo'><span>0</span> Filters Active, Hiding <span>0</span> Offers.</small>
                     </label>
                     <fieldset id='filtering'>
                         <label class='checkbox'><input type='checkbox' class='filter' value='1' data-filter='req' /> Hide Offers with Required Items</label>
@@ -114,7 +114,7 @@
                 if ($(this).is(":checked")) {
                     $("#"+$(this).data('toggle')).show(); }
                 else {
-                    $("#"+$(this).data('toggle')).show();
+                    $("#"+$(this).data('toggle')).hide();
                 }
             }
         }).trigger('change');
