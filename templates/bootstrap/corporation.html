@@ -15,19 +15,19 @@
                         <input type='checkbox' class='toggle' id='filterToggle' value='true' data-toggle='filtering' /> Filtering Options
                     </label>
                     <fieldset id='filtering'>
-                        <label class='checkbox'><input type='checkbox' class='filter' value='1' data-type='req' /> Hide Offers with Required Items</label>
+                        <label class='checkbox'><input type='checkbox' class='filter' value='1' data-filter='req' /> Hide Offers with Required Items</label>
                         <label class='checkbox'><input type='checkbox' class='toggle' value='true' data-toggle='ranges' /> Set Ranges</label>
                         <fieldset id='ranges'>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp' data-type='range' /> LP: 
+                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp' data-filter='range' data-range='lp' /> LP: 
                                 <input class='blank' type='text' id='range-lp-min' size='8' /> to  
                                 <input class='blank' type='text' id='range-lp-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-isk' data-type='range' /> ISK: 
+                            <label class='checkbox'><input type='checkbox' class='filter' id='range-isk' data-filter='range' data-range='isk' /> ISK: 
                                 <input class='blank' type='text' id='range-isk-min' size='8' /> to  
                                 <input class='blank' type='text' id='range-isk-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-volume' data-type='range' /> Volume: 
+                            <label class='checkbox'><input type='checkbox' class='filter' id='range-volume' data-filter='range' data-range='volume' /> Volume: 
                                 <input class='blank' type='text' id='range-volume-min' size='8' /> to  
                                 <input class='blank' type='text' id='range-volume-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp2isk' data-type='range' /> ISK/LP: 
+                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp2isk' data-filter='range' data-range='lp2isk' /> ISK/LP: 
                                 <input class='blank' type='text' id='range-lp2isk-min' size='8' /> to  
                                 <input class='blank' type='text' id='range-lp2isk-max'  size='8' /></label>
                         </fieldset>
@@ -35,7 +35,7 @@
                         <fieldset id='groups'>
                         <?php foreach ($this->filterGroups AS $id => $name): ?>
                             <div class="col-md-3">
-                                <label class='checkbox'><input type='checkbox' class='filter' value='<?= $id ?>' data-type='group' /> <?= $name ?></label>
+                                <label class='checkbox'><input type='checkbox' class='filter' value='<?= $id ?>' data-filter='group' /> <?= $name ?></label>
                             </div>
                         <?php endforeach; ?>
                         </fieldset>
@@ -43,18 +43,11 @@
                     <table class='table table-striped table-hover table-condensed' id='offerList'>
                         <tr><th colspan='2'>Offer</th><th>Items Req</th><th>LP Cost</th><th>ISK Cost</th><th>Volume</th><th>ISK/LP</th></tr>
                         <?php foreach ($this->lpStore->offers AS $id => $offer): ?>
-                            <tr 
-                                data-group='<?= $offer->marketRoot ?>' 
-                                data-isk='<?= $offer->iskCost ?>'
-                                data-lp='<?= $offer->lpCost ?>' 
-                                data-lp2isk='<?= $offer->lp2isk ?>'
-                                data-volume='<?= $offer->totVolume ?>'
-                                data-req='<?= (empty($offer->reqDetails) && empty($offer->manDetails) ? '0' : '1')?>'
-                            >
+                            <tr id='<?= $offer->offerID ?>' data-group='<?= $offer->marketRoot ?>' data-isk='<?= $offer->iskCost ?>' data-lp='<?= $offer->lpCost ?>' data-lp2isk='<?= $offer->lp2isk ?>' data-volume='<?= $offer->totVolume ?>' data-req='<?= (empty($offer->reqDetails) && empty($offer->manDetails) ? '0' : '1')?>'>
                                 <td class='typeImg'>
-                                    <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png");'>
+                                    <!--<div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png");'>
                                         <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' alt='Corp Icon' />
-                                    </div>
+                                    </div> -->
                                 </td>
                                 <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->getDisplayName() ?></a></td>
                                 <td><?= count($offer->reqDetails) ?><?= ($offer->bpc) ? ' + '.count($offer->manDetails) : null ?></td>
@@ -89,6 +82,7 @@
 
 <script>
     $(document).ready(function() { 
+        var filterCont = {};
 
         var cfg = {
             isk: {min:0,max:0},
@@ -104,6 +98,9 @@
                 if (tmp < cfg[type].min) { cfg[type].min = tmp; }
                 if (tmp > cfg[type].max) { cfg[type].max = tmp; }
             }
+            
+            // add IDs to filter container
+            filterCont[$(this).attr('id')] = Array();
         });
         
         for (type in cfg) {
@@ -111,44 +108,79 @@
             $('#range-'+type+'-max').attr('placeholder',cfg[type].max);
         }
 
-        console.log(cfg);
         // !- Bind checkboxes to show filters
         $('input[type="checkbox"].toggle').bind("change", function(){
             if (typeof $(this).data('toggle') != 'undefined') {
                 if ($(this).is(":checked")) {
                     $("#"+$(this).data('toggle')).show(); }
                 else {
-                    $("#"+$(this).data('toggle')).hide();
+                    $("#"+$(this).data('toggle')).show();
                 }
             }
         }).trigger('change');
-        
+
         $('input[type="checkbox"].filter').bind("change", function(){
-            switch ($(this).data('type')) {
+            var filter = $(this).data('filter');
+            switch (filter) {
+                
                 case 'group':
+                    var checked = $(this).is(":checked");
                     var filtered = $('*[data-group="'+this.value+'"]');
-                    console.log("Affected offers: "+filtered.length);
                     
-                    if ($(this).is(":checked")) {
-                        filtered.addClass('hide'); }
-                    else {
-                        filtered.removeClass('hide'); }
+                    filtered.each(function( index ) {
+                        var id = $(this).attr('id');
+                        if (checked) {
+                            filterCont[id].push(filter); 
+                            $(this).hide();
+                        }
+                        else {
+                            filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
+                            if (filterCont[id].length == 0) { $(this).show(); }
+                        }
+                    });
+                    console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
+                    break;
                 case 'req':
+                    var checked = $(this).is(":checked");
                     var filtered = $('*[data-req="1"]');
-                    if ($(this).is(":checked")) {
-                        filtered.addClass('hide'); }
-                    else {
-                        filtered.removeClass('hide'); }
+                    
+                    filtered.each(function( index ) {
+                        var id = $(this).attr('id');
+                        if (checked) {
+                            filterCont[id].push(filter); 
+                            $(this).hide();
+                        }
+                        else {
+                            filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
+                            if (filterCont[id].length == 0) { $(this).show(); }
+                        }
+                    });
+                    console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
+
+                    break;
                 case 'range':
-                    max = $('#'+$(this).attr('id')+'-max').val();
-                    min = $('#'+$(this).attr('id')+'-min').val();
+                    var checked = $(this).is(":checked");
+                    var rangeID = $(this).attr('id')
+                    var rangeType = $(this).data('range')
+
+                    // default to max cfg range
+                    max = $('input#'+rangeID+'-max').val() || 999999999;
+                    min = $('input#'+rangeID+'-min').val() || 0;
+                    
+                    console.log(max);
                     
                     $("#offerList tr").filter(function () {
-                        if ($(this).data(type) > max || $(this).data(type) < min) {
+                        var id = $(this).attr('id');
+                                               
+                        if (checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
+                            filterCont[id].push(rangeID);
                             $(this).hide(); }
                         else {
-                            $(this).show(); }
+                            filterCont[id] = $.grep(filterCont[id], function(value) { return value != rangeID; });
+                            if (filterCont[id].length == 0) { $(this).show(); }
+                        }
                     });
+                    break;
             }
         }).trigger('toggle');
     });
