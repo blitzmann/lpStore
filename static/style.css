@@ -26,6 +26,8 @@
     */
     h3.nav { border: 0px; }
     
+    input[type='text'].blank { padding: 0px 0.3em; border-width: 0px 0px 1px; outline: none;}
+    
     .tab-content { margin-top: 1em; }
     .search-global{ margin-top: 2em; }
     ::-webkit-input-placeholder { font-style: italic; }
