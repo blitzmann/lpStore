@@ -165,13 +165,10 @@
                     var rangeID = $(this).attr('id')
                     var rangeType = $(this).data('range')
 
-                    // default to max cfg range
-                    max = $('input#'+rangeID+'-max').val() || 999999999;
-                    min = $('input#'+rangeID+'-min').val() || 0;
+                    max = $('input#'+rangeID+'-max').val() || cfg[rangeType].max;
+                    min = $('input#'+rangeID+'-min').val() || cfg[rangeType].min;
                     
-                    console.log(max);
-                    
-                    $("#offerList tr").filter(function () {
+                    $("#offerList tbody tr").filter(function () {
                         var id = $(this).attr('id');
                                                
                         if (checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
