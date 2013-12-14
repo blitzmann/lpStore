@@ -28,6 +28,7 @@
                         <div class="col-md-4 cost"><h4><?= number_format($this->offer->iskCost) ?> ISK</h4></div>
                     </div>
                     <table class='table table-striped table-hover' id='offerReqs'>
+                        <tbody>
                         <tr><th colspan='2'>Offer<?= ($this->offer->bpc) ? ' (manufactured)' : null ?></th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
                             <?php if ($this->offer->bpc): ?>
@@ -48,8 +49,9 @@
                             <td><?= number_format($this->offer->price,2) ?></td>
                             <td><?= number_format($this->offer->profit,2) ?></td>
                         </tr>
-                        
+                        </tbody>
                         <?php if (!empty($this->offer->reqDetails)): ?>
+                        <tbody>
                         <tr><th colspan='2'>Offer Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         
                         <?php foreach ($this->offer->reqDetails AS $item): ?>
@@ -64,10 +66,10 @@
                                 <td><?= number_format($item['price'],2) ?></td>
                                 <td>-<?= number_format($item['totPrice'],2) ?></td>
                             </tr>
-                        <?php endforeach; endif; ?>
-                        
-                        <?php if ($this->offer->bpc): ?>
-
+                        <?php endforeach; ?>
+                        </tbody>
+                        <?php endif; if ($this->offer->bpc): ?>
+                        <tbody>
                         <tr><th colspan='2'>Manufacturing Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
 
                         <?php foreach ($this->offer->manDetails AS $item): ?>
@@ -79,7 +81,9 @@
                             <td>-<?= number_format($item['totPrice'],2) ?></td>
                         </tr>
                         
-                        <?php endforeach; endif; ?>
+                        <?php endforeach; ?>
+                        </tbody>
+                        <?php endif; ?>
                         <tfoot>
 
                         <tr>
@@ -93,6 +97,7 @@
                         </tr>
                         </tfoot>
                         </table>
+                        
                 </div>
                 <div class='tab-pane' id='stores'>
                     <table class='table table-condensed table-striped table-hover' id='offerStores'>

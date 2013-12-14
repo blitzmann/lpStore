@@ -71,6 +71,29 @@
     
     .alert { margin-bottom: 10px !important; }
     
+    
+    /* 
+        Bunch of hacks to get the offer details page to look the way I want it to.
+        
+        The reason for this is becasue there cannot be more than one <thead> per 
+        table. I wanted each section to have a header, so thus I had to mimic 
+        <thead> by reversing Bootstrap's default styling of odd/even rows. I then 
+        added a bit of space between each <tbody> so as to not look too cluttered. 
+        Support for ::before is mixed, but who cares.
+    */
+    .table tbody + tbody { border-top: 0px; }
+    .table tbody + tbody::before {
+        content: '';
+        display: block;
+        height: 1em;
+    }
+
+    .table-striped>tbody>tr:nth-child(even)>td, .table-striped>tbody>tr:nth-child(even)>th { background-color: #f9f9f9; }
+    .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th { background-color: #fff; }
+
+    .table tbody>tr>th {border-top: 0px; border-bottom: 2px solid #ddd;}
+    
+
     /*
         Corp listing for factions.  Minor tweaks to make it look nice with corp
         image in it. margine-right statement removes double border
