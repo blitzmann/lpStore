@@ -18,18 +18,18 @@
                         <label class='checkbox'><input type='checkbox' class='filter' value='1' data-filter='req' /> Hide Offers with Required Items</label>
                         <label class='checkbox'><input type='checkbox' class='toggle' value='true' data-toggle='ranges' /> Set Ranges</label>
                         <fieldset id='ranges'>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp' data-filter='range' data-range='lp' /> LP: 
-                                <input class='blank' type='text' id='range-lp-min' size='8' /> to  
-                                <input class='blank' type='text' id='range-lp-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-isk' data-filter='range' data-range='isk' /> ISK: 
-                                <input class='blank' type='text' id='range-isk-min' size='8' /> to  
-                                <input class='blank' type='text' id='range-isk-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-volume' data-filter='range' data-range='volume' /> Volume: 
-                                <input class='blank' type='text' id='range-volume-min' size='8' /> to  
-                                <input class='blank' type='text' id='range-volume-max'  size='8' /></label>
-                            <label class='checkbox'><input type='checkbox' class='filter' id='range-lp2isk' data-filter='range' data-range='lp2isk' /> ISK/LP: 
-                                <input class='blank' type='text' id='range-lp2isk-min' size='8' /> to  
-                                <input class='blank' type='text' id='range-lp2isk-max'  size='8' /></label>
+                            <label class='checkbox filterRange'><input type='checkbox' class='filter' id='range-lp' data-filter='range' data-range='lp' /><span>LP</span>
+                                <input class='fillIn' type='text' id='range-lp-min' size='8' /> to  
+                                <input class='fillIn' type='text' id='range-lp-max'  size='8' /></label> 
+                            <label class='checkbox filterRange'><input type='checkbox' class='filter' id='range-isk' data-filter='range' data-range='isk' /><span>ISK</span>
+                                <input class='fillIn' type='text' id='range-isk-min' size='8' /> to  
+                                <input class='fillIn' type='text' id='range-isk-max'  size='8' /></label> 
+                            <label class='checkbox filterRange'><input type='checkbox' class='filter' id='range-volume' data-filter='range' data-range='volume' /><span>Volume</span>
+                                <input class='fillIn' type='text' id='range-volume-min' size='8' /> to  
+                                <input class='fillIn' type='text' id='range-volume-max'  size='8' /></label>
+                            <label class='checkbox filterRange'><input type='checkbox' class='filter' id='range-lp2isk' data-filter='range' data-range='lp2isk' /><span>ISK/LP</span> 
+                                <input class='fillIn' type='text' id='range-lp2isk-min' size='8' /> to  
+                                <input class='fillIn' type='text' id='range-lp2isk-max'  size='8' /></label>
                         </fieldset>
                         <label class='checkbox'><input type='checkbox' class='toggle' id='groupToggle' value='true' data-toggle='groups' /> Filter By Group</label>
                         <fieldset id='groups'>

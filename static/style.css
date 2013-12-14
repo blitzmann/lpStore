@@ -10,13 +10,21 @@
     /* 
         h2 is used as the scondary title 
         (the content of the page, ie: faction, corporation, offer)
+        @todo: actually... you know... do this...
     */
     h2 {  }
-    
-    fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
-    label { font-weight: normal; }
-    input ~ small { margin-left: 1em; color: #3a87ad;}
+
     table { width: 100%; }
+    fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
+    label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
+    input ~ small { margin-left: 1em; color: #3a87ad;}
+    label.checkbox > span { width: 4.5em; display: inline-block; }
+    /* Fix for uniform spacing. for the toggles */
+    fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
+
+    /* Without this, the group filter fielset leaves margin for some reason */
+    #offerList { margin-top: 10px; }
+    
     .browse { margin-top: 2em; }
     .browse > #pri_blk, .browse > #sec_blk { text-align: center; }
     
@@ -27,7 +35,8 @@
     */
     h3.nav { border: 0px; }
     
-    input[type='text'].blank { padding: 0px 0.3em; border-width: 0px 0px 1px; outline: none;}
+    /* Fill-in-the-blank style for text inputs */
+    input[type='text'].fillIn { padding: 0px 0.3em; border-width: 0px 0px 1px; outline: none;}
     
     .tab-content { margin-top: 1em; }
     .search-global{ margin-top: 2em; }
