@@ -85,6 +85,8 @@
 <script>
     $(document).ready(function() { 
         var filterCont = {};
+        var filterCnt = 0;
+        var hiddenCnt = 0;
 
         var cfg = {
             isk:     {min:null,max:null},
@@ -92,6 +94,12 @@
             lp2isk:  {min:null,max:null},
             volume:  {min:null,max:null}
         };
+
+        function updateFilters() {
+            console.log('filters: '+filterCnt+'; hidden: '+hiddenCnt);
+            $('#filterInfo span:first-child').text(filterCnt);
+            $('#filterInfo span + span').text(hiddenCnt);
+        }
         
         $("#offerList tbody tr").filter(function () {
             for (type in cfg) {
@@ -128,16 +136,20 @@
                 case 'group':
                     var checked = $(this).is(":checked");
                     var filtered = $('*[data-group="'+this.value+'"]');
-                    
+
+                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
+
                     filtered.each(function( index ) {
                         var id = $(this).attr('id');
                         if (checked) {
                             filterCont[id].push(filter); 
                             $(this).hide();
+                            hiddenCnt += 1;
                         }
                         else {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
                             if (filterCont[id].length == 0) { $(this).show(); }
+                            hiddenCnt -= 1;
                         }
                     });
                     console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
@@ -145,16 +157,20 @@
                 case 'req':
                     var checked = $(this).is(":checked");
                     var filtered = $('*[data-req="1"]');
-                    
+
+                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
+
                     filtered.each(function( index ) {
                         var id = $(this).attr('id');
                         if (checked) {
                             filterCont[id].push(filter); 
                             $(this).hide();
+                            hiddenCnt += 1;
                         }
                         else {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
                             if (filterCont[id].length == 0) { $(this).show(); }
+                            hiddenCnt -= 1;
                         }
                     });
                     console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
@@ -165,22 +181,30 @@
                     var rangeID = $(this).attr('id')
                     var rangeType = $(this).data('range')
 
+                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
+
                     max = $('input#'+rangeID+'-max').val() || cfg[rangeType].max;
                     min = $('input#'+rangeID+'-min').val() || cfg[rangeType].min;
-                    
+
                     $("#offerList tbody tr").filter(function () {
                         var id = $(this).attr('id');
                                                
                         if (checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
                             filterCont[id].push(rangeID);
-                            $(this).hide(); }
+                            $(this).hide();
+                            //hiddenCnt += 1; // doesn't work
+                        }
                         else {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != rangeID; });
                             if (filterCont[id].length == 0) { $(this).show(); }
+                            //hiddenCnt -= 1; //doesn't work
                         }
                     });
+                    
                     break;
             }
+            
+            updateFilters();
         }).trigger('toggle');
     });
 </script>
