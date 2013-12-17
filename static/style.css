@@ -14,14 +14,18 @@
     */
     h2 {  }
 
-    table { width: 100%; }
-    fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
+    table { width: 100%; }    
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
     label.checkbox > span { width: 4.5em; display: inline-block; }
     /* Fix for uniform spacing. for the toggles */
     fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
 
+    #store fieldset, label ~ div { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
+    form fieldset { margin: 0px 0px 2em 20px; }
+    legend { margin-left: -20px; }
+    legend:before {content:'\00bb '; padding-right: 0.5em;}
+    
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
     
