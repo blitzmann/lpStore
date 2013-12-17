@@ -12,13 +12,13 @@
         <div class='col-lg-8 col-md-offset-2 browse'>
             <div id='pri_blk'>
                 <?php foreach ($this->primary as $id => $info):  ?>
-                    <a href='<?= BASE_PATH ?>faction/<?= $id ?>/'><img src="http://image.eveonline.com/Alliance/<?= $id ?>_128.png" /></a>
+                    <a href='<?= BASE_PATH ?>faction/<?= $id ?>/'><img src='http://image.eveonline.com/Alliance/<?= $id ?>_128.png' alt='Corp Icon' /></a>
                 <?php endforeach; ?>
             </div>
             <hr />
             <div id='sec_blk'>
                 <?php foreach ($this->secondary as $id => $info):  ?>
-                    <a href='<?= BASE_PATH ?>faction/<?= $id ?>/'><img src="http://image.eveonline.com/Alliance/<?= $id ?>_128.png" width='96' height='96' /></a>
+                    <a href='<?= BASE_PATH ?>faction/<?= $id ?>/'><img src="http://image.eveonline.com/Alliance/<?= $id ?>_128.png" width='96' height='96' alt='Corp Icon' /></a>
                 <?php endforeach; ?>
             </div>
             <hr />

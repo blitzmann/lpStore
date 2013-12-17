@@ -7,7 +7,7 @@
             <div class='list-group' id='corp_list'>
                 <?php foreach ($this->corps as $info):  ?>
                     <a class="col-md-4 list-group-item" href='<?= BASE_PATH ?>corporation/<?= $info['corporationID'] ?>/'>
-                        <img width='32' height='32' src='http://image.eveonline.com/Corporation/<?= $info['corporationID'] ?>_32.png' />
+                        <img width='32' height='32' src='http://image.eveonline.com/Corporation/<?= $info['corporationID'] ?>_32.png' alt='Corp Icon' />
                         <?= $info['corpName'] ?>
                     </a>
                 <?php endforeach; ?>
