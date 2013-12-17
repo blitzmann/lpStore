@@ -10,11 +10,21 @@
     /* 
         h2 is used as the scondary title 
         (the content of the page, ie: faction, corporation, offer)
+        @todo: actually... you know... do this...
     */
     h2 {  }
-    
-    
+
     table { width: 100%; }
+    fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
+    label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
+    input ~ small { margin-left: 1em; color: #3a87ad;}
+    label.checkbox > span { width: 4.5em; display: inline-block; }
+    /* Fix for uniform spacing. for the toggles */
+    fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
+
+    /* Without this, the group filter fielset leaves margin for some reason */
+    #offerList { margin-top: 10px; }
+    
     .browse { margin-top: 2em; }
     .browse > #pri_blk, .browse > #sec_blk { text-align: center; }
     
@@ -24,6 +34,9 @@
         Not possible to select A when the flow is A ~ B. Must use this special class. 
     */
     h3.nav { border: 0px; }
+    
+    /* Fill-in-the-blank style for text inputs */
+    input[type='text'].fillIn { padding: 0px 0.3em; border-width: 0px 0px 1px; outline: none;}
     
     .tab-content { margin-top: 1em; }
     .search-global{ margin-top: 2em; }
@@ -101,6 +114,82 @@
     #corp_list a.list-group-item { margin-right: -1px; padding: 2px 5px 2px 5px; border-radius: 0px; }
     #corp_list a > img { margin-right: 5px; } 
     #corp_list { margin-left: 3px; } /* to compensate for the -1 margin of the items * 3 columns */
+    
+    
+    /* Fancy checkboxes and radios */
+    
+    input[type='checkbox'] {
+        -webkit-appearance: none;
+        background-color: #fafafa;
+        border: 1px solid #cacece;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+        padding: 6px;
+        border-radius: 3px;
+        display: inline-block;
+        position: relative;
+        margin-right: 0.3em;
+        
+    }
+    
+    input[type='checkbox']:active, input[type='checkbox']:checked:active {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    }
+     
+    input[type='checkbox']:checked {
+        background-color: #e9ecee;
+        border: 1px solid #adb8c0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+        color: #99a1a7;
+    }
+    
+    input[type='checkbox']:checked:after {
+        content: '\2714';
+        font-size: 10px;
+        position: absolute;
+        top: 0px;
+        left: 1px;
+        color: #99a1a7;
+    }
+    input[type='checkbox'].toggle:checked:after {
+        content: '\25BC';
+    }
+    
+    input[type='radio'] {
+        -webkit-appearance: none;
+        background-color: #fafafa;
+        border: 1px solid #cacece;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+        padding: 6px;
+        border-radius: 50px;
+        display: inline-block;
+        position: relative;
+        margin-right: 0.3em;
+    }
+     
+    input[type='radio']:checked:after {
+        content: ' ';
+        width: 8px;
+        height: 8px;
+        border-radius: 50px;
+        position: absolute;
+        top: 2px;
+        background: #99a1a7;
+        box-shadow: inset 0px 0px 10px rgba(0,0,0,0.3);
+        text-shadow: 0px;
+        left: 2px;
+        font-size: 32px;
+    }
+     
+    input[type='radio']:checked {
+        background-color: #e9ecee;
+        color: #99a1a7;
+        border: 1px solid #adb8c0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1), inset 0px 0px 10px rgba(0,0,0,0.1);
+    }
+     
+    input[type='radio']:active, input[type='radio']:checked:active {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    }
     
     /*
     .tab-content {
