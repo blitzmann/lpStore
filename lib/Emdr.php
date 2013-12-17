@@ -27,6 +27,8 @@ class Emdr {
     private   static $cache = array();
     private   static $instance = null;
     private $_redis;
+
+    public static $regions = array(); // available regions
     
     function __construct() { }
 

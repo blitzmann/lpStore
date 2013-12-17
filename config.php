@@ -13,6 +13,7 @@ function __autoload($class) {
    require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
 }
 
+Emdr::$regions = json_decode(file_get_contents(ABS_PATH.'/emdr/regions.json'),true);
 
 $tpl = new Savant3();
 $tpl->addPath('template', 'templates/bootstrap');

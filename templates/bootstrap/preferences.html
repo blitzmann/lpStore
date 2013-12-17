@@ -4,9 +4,54 @@
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1'>
             <h3>Preferences</h3>
-            <div class='list-group' id='corp_list'>
-                <pre>Do things here</pre>
-            </div>
+            <form action='<?php echo $_SERVER['PHP_SELF']; ?>' method='post'>
+    
+                <fieldset>
+                    <legend>Default Region</legend>
+
+                    <p>Please select the default region you would like to use for market data</p>
+                    <select name='region'>
+                    <?php
+                    foreach (Emdr::$regions AS $id => $name){
+                        echo "  <option value='".$id."'".($id == $prefs['region'] ? " selected" : null).">".$name."</option>\n"; }
+                    ?>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <legend>Default Corporation</legend>
+
+                    <p>Please select the default corporation you would like to be pre-selected in the corporation dropdown on the homepage.</p>
+                    <select name='defaultCorp'>
+                    <?php
+                    foreach (Db::q('
+                                SELECT a.*, b.itemName 
+                                FROM lpStore a 
+                                INNER JOIN invUniqueNames b ON (a.corporationID = b.itemID AND b.groupID = 2) 
+                                GROUP BY a.corporationID 
+                                ORDER BY b.itemName ASC', array()) AS $corp){
+                        echo "  <option value='".$corp['corporationID']."'".($corp['corporationID'] == $prefs['defaultCorp'] ? " selected" : null).">".$corp['itemName']."</option>\n"; 
+                    }
+                    ?>
+                    </select>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <legend>Default Market Mode</legend>
+                    
+                    <label class="radio">
+                    <input name='marketMode' value='sell' type='radio' /> <strong>Sell Orders</strong>: 
+                        Will use the average of the lowest 5% <strong>sell orders</strong> for pricing information. Useful if you are planning on putting up sell orders and have good market skills; usuallt results in the best margin.
+                    </label>
+                    <label class="radio">
+                    <input name='marketMode' value='buy' type='radio' /> <strong>Buy Orders</strong>: 
+                        Will use the average of the highest 5% <strong>buy orders</strong> for pricing information. Useful if you want to just offload your goods at a trade hub (selling to buy order). <b>Note:</b> Required items and materials for blueprint manufacturing will still use sell orders for their calculations.
+                    </label>
+                </fieldset>
+                <div class="form-actions">
+                    <button type='submit' class='btn btn-primary'>Submit</button>
+                    <button type='submit' class='btn' name='reset'>Reset to Defaults</button>
+                </div>
+                </form>
             
         </div>
    </div><!-- /.container -->
