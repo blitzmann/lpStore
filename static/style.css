@@ -21,9 +21,9 @@
     /* Fix for uniform spacing. for the toggles */
     fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
 
+    /* @todo: Fix this fieldset mess. */
     #store fieldset, label ~ div { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
-    form fieldset { margin: 0px 0px 2em 20px; }
-    legend { margin-left: -20px; }
+    form fieldset { margin-bottom: 2em; }
     legend:before {content:'\00bb '; padding-right: 0.5em;}
     
     /* Without this, the group filter fielset leaves margin for some reason */

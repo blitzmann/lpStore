@@ -4,12 +4,12 @@
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1'>
             <h3 class='nav'>Preferences</h3>
-            <form action='<?php echo $_SERVER['PHP_SELF']; ?>' method='post'>
+            <form action='<?= BASE_PATH ?>prefs/' method='post'>
                 <fieldset>
                     <legend>Default Region</legend>
 
-                    <p>Please select the default region you would like to use for market data</p>
-                    <select name='region'>
+                    <p>Please select the default region you would like to use for market data.</p>
+                    <select class='form-control' name='region'>
                     <?php
                     foreach (Emdr::$regions AS $id => $name){
                         echo "  <option value='".$id."'".($id == $prefs['region'] ? " selected" : null).">".$name."</option>\n"; }
@@ -27,10 +27,12 @@
                     <input name='marketMode' value='buy' type='radio' /> <strong>Buy Orders</strong>: 
                         Will use the average of the highest 5% <strong>buy orders</strong> for pricing information. Useful if you want to just offload your goods at a trade hub (selling to buy order). <b>Note:</b> Required items and materials for blueprint manufacturing will still use sell orders for their calculations.
                     </label>
-                    <label class='radio'><input type='radio' class='toggle' id='advToggle' name='marketMode' value='true' data-toggle='adv' /> Advanced Options</label>
+                    <label class='radio'><input type='radio' class='toggle' id='advToggle' name='marketMode' value='true' data-toggle='adv' /> <strong>Advanced</strong>: Select options to have more control over how ISK/LP is calculated.</label>
                     <div id='adv'>
-                        <label class='checkbox'><input type='checkbox' class='filter' value='' data-filter='group' /> Placeholder</label>
-                        <label class='checkbox'><input type='checkbox' class='filter' value='' data-filter='group' /> Placeholder</label>
+                        <p>You have the option of specifying where pricing information comes from for the various components of an offer. Each offer is broken into three components: Offer, Required, and Materials. For example, you may wish to sell the offer item with a Sell Order (using the <tt>Sell</tt> option), but buy the required goods (Required and Materials) with Buy Orders (using the <tt>Buy</tt> option).</p>
+                        <div class='col-md-4'><strong>Offer Item</strong>: <select class='form-control' name='offerItem'><option value='sell'>Sell</option><option value='buy'>Buy</option></select></div>
+                        <div class='col-md-4'><strong>Required Items</strong>: <select class='form-control' name='reqItems'><option value='sell'>Sell</option><option value='buy'>Buy</option></select></div>
+                        <div class='col-md-4'><strong>BPC Materials</strong>: <select class='form-control' name='matItems'><option value='sell'>Sell</option><option value='buy'>Buy</option></select></div>
                     </div>
                 </fieldset>
                 <div class="form-actions">
