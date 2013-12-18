@@ -19,11 +19,12 @@
     input ~ small { margin-left: 1em; color: #3a87ad;}
     label.checkbox > span { width: 4.5em; display: inline-block; }
     /* Fix for uniform spacing. for the toggles */
+    form fieldset { margin-bottom: 2em; }
     fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
 
-    /* @todo: Fix this fieldset mess. */
-    #store fieldset, label ~ div { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
-    form fieldset { margin-bottom: 2em; }
+    /* Toggleable fieldsets*/
+    label.radio ~ fieldset, label.checkbox ~ fieldset{ margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; margin-bottom: 0px; }
+
     legend:before {content:'\00bb '; padding-right: 0.5em;}
     
     /* Without this, the group filter fielset leaves margin for some reason */
