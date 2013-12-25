@@ -14,6 +14,7 @@ function __autoload($class) {
 }
 
 Emdr::$regions = json_decode(file_get_contents(ABS_PATH.'/emdr/regions.json'),true);
+Prefs::getInstance();
 
 $tpl = new Savant3();
 $tpl->addPath('template', 'templates/bootstrap');
