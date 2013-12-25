@@ -6,7 +6,9 @@ $tpl->success = null;
 
 if (isset($_POST['prefSave'])) {
     try {
-        # @todo: set region
+        # @todo: filter
+        Prefs::setRegion($_POST['region']);
+        
         switch ($_POST['marketMode']) {
             case 'sell':
                 Prefs::setMarketMode('sell','sell','sell');
@@ -29,5 +31,13 @@ if (isset($_POST['prefSave'])) {
         $tpl->msg = $e->getMessage();
     }
 }
+
+// Set radio button default
+if (array(Prefs::get('marketOffer'), Prefs::get('marketReq'), Prefs::get('marketMat')) === array('sell','sell','sell')) {
+    $tpl->radio = 'sell'; }
+else if (array(Prefs::get('marketOffer'), Prefs::get('marketReq'), Prefs::get('marketMat')) === array('buy','sell','sell')) {
+    $tpl->radio = 'buy'; }
+else { $tpl->radio = 'adv'; }
+
 
 $tpl->display('preferences.html');
