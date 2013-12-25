@@ -4,7 +4,7 @@
     EMDR singleton class for getting prices from a Redis database.
     
     Added in-class caching as well. Although accessing Redis values is very fast,
-    doing them hundreds or times adds up. The class implements a simple caching 
+    doing them hundreds of times adds up. The class implements a simple caching 
     in the form of 
         
         regionID => typeID => Redis string
@@ -17,7 +17,7 @@
     blueprints always use a basic mineral, and it's silly to call that same 
     price data for the same mineral 18 different times for 18 blueprints. 
     
-    Calculations for the larget LP Store at this time (1000180, 368 offers with 
+    Calculations for the largest LP Store at this time (1000180, 368 offers with 
     18 BPCs, 752 calls to EMDR::get()) dropped by 0.3 seconds on average.
 */
 
@@ -26,7 +26,7 @@ class Emdr {
     protected static $regionID;
     private   static $cache = array();
     private   static $instance = null;
-    private $_redis;
+    private   $_redis;
 
     public static $regions = array(); // available regions
     

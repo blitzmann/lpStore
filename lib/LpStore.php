@@ -11,7 +11,7 @@ class LpStore {
         $req = (new Query_CorpReqItems($corpID))->execute();
         
         foreach ((new Query_CorpOffers($corpID))->execute() AS $o) {
-            $this->offers[$o['offerID']] = (new LpOffer($o['offerID'], $o, (!isset($req[$o['offerID']]) ? array() : $req[$o['offerID']])))->calc(MARKET_MODE);
+            $this->offers[$o['offerID']] = (new LpOffer($o['offerID'], $o, (!isset($req[$o['offerID']]) ? array() : $req[$o['offerID']])))->calc();
         }
     }
     
