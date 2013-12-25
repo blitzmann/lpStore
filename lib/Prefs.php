@@ -55,7 +55,7 @@ class Prefs {
     }
     
     public static function save() {
-        if (setcookie('prefs', serialize(self::$prefs), time()+60*60*24*30*365*5)) {
+        if (setcookie('prefs', serialize(self::$prefs), time()+60*60*24*30*365*5, BASE_PATH)) {
             return true; }
         return false;
     }
