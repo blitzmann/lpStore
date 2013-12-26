@@ -14,6 +14,8 @@
     */
     h2 {  }
 
+    .center-pills { display: inline-block; }
+    
     table { width: 100%; }    
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
