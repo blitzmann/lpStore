@@ -3,6 +3,14 @@
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
+        
+        $('#searchCont').hide();
+        
+        $(".nav a#srchLnk").click(function(event) {
+            event.preventDefault();
+            $("#searchCont").slideDown('slow');
+        });
+        
         var search = $('#search').typeahead([{
             name: 'search',
             remote: 'json/search/%QUERY.json',

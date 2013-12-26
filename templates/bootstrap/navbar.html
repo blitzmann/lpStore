@@ -3,6 +3,15 @@
         <li><a href='<?= BASE_PATH ?>'>Home</a></li>
         <li><a href='<?= BASE_PATH ?>about/'>About</a></li>
         <li><a href='<?= BASE_PATH ?>prefs/'>Preferences</a></li>
-        <li><a href='#'>Search</a></li>
+        <li><a href='#' id='srchLnk'>Search</a></li>
     </ul>
+</div>
+
+<div class='col-lg-4 col-lg-offset-4' id='searchCont'>
+    <div class='input-group search-global'>
+        <input type='text' class='form-control input-lg' id='search' placeholder='Search for faction, corporation, item...'>
+        <span class='input-group-btn'>
+            <button class='btn btn-default' type='button'><span class='glyphicon glyphicon-search'></span></button>
+        </span>
+    </div>
 </div>
