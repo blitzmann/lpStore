@@ -22,7 +22,7 @@ class Query_OfferMaterials {
         Important to remember that it's the product ID, not the BPC ID, that 
         is stored as key.
         
-        @todo: posprocessing with icon path
+        @todo: post-processing with icon path
         @return Returns array of rows
     */
     function execute() {
@@ -42,7 +42,7 @@ class Query_OfferMaterials {
             
             try {
                 $price = new Price(Emdr::get($manItem['typeID']));
-                $manItem['price']    = $price->sell[0]; 
+                $manItem['price']    = $price->{Prefs::get('marketMat')}[0]; 
                 $manItem['totPrice'] = $manItem['price']*$manItem['totQty']; 
             } catch (Exception $e) {
                 array_push($this->noCache, $manItem['typeName']); }

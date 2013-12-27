@@ -14,13 +14,24 @@
     */
     h2 {  }
 
+    .center-pills { display: inline-block; }
+
     table { width: 100%; }
     fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
+
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
     label.checkbox > span { width: 4.5em; display: inline-block; }
+    
+    form fieldset { margin-bottom: 2em; }
+    legend:before {content:'\00bb '; padding-right: 0.5em;}
+
     /* Fix for uniform spacing. for the toggles */
     fieldset+.radio, fieldset+.checkbox{ margin-top: -5px;}
+    
+    /* Toggleable fieldsets*/
+    label.radio ~ fieldset, label.checkbox ~ fieldset{ margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; margin-bottom: 0px; }
+    
 
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
@@ -39,7 +50,6 @@
     input[type='text'].fillIn { padding: 0px 0.3em; border-width: 0px 0px 1px; outline: none;}
     
     .tab-content { margin-top: 1em; }
-    .search-global{ margin-top: 2em; }
     ::-webkit-input-placeholder { font-style: italic; }
     :-moz-placeholder { font-style: italic; }
     

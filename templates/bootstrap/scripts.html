@@ -3,9 +3,24 @@
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
+        
+        $('#searchCont').hide();
+        
+        $("a#srchLnk").click(function(event) {
+            event.preventDefault();
+            var li = $(this).parent();
+            li.toggleClass('enabled');
+            
+            if (li.hasClass('enabled')) {
+                $("#searchCont").slideDown('slow'); }
+            else {
+                $("#searchCont").slideUp('slow');
+            }
+        });
+        
         var search = $('#search').typeahead([{
             name: 'search',
-            remote: 'json/search/%QUERY.json',
+            remote: '<?= BASE_PATH ?>json/search/%QUERY.json',
             limit: 20
         }]);
         

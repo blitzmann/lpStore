@@ -1,0 +1,66 @@
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
+
+    <div class='container'>
+        <div class='col-lg-10 col-md-offset-1'>
+            <h3 class='nav'>Preferences</h3>
+            <?php if ($this->success === true): ?>
+            <div class='alert alert-success'><strong>Success!</strong> You're prefereneces were saved.</div>
+            <?php elseif ($this->success === false): ?>
+            <div class='alert alert-danger'><strong>Failed!</strong> You're prefereneces were not saved. Error: <em><?= $this->msg ?></em></div>
+            <?php endif; ?>
+            
+
+            <form action='<?= BASE_PATH ?>prefs/' method='post'>
+                <fieldset>
+                    <legend>Default Region</legend>
+
+                    <p>Please select the default region you would like to use for market data.</p>
+                    <select class='form-control' name='region'>
+                    <?php
+                    foreach (Emdr::$regions AS $id => $name){
+                        echo "  <option value='".$id."'".($id == Prefs::get('region') ? ' selected' : null).">".$name."</option>\n"; }
+                    ?>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <legend>Market Settings</legend>
+                    
+                    <label class="radio">
+                    <input name='marketMode' value='sell' type='radio'<?= ($this->radio == 'sell' ? ' checked':null) ?> /> <strong>Sell Orders</strong>: 
+                        Will use the average of the lowest 5% <strong>sell orders</strong> for pricing information. Useful if you are planning on putting up sell orders and have good market skills; usually results in the best margin.
+                    </label>
+                    <label class="radio">
+                    <input name='marketMode' value='buy' type='radio'<?= ($this->radio == 'buy' ? ' checked':null) ?> /> <strong>Buy Orders</strong>: 
+                        Will use the average of the highest 5% <strong>buy orders</strong> for pricing information. Useful if you want to just offload your goods at a trade hub (selling to buy order). <b>Note:</b> Required items and materials for blueprint manufacturing will still use sell orders for their calculations.
+                    </label>
+                    <label class='radio'>
+                    <input type='radio' class='toggle' id='advToggle' name='marketMode' value='adv'<?= ($this->radio == 'adv' ? ' checked': null) ?> data-toggle='adv' /> <strong>Advanced</strong>: Select options to have more control over how ISK/LP is calculated.</label>
+                    <fieldset id='adv'>
+                        <p>You have the option of specifying where pricing information comes from for the various components of an offer. Each offer is broken into three components: Offer, Required, and Materials. For example, you may wish to sell the offer item with a Sell Order (using the <tt>Sell</tt> option), but buy the required goods (Required and Materials) with Buy Orders (using the <tt>Buy</tt> option).</p>
+                        <div class='col-md-4'><strong>Offer Item</strong>: <select class='form-control' name='offerItem'><option value='sell'>Sell</option><option value='buy'<?= (Prefs::get('marketOffer') === 'buy' ? ' selected' : null)?>>Buy</option></select></div>
+                        <div class='col-md-4'><strong>Required Items</strong>: <select class='form-control' name='reqItems'><option value='sell'>Sell</option><option value='buy'<?= (Prefs::get('marketReq') === 'buy' ? ' selected' : null)?>>Buy</option></select></div>
+                        <div class='col-md-4'><strong>BPC Materials</strong>: <select class='form-control' name='matItems'><option value='sell'>Sell</option><option value='buy'<?= (Prefs::get('marketMat') === 'buy' ? ' selected' : null)?>>Buy</option></select></div>
+                    </fieldset>
+                </fieldset>
+                <button type='submit' name='prefSave' class='btn btn-primary'>Save Changes</button>
+            </form>
+        </div>
+   </div><!-- /.container -->
+
+<?php include ('scripts.html') ?>
+<script>
+    $(document).ready(function() { 
+        // !- Bind checkboxes to show filters
+        $('input.toggle').bind("change", function(){
+            if (typeof $(this).data('toggle') != 'undefined') {
+                if ($(this).is(":checked")) {
+                    $("#"+$(this).data('toggle')).show(); }
+                else {
+                    $("#"+$(this).data('toggle')).hide();
+                }
+            }
+        }).trigger('change');
+    });
+</script>
+<?php include ('footer.html') ?>

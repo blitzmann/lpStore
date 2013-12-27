@@ -61,18 +61,12 @@ class LpOffer {
     /*
         calc() takes care of initializing calculation functions
         It is also responsible for gathering data for items if needed.
-        
-        $mode is used to switch between calculation modes (sell or buy orders)
-        
+
         Returns self
     */
     
-    public function calc($mode) {
-        try {
-            if ($mode !== 'sell' && $mode !== 'buy') {
-                throw Exception('Market Mode not valid.');
-            }
-            
+    public function calc() {
+        try {            
             if ($this->offerDetails === null) {
                 $this->offerDetails = Db::q(Sql::oDetails, array($this->offerID))[0]; }
             
@@ -90,8 +84,8 @@ class LpOffer {
                 try {
                     $price = new Price(Emdr::get($this->offerDetails['typeID']));
                     $this->cached      = true;
-                    $this->price       = $price->sell[0];
-                    $this->totVolume   = $price->sell[1];
+                    $this->price       = $price->{Prefs::get('marketOffer')}[0];
+                    $this->totVolume   = $price->{Prefs::get('marketOffer')}[1];
                     $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
                 } catch (Exception $e) {
                     array_push($this->noCache, $this->offerDetails['typeName']); }
@@ -100,7 +94,7 @@ class LpOffer {
             foreach ($this->reqDetails AS &$reqItem) {
                 try {
                     $price = new Price(Emdr::get($reqItem['typeID']));
-                    $reqItem['price']    = $price->sell[0];
+                    $reqItem['price']    = $price->{Prefs::get('marketReq')}[0];
                     $reqItem['totPrice'] = $reqItem['price']* $reqItem['quantity']; 
                 } catch (Exception $e) {
                     array_push($this->noCache, $reqItem['typeName']); }
@@ -145,8 +139,8 @@ class LpOffer {
         try {
             $price = new Price(Emdr::get($this->manTypeID));
             $this->cached      = true;
-            $this->price       = $price->sell[0];
-            $this->totVolume = $price->sell[1];
+            $this->price       = $price->{Prefs::get('marketOffer')}[0];
+            $this->totVolume   = $price->{Prefs::get('marketOffer')}[1];
             $this->timeDiff    = (time() - $price->generatedAt)/60/60; # time difference in hours
         } catch (Exception $e) {
             array_push($this->noCache, $this->offerDetails['typeName']); }
