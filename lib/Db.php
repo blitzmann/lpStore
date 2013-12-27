@@ -114,12 +114,20 @@ class Db {
     }
 
     public static function getLpDbVersion() {
+        # not exactly sure why this is required; without it, on pages with no 
+        # queries besides this one, the proper result is not returned
+        self::getConn();
         return self::qColumn("
             SELECT table_comment
             FROM INFORMATION_SCHEMA.TABLES
             WHERE table_schema = :dbName
             AND table_name =  :tblName",
             array(':dbName' => self::$dbName, ':tblName' => 'lpStore'));
+    }
+    
+    public static function getDbName() {
+        self::getConn(); # init's PDO and thus sets DB Name property of class
+        return self::$dbName;
     }
     
     protected function __clone() { }
