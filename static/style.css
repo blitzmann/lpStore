@@ -17,7 +17,6 @@
     .center-pills { display: inline-block; }
 
     table { width: 100%; }
-    fieldset { margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; }
 
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
