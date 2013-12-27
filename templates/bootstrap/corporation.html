@@ -35,7 +35,7 @@
                         <fieldset id='groups'>
                         <?php foreach ($this->filterGroups AS $id => $name): ?>
                             <div class="col-md-3">
-                                <label class='checkbox'><input type='checkbox' class='filter' value='<?= $id ?>' data-filter='group' /> <?= $name ?></label>
+                                <label class='checkbox'><input type='checkbox' class='filter' value='<?= $id ?>' data-filter='group' checked /> <?= $name ?></label>
                             </div>
                         <?php endforeach; ?>
                         </fieldset>
@@ -137,11 +137,11 @@
                     var checked = $(this).is(":checked");
                     var filtered = $('*[data-group="'+this.value+'"]');
 
-                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
+                    if (!checked) { filterCnt += 1; } else { filterCnt -= 1; }
 
                     filtered.each(function( index ) {
                         var id = $(this).attr('id');
-                        if (checked) {
+                        if (!checked) {
                             filterCont[id].push(filter); 
                             $(this).hide();
                             hiddenCnt += 1;
