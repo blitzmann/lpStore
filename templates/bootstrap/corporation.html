@@ -185,22 +185,23 @@
 
                     max = $('input#'+rangeID+'-max').val() || cfg[rangeType].max;
                     min = $('input#'+rangeID+'-min').val() || cfg[rangeType].min;
-
+    
                     $("#offerList tbody tr").filter(function () {
                         var id = $(this).attr('id');
                                                
                         if (checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
                             filterCont[id].push(rangeID);
                             $(this).hide();
-                            //hiddenCnt += 1; // doesn't work
+                            hiddenCnt += 1;
+                            console.log('Blah!');
                         }
-                        else {
+                        else if (!checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != rangeID; });
                             if (filterCont[id].length == 0) { $(this).show(); }
-                            //hiddenCnt -= 1; //doesn't work
+                            hiddenCnt -= 1;
                         }
                     });
-                    
+                
                     break;
             }
             
