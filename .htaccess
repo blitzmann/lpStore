@@ -5,6 +5,7 @@ RewriteRule    ^corporation/(1000[0-9]{3})/?$    corporation.php?corporation=$1 
 RewriteRule    ^item/([0-9]+)/?$    item.php?typeID=$1    [NC,L]
 RewriteRule    ^offer/([0-9]+)/?$    offer.php?offerID=$1    [NC,L]
 RewriteRule    ^prefs/?$    preferences.php    [NC,L]
+RewriteRule    ^about/?$    about.php    [NC,L]
 
 
 #AddHandler application/x-httpd-php .json
