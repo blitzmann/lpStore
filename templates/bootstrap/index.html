@@ -14,47 +14,6 @@
                     <a href='<?= BASE_PATH ?>faction/<?= $id ?>/'><img src="http://image.eveonline.com/Alliance/<?= $id ?>_128.png" width='96' height='96' alt='Corp Icon' /></a>
                 <?php endforeach; ?>
             </div>
-            <hr />
-        </div>
-        <div style='margin-top: 5em;' class='col-lg-8 col-md-offset-2'>
-            <h2>Todo</h2>
-            <ul>
-                <li>Navbar</li>
-                <li>Preferences</li>
-                <li>json: - rethink design behind this</li>
-                <ul>
-                    <li>faction: get factions and their corps. * returns all</li>
-                    <li>lpoffer: get lpoffer info including price invoice. Can be used with dialog box.</li>
-                    <li>item: return corps that carry item</li>
-                    <li>search: varchar search for corps, factions, etc. Returns name, id, type</li>
-                    <li>store: entire store json data (already available in LPDB dump)</li>
-                    <li>Have available apis and options automatically displayed for <tt>/json</tt></li>
-                </ul>
-                <li>Search: Possibly prefetch corps and factions. This is dependant on the above refinment of json data</li>
-                <li>Filtering offers by</li>
-                <ul>
-                    <li>Toggle required items</li>
-                    <li>Toggle BPCs</li>
-                    <li>Sliders to set min/max of isk/lp/iskperlp</li>
-                    <li>Filter groups (ships, skillbooks, BPC, modules, etc)</li>
-                    <li><ins>Work Started</ins> - 'highlighting' works. Double check market groups and make sure commented out groups don't actually show up in stores. Ideas: change highlighted color depending on how many clicks. Have 2 modes = highlighing / filtering, where filtering removes the offer.</li>
-                </ul>
-                <li>Future: History tab for offers</li>
-                <ul>
-                    <li>Unsure if I wish to store history from EMDR on local server, or gather history 
-                    data from third party and calculate a certain time frame back. This can be cached 
-                    locally and only new data could be fetched afterwards. Will show isk/lp progression</li>
-                </ul>
-                <li>Utility functions on corp/offers page:</li>
-                <ul>
-                    <li>Clickable Icons</li>
-                    <li>link to eve-central or other market site</li>
-                    <li>Show required items without refreshing to offer page (possibly get offer page via ajax and filter it)</li>
-                    <li>get pricing info</li>
-                    <li>show info (if IGB, open show info, if not, open dialog)</li>
-                </ul>
-                <li>Possible future version: shopping cart</li>
-            </ul>
         </div>
     </div><!-- /.container -->
  
