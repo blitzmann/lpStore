@@ -34,7 +34,9 @@
 
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
+    #filtering { float: left; }
     
+    #text_filter {float: right;}
     .browse { margin-top: 2em; }
     .browse > #pri_blk, .browse > #sec_blk { text-align: center; }
     
@@ -64,6 +66,19 @@
 
     tfoot td { text-align: right; }
     tfoot td:first-child { font-weight: bold; }
+    
+    
+    table.dataTable thead th {
+        min-width: 85px;
+        padding: 5px 19px 5px 0px;
+        font-weight: bold;
+        cursor: pointer;
+        *cursor: hand;
+    }
+    
+    .sorting { background: url('sort_both.png') no-repeat center right; }
+    .sorting_asc { background: url('sort_asc.png') no-repeat center right; }
+    .sorting_desc { background: url('sort_desc.png') no-repeat center right; }
     /*
         We want pretty rounded corners on offer imgs.
         We also need to kill off the actual img, otherwise it overwrites the div

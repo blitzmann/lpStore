@@ -11,6 +11,7 @@
             </ul>
             <div class='tab-content'>
                 <div class='tab-pane active' id='store'>
+                    <input id='text_filter' class='fillIn' type='text' placeholder='Search...'>
                     <label class='checkbox'>
                         <input type='checkbox' class='toggle' id='filterToggle' value='true' data-toggle='filtering' /> Filtering Options <small id='filterInfo'><span>0</span> Filters Active, Hiding <span>0</span> Offers.</small>
                     </label>
@@ -41,15 +42,11 @@
                         </fieldset>
                     </fieldset>
                     <table class='table table-striped table-hover table-condensed' id='offerList'>
-                        <thead><tr><th colspan='2'>Offer</th><th>Items Req</th><th>LP Cost</th><th>ISK Cost</th><th>Volume</th><th>ISK/LP</th></tr></thead>
+                        <thead><tr><th>Offer</th><th>Items Req</th><th>LP Cost</th><th>ISK Cost</th><th>Volume</th><th>ISK/LP</th></tr></thead>
                         <tbody>
                         <?php foreach ($this->lpStore->offers AS $id => $offer): ?>
                             <tr id='<?= $offer->offerID ?>' data-group='<?= $offer->marketRoot ?>' data-isk='<?= $offer->iskCost ?>' data-lp='<?= $offer->lpCost ?>' data-lp2isk='<?= $offer->lp2isk ?>' data-volume='<?= $offer->totVolume ?>' data-req='<?= (empty($offer->reqDetails) && empty($offer->manDetails) ? '0' : '1')?>'>
-                                <td class='typeImg'>
-                                    <!--<div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png");'>
-                                        <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' alt='Corp Icon' />
-                                    </div> -->
-                                </td>
+
                                 <td><a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->getDisplayName() ?></a></td>
                                 <td><?= count($offer->reqDetails) ?><?= ($offer->bpc) ? ' + '.count($offer->manDetails) : null ?></td>
                                 <td><?= number_format($offer->lpCost) ?></td>
@@ -81,9 +78,13 @@
    </div><!-- /.container -->
 
 <?php include ('scripts.html') ?>
-
+<script src="<?= BASE_PATH ?>static/datatables.js"></script>
 <script>
-    $(document).ready(function() { 
+    function fnFilterGlobal () {
+        $('#offerList').dataTable().fnFilter($("#text_filter").val(), null, 1, 1);
+    }
+
+    $(document).ready(function() {
         var filterCont = {};
         var filterCnt = 0;
         var hiddenCnt = 0;
@@ -207,6 +208,26 @@
             
             updateFilters();
         }).trigger('toggle');
+
+        $('#offerList').dataTable({
+            "bPaginate": false,
+            //"bSort": false,
+            "sDom": 't',
+            "aoColumnDefs": [
+                { 'bSortable': false, 'aTargets': [ 0 ] }
+            ],
+            "aaSorting": [[ 2, "asc" ]],
+            "aoColumns": [
+                null,
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "desc", "asc", ] },
+                { "asSorting": [ "desc", "asc", ] },
+        ]
+        });
+
+        $("#text_filter").keyup(fnFilterGlobal);
     });
 </script>
 
