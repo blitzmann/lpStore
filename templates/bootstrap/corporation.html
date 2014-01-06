@@ -117,13 +117,14 @@
             volume:  {min:null,max:null}
         };
 
-        var updateFilters = function(a, b) {
+        var updateFilters = function(a) {
             a = typeof a !== 'undefined' ? a : 0;
-            b = typeof b !== 'undefined' ? b : 0;
-
-            var hiddenCnt = $('#offerList').dataTable().fnGetHiddenNodes().length + a;
+            var b = 0; // if text search, this is 1 and is added to filterCnt
             
-            console.log('filters: '+filterCnt+'; hidden: '+hiddenCnt);
+            var hiddenCnt = $('#offerList').dataTable().fnGetHiddenNodes().length + a;
+            if ($("#text_filter").val() !== '') { b = 1; }
+            
+            console.log('filters: '+(filterCnt+b)+'; hidden: '+hiddenCnt);
             $('#filterInfo span:first-child').text(filterCnt+b);
             $('#filterInfo span + span').text(hiddenCnt);
         }
@@ -140,11 +141,10 @@
                 Look into this to confirm. Probably best way is to port custom filtering
                 to DataTables plugins so that it handles removal of rows on it's own.
             */
-            var val = $("#text_filter").val();
-            $('#offerList').dataTable().fnFilter(val, null, 1, 1);
+            $('#offerList').dataTable().fnFilter($("#text_filter").val(), null, 1, 1);
             var empty = $("#offerList tbody tr td:first-child").hasClass('dataTables_empty');
                 
-            updateFilters(empty ? 1 : 0, val !== '' ? 1 : 0);
+            updateFilters(empty ? 1 : 0);
         }
         
         $("#offerList tbody tr").filter(function () {
