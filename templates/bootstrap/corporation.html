@@ -80,14 +80,35 @@
 <?php include ('scripts.html') ?>
 <script src="<?= BASE_PATH ?>static/datatables.js"></script>
 <script>
-    function fnFilterGlobal () {
-        $('#offerList').dataTable().fnFilter($("#text_filter").val(), null, 1, 1);
-    }
-
     $(document).ready(function() {
+        $.fn.dataTableExt.oApi.fnGetHiddenNodes = function ( settings )
+        {
+            var nodes;
+            var display = $('tbody tr', settings.nTable);
+            if ( $.fn.dataTable.versionCheck ) {
+                    // DataTables 1.10
+                    var api = new $.fn.dataTable.Api( settings );
+                    nodes = api.rows().nodes().toArray();
+            }
+            else {
+                    // 1.9-
+                    nodes = this.oApi._fnGetTrNodes( settings );
+            }
+
+            /* Remove nodes which are being displayed */
+            for ( var i=0 ; i<display.length ; i++ ) {
+                    var iIndex = jQuery.inArray( display[i], nodes );
+
+                    if ( display[i].style.display != 'none'  ) {
+                            nodes.splice( iIndex, 1 );
+                    }
+            }
+
+            return nodes;
+        };
+    
         var filterCont = {};
         var filterCnt = 0;
-        var hiddenCnt = 0;
 
         var cfg = {
             isk:     {min:null,max:null},
@@ -96,10 +117,34 @@
             volume:  {min:null,max:null}
         };
 
-        function updateFilters() {
+        var updateFilters = function(a, b) {
+            a = typeof a !== 'undefined' ? a : 0;
+            b = typeof b !== 'undefined' ? b : 0;
+
+            var hiddenCnt = $('#offerList').dataTable().fnGetHiddenNodes().length + a;
+            
             console.log('filters: '+filterCnt+'; hidden: '+hiddenCnt);
-            $('#filterInfo span:first-child').text(filterCnt);
+            $('#filterInfo span:first-child').text(filterCnt+b);
             $('#filterInfo span + span').text(hiddenCnt);
+        }
+        
+        function fnFilterGlobal () {
+            /* 
+                @todo: if no matches are found, hidden count is not correct
+            
+                The reason for this is because DataTables seems to remove filtered rows 
+                from the DOM and store them in a cache (but then it also hides them?) 
+                If there are no matches with the text search, it simply replaces the first 
+                row with text, and thus it is not technically hidden.
+                
+                Look into this to confirm. Probably best way is to port custom filtering
+                to DataTables plugins so that it handles removal of rows on it's own.
+            */
+            var val = $("#text_filter").val();
+            $('#offerList').dataTable().fnFilter(val, null, 1, 1);
+            var empty = $("#offerList tbody tr td:first-child").hasClass('dataTables_empty');
+                
+            updateFilters(empty ? 1 : 0, val !== '' ? 1 : 0);
         }
         
         $("#offerList tbody tr").filter(function () {
@@ -145,12 +190,10 @@
                         if (!checked) {
                             filterCont[id].push(filter); 
                             $(this).hide();
-                            hiddenCnt += 1;
                         }
                         else {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
                             if (filterCont[id].length == 0) { $(this).show(); }
-                            hiddenCnt -= 1;
                         }
                     });
                     console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
@@ -166,12 +209,10 @@
                         if (checked) {
                             filterCont[id].push(filter); 
                             $(this).hide();
-                            hiddenCnt += 1;
                         }
                         else {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != filter; });
                             if (filterCont[id].length == 0) { $(this).show(); }
-                            hiddenCnt -= 1;
                         }
                     });
                     console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
@@ -193,13 +234,10 @@
                         if (checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
                             filterCont[id].push(rangeID);
                             $(this).hide();
-                            hiddenCnt += 1;
-                            console.log('Blah!');
                         }
                         else if (!checked && ($(this).data(rangeType) > max || $(this).data(rangeType) < min)) {
                             filterCont[id] = $.grep(filterCont[id], function(value) { return value != rangeID; });
                             if (filterCont[id].length == 0) { $(this).show(); }
-                            hiddenCnt -= 1;
                         }
                     });
                 
@@ -224,7 +262,7 @@
                 { "asSorting": [ "asc", "desc", ] },
                 { "asSorting": [ "desc", "asc", ] },
                 { "asSorting": [ "desc", "asc", ] },
-        ]
+            ]
         });
 
         $("#text_filter").keyup(fnFilterGlobal);
