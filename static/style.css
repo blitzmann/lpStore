@@ -32,8 +32,6 @@
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
     #filtering { float: left; }
-
-    .browse { margin-top: 2em; }
     #pri_blk, #sec_blk { text-align: center; }
 
     
@@ -90,9 +88,9 @@
     #offerSimilar td:nth-child(1n+3), #offerSimilar th:nth-child(1n+3) { text-align: right; }
     #offerReqs td:nth-child(1n+3), #offerReqs th:nth-child(1n+3) { text-align: right; }
 
-    .offerBrief > div > h4 { font-size: 24px; text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; border-top: 1px solid #eee; }
+    .offerBrief > div > span { display: block; font-size: 20px; text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; border-top: 1px solid #eee; }
     .offerBrief > div.cost { color: #3a87ad; }
-    .offerBrief > div.lp2isk  > h4{ font-size: 32px;  color: #468847; }
+    .offerBrief > div.lp2isk  > span{ font-size: 28px;  color: #468847; }
 
     #footer { margin-bottom: 5em; text-align: center;}
     
