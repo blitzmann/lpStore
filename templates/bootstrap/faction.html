@@ -3,7 +3,7 @@
 
     <div class='container'>
         <div class='col-lg-10 col-md-offset-1'>
-            <h3><?= $this->factionName ?></h3>
+            <h2><?= $this->factionName ?></h2>
             <div class='list-group' id='corp_list'>
                 <?php foreach ($this->corps as $info):  ?>
                     <a class="col-md-4 list-group-item" href='<?= BASE_PATH ?>corporation/<?= $info['corporationID'] ?>/'>
