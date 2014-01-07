@@ -13,8 +13,11 @@
     p~h3 {margin-top:2em;}
     .center-pills { display: inline-block; }
 
-    table { width: 100%; }
-
+    table { width: 100%; text-align: right; }
+    
+    th { text-align: right; }
+    td:first-child, th:first-child  { text-align: left; }
+    
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
     label.checkbox > span { width: 4.5em; display: inline-block; }
@@ -58,6 +61,7 @@
         width: 32px;
         height: 32px;        
         vertical-align:1px;
+        margin-right: 5px;
     }
     
     .imgRound img{
@@ -80,12 +84,7 @@
     
     .sorting { background: url('sort_both.png') no-repeat center right; }
     .sorting_asc { background: url('sort_asc.png') no-repeat center right; }
-    .sorting_desc { background: url('sort_desc.png') no-repeat center right; }
-        
-    #offerList td:nth-child(1n+3), #offerList th:nth-child(1n+2) { text-align: right; }
-    #stationList td:nth-child(1n+2), #stationList th:nth-child(1n+    2) { text-align: right; }
-    #offerSimilar td:nth-child(1n+3), #offerSimilar th:nth-child(1n+3) { text-align: right; }
-    #offerReqs td:nth-child(1n+3), #offerReqs th:nth-child(1n+3) { text-align: right; }
+    .sorting_desc { background: url('sort_desc.png') no-repeat center right; }    
 
     .offerBrief > div > span { display: block; font-size: 20px; text-align: center; font-weight: bold; line-height: 70px; border-bottom: 1px solid #eee; margin-top: 0; border-top: 1px solid #eee; }
     .offerBrief > div.cost { color: #3a87ad; }
@@ -99,7 +98,7 @@
     /* 
         Bunch of hacks to get the offer details page to look the way I want it to.
         
-        The reason for this is becasue there cannot be more than one <thead> per 
+        The reason for this is because there cannot be more than one <thead> per 
         table. I wanted each section to have a header, so thus I had to mimic 
         <thead> by reversing Bootstrap's default styling of odd/even rows. I then 
         added a bit of space between each <tbody> so as to not look too cluttered. 
