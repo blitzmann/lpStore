@@ -34,7 +34,7 @@
     #filtering { float: left; }
 
     .browse { margin-top: 2em; }
-    .browse > #pri_blk, .browse > #sec_blk { text-align: center; }
+    #pri_blk, #sec_blk { text-align: center; }
 
     
     /* Fill-in-the-blank style for text inputs */

@@ -20,7 +20,7 @@ if (count($offers) === 1) {
 }
 
 foreach ($offers AS $id => $data) {
-    $offers[$id] = (new LpOffer($data['offerID']))->calc(MARKET_MODE); }
+    $offers[$id] = (new LpOffer($data['offerID']))->calc(); }
 
 $tpl->offers = $offers;
 $tpl->display('item.html');
