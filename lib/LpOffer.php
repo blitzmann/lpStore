@@ -12,8 +12,6 @@
     the info for the entire LP Store. lpStore() will do one big 
     query to get all offers and 1 query to get required items, 
     and pass this info along to lpOffer()
-    
-    @todo: allow switching req and man costs between sell and buy?
 */
 
 class LpOffer {

@@ -138,7 +138,7 @@
         display: inline-block;
         position: relative;
         margin-right: 0.3em;
-        
+        margin-top: 3px;
     }
     
     input[type='checkbox']:active, input[type='checkbox']:checked:active {

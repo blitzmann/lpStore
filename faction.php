@@ -2,8 +2,7 @@
 
 require_once 'config.php'; 
 
-# @todo: filter
-$factionID = $_GET['factionID'];
+$factionID = filter_input(INPUT_GET, 'factionID', FILTER_VALIDATE_INT);
 
 $tpl->factionName = Db::qColumn("SELECT `itemName` FROM  `invUniqueNames` WHERE  `itemID` = ?", array($factionID));
 $tpl->corps = Db::q("

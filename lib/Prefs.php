@@ -26,8 +26,6 @@ class Prefs {
     function __construct() { 
         if (isset($_COOKIE['prefs'])){
             self::$prefs = array_merge(self::$default, unserialize($_COOKIE['prefs']))    ;
-            # @todo: filter
-            #self::$prefs = filter_var_array(unserialize($_COOKIE['prefs']), $filterArgs); }
         }
         else {
             self::$prefs = self::$default; }

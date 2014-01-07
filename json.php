@@ -51,8 +51,8 @@ function doJson($request, $query){
             foreach (Db::q($json_sql[$request], array(':query' => $query)) AS $result){
                 $json[] = array(
                     'value' => $result['name'],
-                    'id' => $result['id'],
-                    'type' => $result['type']
+                    'id'    => $result['id'],
+                    'type'  => $result['type']
                 );
             }
             break;
@@ -66,7 +66,6 @@ function doJson($request, $query){
 if (isset($_GET['noinclude'])){ // if accessing via ajax /json/blah/thing.json
     require_once "config.php";
     # @todo: try...catch
-    # @todo: filter
-    //var_dump($_GET);
+
     echo json_encode(doJson($_GET['request'], $_GET['query'])); 
 }

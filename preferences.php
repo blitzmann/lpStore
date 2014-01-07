@@ -6,8 +6,7 @@ $tpl->success = null;
 
 if (isset($_POST['prefSave'])) {
     try {
-        # @todo: filter
-        Prefs::setRegion($_POST['region']);
+        Prefs::setRegion(filter_input(INPUT_POST, 'region', FILTER_VALIDATE_INT));
         
         switch ($_POST['marketMode']) {
             case 'sell':
@@ -19,8 +18,8 @@ if (isset($_POST['prefSave'])) {
             case 'adv':
                 Prefs::setMarketMode(
                             ($_POST['offerItem'] === 'buy' ? 'buy' : 'sell'),
-                            ($_POST['reqItems'] === 'buy' ? 'buy' : 'sell'),
-                            ($_POST['matItems'] === 'buy' ? 'buy' : 'sell'));
+                            ($_POST['reqItems']  === 'buy' ? 'buy' : 'sell'),
+                            ($_POST['matItems']  === 'buy' ? 'buy' : 'sell'));
                 break;
             default:
                 throw new Exception('Invalid Form Data');
@@ -38,6 +37,5 @@ if (array(Prefs::get('marketOffer'), Prefs::get('marketReq'), Prefs::get('market
 else if (array(Prefs::get('marketOffer'), Prefs::get('marketReq'), Prefs::get('marketMat')) === array('buy','sell','sell')) {
     $tpl->radio = 'buy'; }
 else { $tpl->radio = 'adv'; }
-
 
 $tpl->display('preferences.html');
