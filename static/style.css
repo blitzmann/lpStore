@@ -45,16 +45,30 @@
     /*
         Fixes for 32x32 type images for both condensed rows and regular rows
         Bootstrap condensed rows are 30px high with 1 px top border, this 
-        overrides and give the row a 32px hieght (to match image) with 1px 
-        border, totaling 33px
+        overrides and give the row a 32px height (to match image) with 1px 
+        border, totalling 33px
     */
-    td.typeImg{ padding: 2px 5px 2px 0px !important; width: 42px; }
+    td.img{ padding: 2px 5px 2px 0px !important; vertical-align: middle !important;}
     .table-condensed td { padding: 6px 5px 6px 0px !important; }
-    .table-condensed td.typeImg{ padding: 0px 5px 0px 0px !important; width: 42px; }
+    .table-condensed td.img{ padding: 0px 5px 0px 0px !important; }
 
+    .imgRound {
+        display: inline-block;
+        border: 0px solid black;
+        width: 32px;
+        height: 32px;        
+        vertical-align:1px;
+    }
+    
+    .imgRound img{
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        -webkit-border-radius: 5px;
+    }
+    
     tfoot td { text-align: right; }
     tfoot td:first-child { font-weight: bold; }
-    
     
     table.dataTable thead th {
         min-width: 85px;
@@ -67,22 +81,7 @@
     .sorting { background: url('sort_both.png') no-repeat center right; }
     .sorting_asc { background: url('sort_asc.png') no-repeat center right; }
     .sorting_desc { background: url('sort_desc.png') no-repeat center right; }
-    /*
-        We want pretty rounded corners on offer imgs.
-        We also need to kill off the actual img, otherwise it overwrites the div
-    */
-    .imgRound {
-        border: 0px solid black;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        -khtml-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        width: 32px;
-        height: 32px;
-    }
-    
-    .imgRound img{ display:none; }
-    
+        
     #offerList td:nth-child(1n+3), #offerList th:nth-child(1n+2) { text-align: right; }
     #stationList td:nth-child(1n+2), #stationList th:nth-child(1n+    2) { text-align: right; }
     #offerSimilar td:nth-child(1n+3), #offerSimilar th:nth-child(1n+3) { text-align: right; }

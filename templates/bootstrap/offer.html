@@ -11,17 +11,6 @@
             </ul>
             <div class='tab-content'>
                 <div class='tab-pane active' id='offer'>
-                    <!--
-                    <div style="border: 0px solid black;
-                        border-radius: 5px;
-                        -moz-border-radius: 5px;
-                        -khtml-border-radius: 5px;
-                        -webkit-border-radius: 5px;
-                        width: 64px;
-                        height: 64px;
-                        background: url('http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_64.png');">
-                    </div>
-                    -->
                     <div class="row offerBrief">
                         <div class="col-md-4 cost"><span><?= number_format($this->offer->lpCost) ?>  LP</span></div>
                         <div class="col-md-4 lp2isk"><span><?= number_format($this->offer->lp2isk) ?>  ISK/LP</span></div>
@@ -29,22 +18,16 @@
                     </div>
                     <table class='table table-striped table-hover' id='offerReqs'>
                         <tbody>
-                        <tr><th colspan='2'>Offer<?= ($this->offer->bpc) ? ' (manufactured)' : null ?></th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
+                        <tr><th>Offer<?= ($this->offer->bpc) ? ' (manufactured)' : null ?></th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         <tr>
+                            <td class='img'>
                             <?php if ($this->offer->bpc): ?>
-                            <td class='typeImg'>
-                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $this->offer->manTypeID ?>_32.png");'>
-                                    <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $this->offer->manTypeID ?>_32.png' alt='Item Icon' />
-                                </div>
-                            </td>
+                                <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $this->offer->manTypeID ?>_32.png' alt='Item Icon' /></div>
                             <?php else: ?>
-                            <td class='typeImg'>
-                                <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_32.png");'>
-                                    <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_32.png' alt='Item Icon' />
-                                </div>
-                            </td>
+                                <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $this->offer->typeID ?>_32.png' alt='Item Icon' /></div>
                             <?php endif; ?>
-                            <td><?= $this->offer->getProductName() ?></td>
+                                <?= $this->offer->getProductName() ?>
+                            </td>
                             <td><?= $this->offer->quantity?>x</td>
                             <td><?= number_format($this->offer->price,2) ?></td>
                             <td><?= number_format($this->offer->profit,2) ?></td>
@@ -52,16 +35,14 @@
                         </tbody>
                         <?php if (!empty($this->offer->reqDetails)): ?>
                         <tbody>
-                        <tr><th colspan='2'>Offer Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
+                        <tr><th>Offer Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
                         
                         <?php foreach ($this->offer->reqDetails AS $item): ?>
                             <tr>
-                                <td class='typeImg'>
-                                    <div class='imgRound' style='background: url("http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png");'>
-                                        <img width='32' height='32' src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' />
-                                    </div>
+                                <td class='img'>
+                                    <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' /></div>
+                                    <?= $item['typeName'] ?>
                                 </td>
-                                <td><?= $item['typeName'] ?></td>
                                 <td><?= $item['quantity'] ?>x</td>
                                 <td><?= number_format($item['price'],2) ?></td>
                                 <td>-<?= number_format($item['totPrice'],2) ?></td>
@@ -70,12 +51,14 @@
                         </tbody>
                         <?php endif; if ($this->offer->bpc): ?>
                         <tbody>
-                        <tr><th colspan='2'>Manufacturing Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
+                        <tr><th>Manufacturing Requirements</th><th>Qty</th><th>Price per Unit</th><th>Total</th></tr>
 
                         <?php foreach ($this->offer->manDetails AS $item): ?>
                         <tr>
-                            <td class='typeImg'><img src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' /></td>
-                            <td><?= $item['typeName'] ?></td>
+                            <td class='img'>
+                                <img src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' />
+                                <?= $item['typeName'] ?>
+                            </td>
                             <td><?= number_format($item['totQty']) ?>x</td>
                             <td><?= number_format($item['price'],2) ?></td>
                             <td>-<?= number_format($item['totPrice'],2) ?></td>
@@ -87,13 +70,13 @@
                         <tfoot>
 
                         <tr>
-                            <td colspan='4'>Offer ISK Cost</td><td>-<?= number_format($this->offer->iskCost,2) ?></td>
+                            <td colspan='3'>Offer ISK Cost</td><td>-<?= number_format($this->offer->iskCost,2) ?></td>
                         </tr>
                         <tr>
-                            <td colspan='4'>Total Cost</td><td>-<?= number_format($this->offer->totalCost,2) ?></td>
+                            <td colspan='3'>Total Cost</td><td>-<?= number_format($this->offer->totalCost,2) ?></td>
                         </tr>
                         <tr>
-                            <td colspan='4'>Profit</td><td><?= number_format($this->offer->margin,2) ?></td>
+                            <td colspan='3'>Profit</td><td><?= number_format($this->offer->margin,2) ?></td>
                         </tr>
                         </tfoot>
                         </table>
@@ -104,8 +87,10 @@
                         
                         <?php foreach ($this->offer->getStores() AS $store): ?>
                         <tr>
-                            <td class='typeImg'><img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' /></td>
-                            <td><a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'><?= $store['itemName'] ?></a></td>
+                            <td class='img'>
+                                <img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' />
+                                <a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'><?= $store['itemName'] ?></a>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
