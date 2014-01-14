@@ -7,17 +7,7 @@
 */    
 
 $json_sql = array(
- 'faction'=><<<'FAC'
-    SELECT a.corporationID, b.factionID, c.itemName AS corpName, f.itemName AS facName
-    FROM `lpStore` a 
-    INNER JOIN crpNPCCorporations b ON (b.corporationID = a.corporationID) 
-    INNER JOIN invUniqueNames c ON (a.corporationID = c.itemID AND c.groupID = 2)
-    INNER JOIN invUniqueNames f ON (b.factionID = f.itemID)
-    WHERE b.factionID LIKE ?
-    GROUP BY a.corporationID 
-    ORDER BY facName, corpName ASC
-FAC
-, 'search' => <<<'SEARCH'
+'search' => <<<'SEARCH'
     SELECT a.corporationID AS id, b.itemName AS name, 'corporation' AS type
     FROM lpStore a 
     INNER JOIN invUniqueNames b ON (a.corporationID = b.itemID AND b.groupID = 2) 
@@ -39,13 +29,6 @@ function doJson($request, $query){
     
     $json = array();
     switch ($request) {
-        # @todo: should this really return corps?
-        case 'faction':
-            foreach (Db::q($json_sql[$request], array($query)) AS $result){
-                if (!isset($json[$result['factionID']]['name'])) {
-                    $json[$result['factionID']]['name'] = $result['facName']; }
-                $json[$result['factionID']]['corps'][$result['corporationID']] = $result['corpName']; }
-            break;
         case 'search':
             $query = '%'.$query.'%'; // Add wildcards
             foreach (Db::q($json_sql[$request], array(':query' => $query)) AS $result){
