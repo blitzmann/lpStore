@@ -51,7 +51,6 @@
         border, totalling 33px
     */
     td.img{ padding: 2px 5px 2px 0px !important; vertical-align: middle !important;}
-    td.img img { margin-right: 0.5em; }
     .table-condensed td { padding: 6px 5px 6px 0px !important; }
     .table-condensed td.img{ padding: 0px 5px 0px 0px !important;}
 
@@ -61,7 +60,7 @@
         width: 32px;
         height: 32px;        
         vertical-align:1px;
-        margin-right: 5px;
+        margin-right: 0.5em;
     }
     
     .imgRound img{

@@ -27,7 +27,8 @@
         // Attach initialized event to it
         search.on('typeahead:selected',function(evt,data){
             //var data = JSON.stringify(data);
-            window.location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
+            var location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
+            window.location = location;
             //console.log(data.id); //selected datum object
         });
     }); 

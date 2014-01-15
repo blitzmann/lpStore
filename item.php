@@ -1,8 +1,8 @@
 <?php
 
 require_once 'config.php'; 
-require_once 'json.php';
 
+# @todo migrate SQL to Query subclass 
 $typeID = filter_input(INPUT_GET, 'typeID', FILTER_VALIDATE_INT);
 $tpl->typeName = Db::qColumn("SELECT `typeName` FROM  `invTypes` WHERE  `typeID` = ?", array($typeID));
 

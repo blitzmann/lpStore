@@ -56,7 +56,7 @@
                         <?php foreach ($this->offer->manDetails AS $item): ?>
                         <tr>
                             <td class='img'>
-                                <img src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' />
+                                 <div class='imgRound'><img src='http://image.eveonline.com/Type/<?= $item['typeID'] ?>_32.png' alt='Item Icon' /></div>
                                 <?= $item['typeName'] ?>
                             </td>
                             <td><?= number_format($item['totQty']) ?>x</td>
@@ -89,7 +89,7 @@
                         <tr>
                             <td class='img'>
                                 <a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'>
-                                    <img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' /><?= $store['itemName'] ?>
+                                    <div class='imgRound'><img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' /></div><?= $store['itemName'] ?>
                                 </a>
                             </td>
                         </tr>
