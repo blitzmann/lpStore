@@ -33,7 +33,6 @@
     
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
-    #filtering { float: left; }
     #pri_blk, #sec_blk { text-align: center; }
 
     
