@@ -1,7 +1,7 @@
 RewriteEngine On
 RewriteRule    ^json/([a-z]+)/([\s\w*]+).json$    json.php?request=$1&query=$2&noinclude    [NC,L]
 RewriteRule    ^faction/(5000[0-9]{2})/?$    faction.php?factionID=$1    [NC,L]
-RewriteRule    ^corporation/(1000[0-9]{3})/?$    corporation.php?corporation=$1    [NC,L]
+RewriteRule    ^(corporation|corp)/(1000[0-9]{3})/?$    corporation.php?corporation=$2    [NC,L]
 RewriteRule    ^item/([0-9]+)/?$    item.php?typeID=$1    [NC,L]
 RewriteRule    ^offer/([0-9]+)/?$    offer.php?offerID=$1    [NC,L]
 RewriteRule    ^prefs/?$    preferences.php    [NC,L]
