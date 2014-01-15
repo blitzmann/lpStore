@@ -107,9 +107,25 @@
             return nodes;
         };
     
-        var filterCont = {};
-        var filterCnt = 0;
+        $('#offerList').dataTable({
+            "bPaginate": false,
+            //"bSort": false,
+            "sDom": 't',
+            "aoColumnDefs": [
+                { 'bSortable': false, 'aTargets': [ 0 ] }
+            ],
+            "aaSorting": [[ 2, "asc" ]],
+            "aoColumns": [
+                null,
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "asc", "desc", ] },
+                { "asSorting": [ "desc", "asc", ] },
+                { "asSorting": [ "desc", "asc", ] },
+            ]
+        });
 
+        var filterCont = {};
         var cfg = {
             isk:     {min:null,max:null},
             lp:      {min:null,max:null},
@@ -121,6 +137,10 @@
             a = typeof a !== 'undefined' ? a : 0;
             var b = 0; // if text search, this is 1 and is added to filterCnt
             
+            var filterCnt = $('input[data-filter="group"]:not(:checked)').length +
+                            $('input[data-filter="range"]:checked').length +
+                            $('input[data-filter="req"]:checked').length;
+
             var hiddenCnt = $('#offerList').dataTable().fnGetHiddenNodes().length + a;
             if ($("#text_filter").val() !== '') { b = 1; }
             
@@ -128,7 +148,7 @@
             $('#filterInfo span:first-child').text(filterCnt+b);
             $('#filterInfo span + span').text(hiddenCnt);
         }
-        
+
         function fnFilterGlobal () {
             /* 
                 @todo: if no matches are found, hidden count is not correct
@@ -146,7 +166,7 @@
                 
             updateFilters(empty ? 1 : 0);
         }
-        
+
         $("#offerList tbody tr").filter(function () {
             for (type in cfg) {
                 tmp = parseInt($(this).data(type))
@@ -165,7 +185,7 @@
         }
 
         // !- Bind checkboxes to show filters
-        $('input[type="checkbox"].toggle').bind("change", function(){
+        $('input[type="checkbox"].toggle').on("change", function(){
             if (typeof $(this).data('toggle') != 'undefined') {
                 if ($(this).is(":checked")) {
                     $("#"+$(this).data('toggle')).show(); }
@@ -175,15 +195,13 @@
             }
         }).trigger('change');
 
-        $('input[type="checkbox"].filter').bind("change", function(){
+        $('input[type="checkbox"].filter').on("change", function(){
             var filter = $(this).data('filter');
             switch (filter) {
                 
                 case 'group':
                     var checked = $(this).is(":checked");
                     var filtered = $('*[data-group="'+this.value+'"]');
-
-                    if (!checked) { filterCnt += 1; } else { filterCnt -= 1; }
 
                     filtered.each(function( index ) {
                         var id = $(this).attr('id');
@@ -201,8 +219,6 @@
                 case 'req':
                     var checked = $(this).is(":checked");
                     var filtered = $('*[data-req="1"]');
-
-                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
 
                     filtered.each(function( index ) {
                         var id = $(this).attr('id');
@@ -222,8 +238,6 @@
                     var checked = $(this).is(":checked");
                     var rangeID = $(this).attr('id')
                     var rangeType = $(this).data('range')
-
-                    if (checked) { filterCnt += 1; } else { filterCnt -= 1; }
 
                     max = $('input#'+rangeID+'-max').val() || cfg[rangeType].max;
                     min = $('input#'+rangeID+'-min').val() || cfg[rangeType].min;
@@ -245,25 +259,7 @@
             }
             
             updateFilters();
-        }).trigger('toggle');
-
-        $('#offerList').dataTable({
-            "bPaginate": false,
-            //"bSort": false,
-            "sDom": 't',
-            "aoColumnDefs": [
-                { 'bSortable': false, 'aTargets': [ 0 ] }
-            ],
-            "aaSorting": [[ 2, "asc" ]],
-            "aoColumns": [
-                null,
-                { "asSorting": [ "asc", "desc", ] },
-                { "asSorting": [ "asc", "desc", ] },
-                { "asSorting": [ "asc", "desc", ] },
-                { "asSorting": [ "desc", "asc", ] },
-                { "asSorting": [ "desc", "asc", ] },
-            ]
-        });
+        }).trigger('change');
 
         $("#text_filter").keyup(fnFilterGlobal);
     });
