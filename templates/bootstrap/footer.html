@@ -1,6 +1,12 @@
     <hr />
     <div id='footer'>
-        <?= number_format($this->siteTime->stop(),2) ?> ms | <?= Db::$queryCount ?> qs | Using <?= Db::getDbName() ?> / <a href='https://forums.eveonline.com/default.aspx?g=posts&amp;m=2508255'>LPDB</a> v<?= Db::getLpDbVersion() ?>
+    <span>&copy; Sable Blitzmann (
+        <a href='https://gate.eveonline.com/Mail/Compose/Sable%20Blitzmann'>mail</a>, 
+        <a href='https://github.com/blitzmann/lpStore' title='commit <?= `git log -1 --pretty=format:'%h' --abbrev-commit`; ?>'>GitHub</a> )</span> |
+    <span><?= strtoupper(Db::getDbName()) ?> / <a href='https://forums.eveonline.com/default.aspx?g=posts&amp;m=2508255'>LPDB</a> v<?= Db::getLpDbVersion() ?></span> |
+    <span><a href='<?= BASE_PATH ?>json/'>API</a></span> |
+    <span><?= number_format($this->siteTime->stop(),2) ?> ms</span> |
+    <span><?= Db::$queryCount ?> qs</span>
     </div>
   </body>
 </html>

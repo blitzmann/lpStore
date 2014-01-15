@@ -1,54 +1,34 @@
 <?php
+// This file handles requests for JSON data
+# @todo: if query is required, don't exit. Pass exception / display error 
+require_once "config.php";
 
-/*
-    This file manages mostly ajax requests, but can also be included to get 
-    info from the $json array.
-    
-*/    
+if (isset($_GET['request'])) {
+    $request = $_GET['request'];
+    $query   = ($_GET['query'] === '*' ? '%' : $_GET['query']);
 
-$json_sql = array(
-'search' => <<<'SEARCH'
-    SELECT a.corporationID AS id, b.itemName AS name, 'corporation' AS type
-    FROM lpStore a 
-    INNER JOIN invUniqueNames b ON (a.corporationID = b.itemID AND b.groupID = 2) 
-    WHERE itemName LIKE :query
-    GROUP BY a.corporationID 
-    
-    UNION
-    
-    SELECT a.typeID AS id, b.typeName AS name, 'item' AS type
-    FROM lpOffers a 
-    INNER JOIN invTypes b ON (a.typeID = b.typeID) 
-    WHERE typeName LIKE :query
-SEARCH
-);
-
-function doJson($request, $query){
-    global $json_sql;
-    $query = ($query === '*' ? '%' : $query);
-    
-    $json = array();
     switch ($request) {
-        case 'search':
-            $query = '%'.$query.'%'; // Add wildcards
-            foreach (Db::q($json_sql[$request], array(':query' => $query)) AS $result){
-                $json[] = array(
-                    'value' => $result['name'],
-                    'id'    => $result['id'],
-                    'type'  => $result['type']
-                );
-            }
+        case 'type':
+            if (!$query || $query == '%') { exit(); }
+            echo (new Query_Types($query))->json();
+            break;
+        case 'offer':
+            if (!$query || $query == '%') { exit(); }
+            // @todo: add options for region/market modes
+            $offerID = filter_input(INPUT_GET, 'query', FILTER_VALIDATE_INT);
+            echo json_encode((new LpOffer($offerID))->calc());
+            break;
+        case 'corps':
+            echo (new Query_Corps($query))->json();
+            break;
+        case 'store':
+            // @todo: include corp json file
             break;
         default:
             break;
     }
     
-    return $json;
+    exit();
 }
 
-if (isset($_GET['noinclude'])){ // if accessing via ajax /json/blah/thing.json
-    require_once "config.php";
-    # @todo: try...catch
-
-    echo json_encode(doJson($_GET['request'], $_GET['query'])); 
-}
+$tpl->display('json.html');

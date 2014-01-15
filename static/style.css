@@ -31,7 +31,6 @@
     /* Toggleable fieldsets*/
     label.radio ~ fieldset, label.checkbox ~ fieldset{ margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; margin-bottom: 0px; }
     
-
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
     #filtering { float: left; }
@@ -91,6 +90,7 @@
     .offerBrief > div.lp2isk  > span{ font-size: 28px;  color: #468847; }
 
     #footer { margin-bottom: 5em; text-align: center;}
+    #footer > span { margin: 0px 0.3em; }
     
     .alert { margin-bottom: 10px !important; }
     

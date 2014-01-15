@@ -3,7 +3,6 @@
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
-        
         $('#searchCont').hide();
         
         $("a#srchLnk").click(function(event) {
@@ -20,7 +19,8 @@
         
         var search = $('#search').typeahead([{
             name: 'search',
-            remote: '<?= BASE_PATH ?>json/search/%QUERY.json',
+            remote: '<?= BASE_PATH ?>json/type/%QUERY.json',
+            prefetch: '<?= BASE_PATH ?>json/corps/*.json',
             limit: 20
         }]);
         

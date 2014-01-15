@@ -1,0 +1,28 @@
+<?php include ('header.html') ?>
+<?php include ('navbar.html') ?>
+
+    <div class='container'>
+        <div class='col-lg-10 col-md-offset-1'>
+            <h2>API</h2>
+            <h3>Introduction</h3>
+            <p><span class='project'>lpStore</span> provides a rudimentary API for third party applications. All APIs are accessed via <tt>/json/&lt;api&gt;/&lt;query&gt;.json</tt>. While there are a few APIs enabled for use, most third-party developers will only be interested in the <tt>offer</tt> API, which returns a JSON-serialized string of the LpOffer with all data associated with that offer. The others are used by <span class='project'>lpStore</span> itself (typeahead search, etc). If you have an idea for a useful API, feel free to contact me!</p>
+            <p>I ask that you <strong>DO NOT</strong> abuse this API. A few queries here or there is fine (ie: spreadsheet use, pages that use data for supplemental info), but if you need continuous data (ie: your own ISK/LP application), you're more than welcome to take a look at <a href='https://github.com/blitzmann/lpStore' target='_blank'>lpStore on GitHub</a> and make your own implementation. I simply do not have the resources or bandwidth to process continuous requests, and I will block IPs that show abuse.</p>
+            <p>Also, please remember that complete LP Store data is available with the <a href="https://forums.eveonline.com/default.aspx?g=posts&amp;m=2508255">LPDB release</a>.</p>        
+            <p>Thanks, <br />§ Sable Blitzmann</p>
+            <h3>APIs</h3>
+            <dl>
+                <dt>Offers</dt>
+                <dd><tt>/json/offer/&lt;offerID&gt;.json</tt></dd>
+                <dd>Simply returns a JSON-encoded strong of the <tt>LpOffer</tt> class initialised with the offer ID. Variables are self-explanatory, however more information on variables is available at <tt>/lib/LpOffer.php</tt> on GitHub. Please note that, at this time, ISK/LP and all pricing data is based on The Forge region and sell orders for everything.</dd>
+                <dt>Corps</dt>
+                <dd><tt>/json/corps/&lt;* | varchar search&gt;.json</tt></dd>
+                <dd>Used by <span class='project'>lpStore</span> as the JSON source for corporation listing used by the Twitter Typeahead search. Can either be given a asterisk to return all corps, or narrowed with a character search. No understandable use for third party applications as data is available in LPDB<dd>
+                <dt>Types</dt>
+                <dd><tt>/json/type/&lt;varchar search&gt;.json</tt></dd>
+                <dd>Used by <span class='project'>lpStore</span> as the JSON source for LP Offer item searches used by the Twitter Typeahead search. Must have a search term. No understandable use for third party applications as data is available in LPDB<dd>
+            </dl>
+        </div>
+    </div><!-- /.container -->
+
+<?php include ('scripts.html') ?>
+<?php include ('footer.html') ?>
