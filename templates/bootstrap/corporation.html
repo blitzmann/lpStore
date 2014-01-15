@@ -47,8 +47,9 @@
                             <tr id='<?= $offer->offerID ?>' data-group='<?= $offer->marketRoot ?>' data-isk='<?= $offer->iskCost ?>' data-lp='<?= $offer->lpCost ?>' data-lp2isk='<?= $offer->lp2isk ?>' data-volume='<?= $offer->totVolume ?>' data-req='<?= (empty($offer->reqDetails) && empty($offer->manDetails) ? '0' : '1')?>'>
                                 
                                 <td class='img'>
-                                    <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' alt='Item Icon' /></div>
-                                    <a href='<?= BASE_PATH ?>offer/<?= $id ?>/'><?= $offer->getDisplayName() ?></a>
+                                    <a href='<?= BASE_PATH ?>offer/<?= $id ?>/'>
+                                        <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer->typeID ?>_32.png' alt='Item Icon' /></div><?= $offer->getDisplayName() ?>
+                                    </a>
                                 </td>
                                 <td><?= count($offer->reqDetails) ?><?= ($offer->bpc) ? ' + '.count($offer->manDetails) : null ?></td>
                                 <td><?= number_format($offer->lpCost) ?></td>

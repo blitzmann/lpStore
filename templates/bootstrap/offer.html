@@ -84,12 +84,13 @@
                 </div>
                 <div class='tab-pane' id='stores'>
                     <table class='table table-condensed table-striped table-hover' id='offerStores'>
-                        
+                        <tr><th>Stores</th></tr>
                         <?php foreach ($this->offer->getStores() AS $store): ?>
                         <tr>
                             <td class='img'>
-                                <img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' />
-                                <a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'><?= $store['itemName'] ?></a>
+                                <a href='<?= BASE_PATH ?>corporation/<?= $store['corporationID'] ?>/'>
+                                    <img src='http://image.eveonline.com/Corporation/<?= $store['corporationID'] ?>_32.png' alt='Corp Icon' /><?= $store['itemName'] ?>
+                                </a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -97,16 +98,21 @@
                 </div>
                 <div class='tab-pane' id='similar'>
                     <table class='table table-condensed table-striped table-hover' id='offerSimilar'>
-                        <tr><th>ID</th><th>Offer</th><th>LP Cost</th><th>ISK Cost</th></tr>
+                        <tr><th>Offer</th><th>LP Cost</th><th>ISK Cost</th></tr>
                         
-                        <?php foreach ($this->offer->getSimilar() AS $offer): ?>
+                        <?php foreach ($c = $this->offer->getSimilar() AS $offer): if (count($c) === 1): ?>
+                        <tr><td colspan='3'><div class='text-center'>No Similar Offers Available</div></td></tr>
+                        <?php endif; if ($offer['offerID'] != $this->offer->offerID):?>
                         <tr>
-                            <td><a href='<?= BASE_PATH ?>offer/<?= $offer['offerID'] ?>/'><?= $offer['offerID'] ?></a></td>
-                            <td><?= $offer['typeName'] ?></td>
-                            <td><?= $offer['lpCpst'] ?></td>
-                            <td><?= $offer['iskCost'] ?></td>
+                            <td class='img'>
+                                <a href='<?= BASE_PATH ?>offer/<?= $offer['offerID'] ?>/'>
+                                    <div class='imgRound'><img width='32' height='32' src='http://image.eveonline.com/Type/<?= $offer['typeID'] ?>_32.png' alt='Item Icon' /></div><?= $offer['typeName'] ?>
+                                </a>
+                            </td>
+                            <td><?= number_format($offer['lpCost']) ?></td>
+                            <td><?= number_format($offer['iskCost']) ?></td>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php endif; endforeach; ?>
                     </table>
                 </div>
             </div>

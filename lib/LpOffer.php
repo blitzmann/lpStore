@@ -151,7 +151,7 @@ class LpOffer {
     }
     
     public function getSimilar() {
-        return (new Query_OfferStores($this->offerDetails['typeID']))->execute();
+        return (new Query_OfferSimilar($this->offerDetails['typeID']))->execute();
     }
     
     public function getStores() {

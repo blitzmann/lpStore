@@ -16,7 +16,8 @@ class Query_OfferStores {
             SELECT s.*, u.`itemName` 
             FROM `lpStore` s 
             INNER JOIN `invUniqueNames` u ON (u.`itemID` = s.`corporationID`) 
-            WHERE `offerID` = :offerID', 
+            WHERE `offerID` = :offerID
+            ORDER BY `itemName` ASC', 
             array(':offerID'=>$this->offerID));
         
         return $result;
