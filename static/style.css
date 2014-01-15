@@ -119,11 +119,10 @@
 
     /*
         Corp listing for factions.  Minor tweaks to make it look nice with corp
-        image in it. margine-right statement removes double border
+        image in it. margin-right statement removes double border
     */
-    #corp_list a.list-group-item { margin-right: -1px; padding: 2px 5px 2px 5px; border-radius: 0px; }
+    #corp_list a.list-group-item { border-right: 0px; border-left: 0px; padding: 5px 5px 5px 5px; border-radius: 0px; }
     #corp_list a > img { margin-right: 5px; } 
-    #corp_list { margin-left: 3px; } /* to compensate for the -1 margin of the items * 3 columns */
     
     
     /* Fancy checkboxes and radios */
