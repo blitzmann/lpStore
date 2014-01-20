@@ -20,7 +20,7 @@
     
     label { font-weight: normal; } /* Don't like how Bootstrap3 bolds it */
     input ~ small { margin-left: 1em; color: #3a87ad;}
-    label.checkbox > span { width: 4.5em; display: inline-block; }
+    #ranges label > span { width: 4.5em; display: inline-block; }
     
     form fieldset { margin-bottom: 2em; }
     legend:before, h4:before {content:'\00bb '; padding-right: 0.5em; }
