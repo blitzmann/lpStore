@@ -87,8 +87,23 @@
         /***************
         * Station listing code
         ****************/
+        
         // hide the jump column on load
         $('#stationList th:last-child, #stationList td:last-child').hide();
+        
+        var search = $('#sys_search').typeahead([{
+            name: 'syssearch',
+            remote: '<?= BASE_PATH ?>json/system/%QUERY.json',
+            limit: 20
+        }]);
+        
+        // Attach initialized event to it
+        search.on('typeahead:selected',function(evt,data){
+            //var data = JSON.stringify(data);
+            //var location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
+            //window.location = location;
+            console.log(data); //selected datum object
+        });
         
         /***************
         * Offer listing code
@@ -156,7 +171,7 @@
             var hiddenCnt = $('#offerList').dataTable().fnGetHiddenNodes().length + a;
             if ($("#text_filter").val() !== '') { b = 1; }
             
-            console.log('filters: '+(filterCnt+b)+'; hidden: '+hiddenCnt);
+            //console.log('filters: '+(filterCnt+b)+'; hidden: '+hiddenCnt);
             $('#filterInfo span:first-child').text(filterCnt+b);
             $('#filterInfo span + span').text(hiddenCnt);
         }
@@ -226,7 +241,7 @@
                             if (filterCont[id].length == 0) { $(this).show(); }
                         }
                     });
-                    console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
+                    //console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
                     break;
                 case 'req':
                     var checked = $(this).is(":checked");
@@ -243,7 +258,7 @@
                             if (filterCont[id].length == 0) { $(this).show(); }
                         }
                     });
-                    console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
+                    //console.log("Filter: "+filter+"; Affected offers: "+filtered.length);
 
                     break;
                 case 'range':

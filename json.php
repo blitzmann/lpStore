@@ -21,6 +21,10 @@ if (isset($_GET['request'])) {
         case 'corps':
             echo (new Query_Corps($query))->json();
             break;
+        case 'system':
+            if (!$query || $query == '%') { exit(); }
+            echo (new Query_Systems($query))->json();
+            break;
         case 'store':
             // @todo: include corp json file
             break;
