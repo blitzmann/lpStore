@@ -1,3 +1,16 @@
+/*
+    @todo: Clean this up. 
+    
+    This file contains CSS fixed to Twitter Typeahead related to Bootstrap 3
+    It's a collection of things I've found on the interwebs, and have thrown it together.
+    
+    It barely works for Chrome, having been hacked at. Need to sit down and refine a lot 
+    of these things, as well as document. Right now it's not really being applied to the 
+    global search (which is fine as I really like it the way it is, not the way it was 
+    intended(input-lg) ) but it would be nice if a more comprehensive fix could be found.
+    
+*/
+
 .twitter-typeahead {
   width: 100%;
   position: relative;
@@ -64,49 +77,63 @@
   z-index: 1;
   border: 1px solid transparent;
 }
-.input-group .twitter-typeahead .tt-query {
+.twitter-typeahead .tt-query {
   z-index: 2;
 }
-.input-group .twitter-typeahead:first-child .tt-query,
-.input-group .twitter-typeahead:first-child .tt-hint {
+.twitter-typeahead:first-child .tt-query,
+.twitter-typeahead:first-child .tt-hint {
   border-radius: 4px 0 0 4px !important;
 }
-.input-group .twitter-typeahead:last-child .tt-query,
-.input-group .twitter-typeahead:last-child .tt-hint {
+.twitter-typeahead:last-child .tt-query,
+.twitter-typeahead:last-child .tt-hint {
   border-radius: 0 4px 4px 0 !important;
 }
-.input-group .twitter-typeahead .tt-query,
-.input-group .twitter-typeahead .tt-hint {
+.twitter-typeahead:only-child .tt-query,
+.twitter-typeahead:only-child .tt-hint {
+  border-radius:4px !important;
+}
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.428571429;
 }
-.input-group.input-group-sm .twitter-typeahead:first-child .tt-query,
-.input-group.input-group-sm .twitter-typeahead:first-child .tt-hint {
+
+.input-sm .twitter-typeahead:first-child .tt-query,
+.input-sm .twitter-typeahead:first-child .tt-hint {
   border-radius: 3px 0 0 3px !important;
 }
-.input-group.input-group-sm .twitter-typeahead:last-child .tt-query,
-.input-group.input-group-sm .twitter-typeahead:last-child .tt-hint {
+.input-sm .twitter-typeahead:last-child .tt-query,
+.input-sm .twitter-typeahead:last-child .tt-hint {
   border-radius: 0 3px 3px 0 !important;
 }
-.input-group.input-group-sm .tt-query,
-.input-group.input-group-sm .tt-hint {
-  height: 30px;
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
+.input-sm .twitter-typeahead:only-child .tt-query,
+.input-sm .twitter-typeahead:only-child .tt-hint {
+  border-radius: 3px !important;
 }
-.input-group.input-group-lg .twitter-typeahead:first-child .tt-query,
-.input-group.input-group-lg .twitter-typeahead:first-child .tt-hint {
+.twitter-typeahead > .hint-small, .input-sm.tt-query {
+  height: 30px !important;
+  padding: 5px 10px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+.input-lg .twitter-typeahead:first-child .tt-query,
+.input-lg .twitter-typeahead:first-child .tt-hint {
   border-radius: 6px 0 0 6px !important;
 }
-.input-group.input-group-lg .twitter-typeahead:last-child .tt-query,
-.input-group.input-group-lg .twitter-typeahead:last-child .tt-hint {
+.input-lg .twitter-typeahead:last-child .tt-query,
+.input-lg .twitter-typeahead:last-child .tt-hint {
   border-radius: 0 6px 6px 0 !important;
 }
-.input-group.input-group-lg .tt-query,
-.input-group.input-group-lg .tt-hint {
+
+.input-lg .twitter-typeahead:only-child .tt-query,
+.input-lg .twitter-typeahead:only-child .tt-hint {
+  border-radius: 6px !important;
+}
+
+.twitter-typeahead .hint-large
+ {
   height: 45px;
   padding: 10px 16px;
   font-size: 18px;

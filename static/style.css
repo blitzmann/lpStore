@@ -31,6 +31,7 @@
     /* Toggleable fieldsets*/
     label.radio ~ fieldset, label.checkbox ~ fieldset{ margin-left: .5em; padding-left: 2.5em; border-left: 1px solid #e9ecee; margin-bottom: 0px; }
     
+    label.filtering {margin-top: 5px;}
     /* Without this, the group filter fielset leaves margin for some reason */
     #offerList { margin-top: 10px; }
     #pri_blk, #sec_blk { text-align: center; }

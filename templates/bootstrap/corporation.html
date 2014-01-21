@@ -9,12 +9,13 @@
               <li><a href='#stations' data-toggle="tab">Stations</a></li>
             </ul>
             <div class='tab-content'>
-                <div class='tab-pane active' id='store'>
-                    <label class='pull-right'>Search: <input id='text_filter' class='' type='text'></label>
-                    <label class='checkbox'>
+                <div class='tab-pane' id='store'>
+                    <div class='pull-right col-xs-3'><input id='text_filter' class='form-control input-sm' placeholder='Search Offers...' type='text'></div>
+                    <label class='checkbox filtering pull-left'>
                         <input type='checkbox' class='toggle' id='filterToggle' value='true' data-toggle='filtering' /> Filtering Options <small id='filterInfo'><span>0</span> Filters Active, Hiding <span>0</span> Offers.</small>
                     </label>
-                    <fieldset id='filtering'>
+                    <div class='clearfix'></div>
+                    <fieldset id='filtering' class='clearfix'>
                         <label class='checkbox'><input type='checkbox' class='filter' value='1' data-filter='req' /> Hide Offers with Required Items</label>
                         <label class='checkbox'><input type='checkbox' class='toggle' value='true' data-toggle='ranges' /> Set Ranges</label>
                         <fieldset id='ranges'>
@@ -61,8 +62,8 @@
                         </tbody>    
                     </table>
                 </div>
-                <div class='tab-pane' id='stations'>
-                    <label class='pull-right'>System: <input id='sys_search' class='' type='text'></label>
+                <div class='tab-pane active' id='stations'>
+                    <div class='pull-right col-xs-3'><input id='sys_search' class='input-sm' placeholder='Search for Systems...' type='text'></div>
                     <table class='table table-striped table-hover table-condensed' id='stationList'>
                         <tr><th>Station</th><th>Region</th><th>Security</th><th>Jumps</th></tr>
                         <?php foreach($this->lpStore->getStations() AS $station): ?>
@@ -90,15 +91,19 @@
         
         // hide the jump column on load
         $('#stationList th:last-child, #stationList td:last-child').hide();
-        
-        var search = $('#sys_search').typeahead([{
+       
+        var sysSearch = $('#sys_search').typeahead([{
             name: 'syssearch',
             remote: '<?= BASE_PATH ?>json/system/%QUERY.json',
             limit: 20
         }]);
         
+        // set the hint to have small text
+        $('.twitter-typeahead > .input-sm').siblings('input.tt-hint').addClass('hint-small');
+
+        
         // Attach initialized event to it
-        search.on('typeahead:selected',function(evt,data){
+        sysSearch.on('typeahead:selected',function(evt,data){
             //var data = JSON.stringify(data);
             //var location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
             //window.location = location;
