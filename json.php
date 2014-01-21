@@ -25,6 +25,11 @@ if (isset($_GET['request'])) {
             if (!$query || $query == '%') { exit(); }
             echo (new Query_Systems($query))->json();
             break;
+        case 'stations':
+            $e = explode(',', $query);
+            if (count($e) !== 2) { exit(); }
+            echo (new Query_CorpStations($e[0], $e[1]))->json();
+            break;
         case 'store':
             // @todo: include corp json file
             break;

@@ -10,16 +10,28 @@
             <p>Also, please remember that complete LP Store data is available with the <a href="https://forums.eveonline.com/default.aspx?g=posts&amp;m=2508255">LPDB release</a>.</p>        
             <p>Thanks, <br />§ Sable Blitzmann</p>
             <h3>APIs</h3>
+            <h4>External use</h4>
+            <p>These APIs have a purpose outside of the <span class='project'>lpStore</span> application, and are implemented for third-party use.</p>
             <dl>
                 <dt>Offers</dt>
                 <dd><tt>/json/offer/&lt;offerID&gt;.json</tt></dd>
                 <dd>Simply returns a JSON-encoded strong of the <tt>LpOffer</tt> class initialised with the offer ID. Variables are self-explanatory, however more information on variables is available at <tt>/lib/LpOffer.php</tt> on GitHub. Please note that, at this time, ISK/LP and all pricing data is based on The Forge region and sell orders for everything.</dd>
+            </dl>
+            <h4>Internal Use</h4>
+            <p>These APIs don't really have a use for third-party developers as they are easily and readily available in the EVE Static Database Lump or in the LP Database release. However, they are listed here in case anyone is interested in them, and technically can be used by anyone if needed</p>
+            <dl>
                 <dt>Corps</dt>
                 <dd><tt>/json/corps/&lt;* | varchar search&gt;.json</tt></dd>
-                <dd>Used by <span class='project'>lpStore</span> as the JSON source for corporation listing used by the Twitter Typeahead search. Can either be given a asterisk to return all corps, or narrowed with a character search. No understandable use for third party applications as data is available in LPDB<dd>
+                <dd>Used by <span class='project'>lpStore</span> as the JSON source for corporation listing used by the Twitter Typeahead search. Can either be given a asterisk to return all corps, or narrowed with a character search. Data is available in LPDB</dd>
                 <dt>Types</dt>
                 <dd><tt>/json/type/&lt;varchar search&gt;.json</tt></dd>
-                <dd>Used by <span class='project'>lpStore</span> as the JSON source for LP Offer item searches used by the Twitter Typeahead search. Must have a search term. No understandable use for third party applications as data is available in LPDB<dd>
+                <dd>Used by <span class='project'>lpStore</span> as the JSON source for LP Offer item searches used by the Twitter Typeahead search. Must have a search term. Data is available in LPDB</dd>
+                <dt>System</dt>
+                <dd><tt>/json/system/&lt;varchar search&gt;.json</tt></dd>
+                <dd>Used by <span class='project'>lpStore</span> as the JSON source for Solar System searches used by Twitter Typeahead. Must have a search term. Data is available in EVE Database Dump</dd>
+                <dt>Stations</dt>
+                <dd><tt>/json/stations/&lt;corpID&gt;,&lt;origin systemID&gt;.json</tt></dd>
+                <dd>Used by <span class='project'>lpStore</span> with the system search on the corporation stations page to get stations and also apply the jump distance via origin ID. Returns array of <tt>stationID=>jumps</tt>. Both <tt>corpID</tt> and <tt>origin ID</tt> are required.</dd>
             </dl>
         </div>
     </div><!-- /.container -->

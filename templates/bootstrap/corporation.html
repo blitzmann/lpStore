@@ -67,11 +67,11 @@
                     <table class='table table-striped table-hover table-condensed' id='stationList'>
                         <tr><th>Station</th><th>Region</th><th>Security</th><th>Jumps</th></tr>
                         <?php foreach($this->lpStore->getStations() AS $station): ?>
-                        <tr id='stationID'>
+                        <tr id='<?= $station['stationID'] ?>'>
                             <td><?= $station['stationName'] ?></td>
                             <td><?= $station['regionName'] ?></td>
                             <td><?= number_format($station['security'],1) ?></td>
-                            <td class='jumps'></td>
+                            <td class='jumps'><?= $station['jumps'] ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
@@ -102,12 +102,15 @@
         $('.twitter-typeahead > .input-sm').siblings('input.tt-hint').addClass('hint-small');
 
         
-        // Attach initialized event to it
+        // When selected, get JSON data and apply it to every row.
         sysSearch.on('typeahead:selected',function(evt,data){
-            //var data = JSON.stringify(data);
-            //var location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
-            //window.location = location;
-            console.log(data); //selected datum object
+            $.getJSON('<?= BASE_PATH ?>json/stations/<?=$this->corpID?>,'+data.id+'.json', function( staData ) {
+                $.each( staData, function( key, val ) { $('#'+key+' td.jumps').text(val); });
+            }).done(function() {
+                $('#stationList th:last-child, #stationList td:last-child').show();
+                // @todo: Show system as currently active in a span somewhere
+                // @todo: Enable datatables on table, sort by jumps?
+            });
         });
         
         /***************
