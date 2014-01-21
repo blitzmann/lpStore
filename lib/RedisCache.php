@@ -45,7 +45,7 @@ class RedisCache {
             @todo: every so often, this error pops up.
             Look into why. If no fix available, display error page
         */
-        $this->_redis->pconnect('localhost', 6379) or die ("Could not connect to Redis server");
+        $this->_redis->connect('localhost', 6379) or die ("Could not connect to Redis server");
         $this->_redis->select(Config::emdrRedis);
         
         /*
