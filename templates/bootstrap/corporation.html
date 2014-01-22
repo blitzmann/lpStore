@@ -65,7 +65,7 @@
                 <div class='tab-pane' id='stations'>
                     <div class='pull-right col-xs-3'><input id='sys_search' class='input-sm' placeholder='Search Systems to Apply Jumps' type='text'></div>
                     <div id='sysSearchText' class='hide pull-left col-xs-6'>Origin System: <small></small></div>
-                    
+                    <div class='clearfix'></div>
                     <table class='table table-striped table-hover table-condensed' id='stationList'>
                         <thead><tr><th>Station</th><th>Region</th><th>Security</th><th>Jumps</th></tr></thead>
                         <tbody>
@@ -96,6 +96,7 @@
             $('#stationList').dataTable({
                 "bDestroy": true, // destroy previous init
                 "bPaginate": false,
+                "bAutoWidth": false,
                 "sDom": 't'
             });
         }
@@ -158,7 +159,7 @@
     
         $('#offerList').dataTable({
             "bPaginate": false,
-            //"bSort": false,
+            "bAutoWidth": false,
             "sDom": 't',
             "aoColumnDefs": [
                 { 'bSortable': false, 'aTargets': [ 0 ] }
