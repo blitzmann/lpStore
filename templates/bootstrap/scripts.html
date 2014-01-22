@@ -3,8 +3,8 @@
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
-       //$('#searchCont').hide();
-        
+        $('#searchCont').hide();
+
         $("a#srchLnk").click(function(event) {
             event.preventDefault();
             var li = $(this).parent();
@@ -16,14 +16,14 @@
                 $("#searchCont").slideUp('slow');
             }
         });
-        
+
         var search = $('#search').typeahead([{
             name: 'search',
             remote: '<?= BASE_PATH ?>json/type/%QUERY.json',
             prefetch: '<?= BASE_PATH ?>json/corps/*.json',
             limit: 20
         }]);
-        
+
         // Attach initialized event to it
         search.on('typeahead:selected',function(evt,data){
             //var data = JSON.stringify(data);
