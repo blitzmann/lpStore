@@ -15,3 +15,9 @@
         </span>
     </div>
 </div>
+<div class='clearfix'></div>
+<?php if ($this->emdrDown): ?>
+<div class="alert alert-danger col-lg-6 col-lg-offset-3">
+    <strong>Warning:</strong> EMDR consumer may be down or unresponsive for <?= $_SERVER['HTTP_HOST']; ?>. As such, prices may be outdated. This issue has been logged and the EMDR consumer script will be back up and running soon.
+</div>
+<?php endif; ?>

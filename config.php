@@ -20,8 +20,13 @@ $tpl->addPath('template', 'templates/bootstrap');
 $tpl->addPath('resource', 'lib');
 
 $tpl->siteTime = new Timer();
-
+$tpl->emdrDown = false;
 # https://forums.eveonline.com/default.aspx?g=posts&m=2508255
 
 $regions = json_decode(file_get_contents(dirname(__FILE__).'/emdr/regions.json'),true);
 Emdr::setRegion(Prefs::get('region'));
+
+# If price of Tritanium is more than 12 hours old, then something has happened with EMDR consumer
+# Set template variable to display warning to user when this happens
+if (time() - (new Price(Emdr::get(34)))->generatedAt > 60*60*12) {
+    $tpl->emdrDown = true; }
