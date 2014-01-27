@@ -45,9 +45,13 @@ class RedisCache {
             @todo: every so often, this error pops up.
             Look into why. If no fix available, display error page
         */
-        $this->_redis->connect('localhost', 6379) or die ("Could not connect to Redis server");
-        $this->_redis->select(Config::emdrRedis);
-        
+        try {
+            $this->_redis->connect('localhost', 6379, 0);
+            $this->_redis->select(Config::emdrRedis);
+        } catch (RedisException $e) {
+            echo 'Opps... Something happened. Please try refreshing page.<br /><br /> Error message: ',  $e->getMessage();
+            die();
+        }
         /*
         if (substr($redisServer, 0, 7) == "unix://") {
             $this->_redis->pconnect(substr($redisServer, 7), 0.0, null, 0);
