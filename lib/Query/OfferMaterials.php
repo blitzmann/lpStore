@@ -112,16 +112,20 @@ class Query_OfferMaterials {
             AND g.categoryID != 16
             AND t.groupID = g.groupID',
             array(':productID' => $this->productID));
-
+        
+        $mats = array();
         foreach($result = array_merge($result1, $result2) AS &$item) {
             # this sometimes happens for some reason
+
             if ($item['runQty'] <= 0) { 
               $item = null; continue;}
 
-            $item['totQty'] = $item['runQty'] * $this->qty;
+            if (!isset($mats[$item['typeID']])) { $mats[$item['typeID']] = $item; $mats[$item['typeID']]['totQty'] = 0; }
+            
+            $mats[$item['typeID']]['totQty'] += $item['runQty'] * $this->qty;
         }
 
-        return array_filter($result);
+        return array_filter($mats);
     }
 
     /*
