@@ -24,8 +24,8 @@ abstract class Config {
         '06D6D6');
 
     static public function getDbDsn() {
-        return parse_ini_file('/home/http/private/db-eve-latest.ini', true); }
+        return parse_ini_file(self::dsnDetails, true); }
         
     static public function getDbAuth() {
-        return parse_ini_file('/home/http/private/auth-eve.ini'); }
+        return parse_ini_file(self::authDetails); }
 }
