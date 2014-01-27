@@ -1,4 +1,4 @@
-<div class="col-lg-8 col-md-offset-2 text-center">
+<div class='col-lg-8 col-md-offset-2 text-center'>
     <ul class='nav nav-pills center-pills'>
         <li><a href='<?= BASE_PATH ?>'>Home</a></li>
         <li><a href='<?= BASE_PATH ?>about/'>About</a></li>
@@ -17,7 +17,12 @@
 </div>
 <div class='clearfix'></div>
 <?php if ($this->emdrDown): ?>
-<div class="alert alert-danger col-lg-6 col-lg-offset-3">
+<div class='alert alert-danger col-lg-6 col-lg-offset-3'>
     <strong>Warning:</strong> EMDR consumer may be down or unresponsive for <?= $_SERVER['HTTP_HOST']; ?>. As such, prices may be outdated. This issue has been logged and the EMDR consumer script will be back up and running soon.
 </div>
 <?php endif; ?>
+
+<div class='alert alert-info col-lg-6 col-lg-offset-3 alert-dismissable' id='siteNotice'>
+    <button type='button' class='close' id='99eb76e2' data-dismiss='alert' aria-hidden='true' title='Close Permanently'>&times;</button>
+    <strong>Notice:</strong> <?= $_SERVER['HTTP_HOST']; ?> is experiencing router issues; it is likely that a new router is needed. This is currently being investigated. In the meantime, outages may occur.
+</div>

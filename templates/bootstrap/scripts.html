@@ -1,8 +1,10 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
     $(document).ready(function() { 
+
         $('#searchCont').hide();
 
         $("a#srchLnk").click(function(event) {
@@ -30,6 +32,18 @@
             var location = '<?= BASE_PATH ?>'+data.type+'/'+data.id+'/';
             window.location = location;
             //console.log(data.id); //selected datum object
+        });
+        
+        // Site Notice logic
+        $('#siteNotice').hide();
+        var cookID = $('#siteNotice button').attr('id');
+        var seen = $.cookie('siteNotice');
+        
+        if(seen == null || seen != cookID) {
+            $('#siteNotice').show(); }
+        
+        $('#siteNotice button').click(function(event) {
+           $.cookie('siteNotice', cookID, { path: '<?= BASE_PATH ?>' });
         });
     }); 
     </script>
