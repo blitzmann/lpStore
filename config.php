@@ -30,3 +30,5 @@ Emdr::setRegion(Prefs::get('region'));
 # Set template variable to display warning to user when this happens
 if (time() - (new Price(Emdr::get(34)))->generatedAt > 60*60*12) {
     $tpl->emdrDown = true; }
+
+$tpl->webkitFix = (preg_match("#.+WebKit/(\H+)+\s.+?#s", $_SERVER['HTTP_USER_AGENT'], $matches) && $matches[1] < 535 ? true : false);
