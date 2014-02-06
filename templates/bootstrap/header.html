@@ -13,21 +13,21 @@
 
     <?php if ($this->webkitFix): ?>
     <style type='text/css'>
-        .nav-justified {
-            border-bottom: 1px solid rgb(221, 221, 221) !important;
-        }
+        .nav-justified { border-bottom: 1px solid rgb(221, 221, 221) !important; }
         .nav-justified > li {
             float: left !important;
             display: block !important;
             width: auto !important;
         }
+        .tt-hint { z-index: -1 !important; }
+        
+        #searchCont .input-group { display: block; }
+        #searchCont .input-group-btn { display: none; }
+        #searchCont .twitter-typeahead {width: 100% !important; }
     </style>
     <?php endif; ?>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
       <script src="../../assets/js/html5shiv.js"></script>
       <script src="../../assets/js/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
     <h1><a href='<?= BASE_PATH ?>'>lpStore</a></h1>
