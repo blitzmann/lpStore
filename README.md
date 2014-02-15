@@ -9,8 +9,10 @@ Requirements
 * PHP (tested on 5.5, unsure about minimum version)
 * MariaDB with [OQGRAPH computational engine](http://openquery.com.au/node/23) (MariaDB has this bundled from 10.0.7 onward)
 * [emdr-py] (https://github.com/blitzmann/emdr-py)
-    * Redis
-    * Python 2.7
+* Redis
+* Python 2.7
+* Savant3 (http://phpsavant.com/download/)
+* PHP-Redis (https://github.com/nicolasff/phpredis)
     
 Features
 ============
