@@ -8,9 +8,16 @@ require_once 'Savant3.php';
 define('ABS_PATH', str_replace('\\', '/', dirname(__FILE__)) . '/');
 define('BASE_PATH', '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/');
 
-function __autoload($class) {
-   require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
-}
+# to be deprecated - currently strongly discouraged in official documentation -gg
+#function __autoload($class) {
+#   require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
+#}
+
+# new style using spl_autoload_register:
+spl_autoload_register(function ($class) {
+    require_once('lib/' . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php');
+});
+
 
 Emdr::$regions = json_decode(file_get_contents(ABS_PATH.'/emdr/regions.json'),true);
 Prefs::getInstance();
