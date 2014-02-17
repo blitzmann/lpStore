@@ -1,13 +1,15 @@
 <?php
 
 abstract class Config {
- 
+
     const emdrRedis    = 0; # database for emdr-py
     const lpStoreRedis = 1; # database for lpStore
+    const emdrVersion  = 1;
+
+    # config files. Samples included in inc/ directory
     const dsnDetails   = '/home/http/private/db-eve-latest.ini';
     const authDetails  = '/home/http/private/auth-eve.ini';
-    const emdrVersion  = 1;
-    
+
     static $themes = array('clean');
 
     static $secColors = array(
@@ -25,7 +27,7 @@ abstract class Config {
 
     static public function getDbDsn() {
         return parse_ini_file(self::dsnDetails, true); }
-        
+
     static public function getDbAuth() {
         return parse_ini_file(self::authDetails); }
 }
