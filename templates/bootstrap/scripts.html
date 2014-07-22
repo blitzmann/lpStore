@@ -3,7 +3,7 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
     <script>
-    $(document).ready(function() { 
+    $(document).ready(function() {
 
         $('#searchCont').hide();
 
@@ -11,12 +11,16 @@
             event.preventDefault();
             var li = $(this).parent();
             li.toggleClass('enabled');
-            
+
             if (li.hasClass('enabled')) {
-                $("#searchCont").slideDown('slow'); }
-            else {
-                $("#searchCont").slideUp('slow');
+                $("#searchCont").slideDown('fast', function() {
+                    $("#search").focus()
+                });
             }
+            else {
+                $("#searchCont").slideUp('fast');
+            }
+
         });
 
         var search = $('#search').typeahead([{
@@ -33,17 +37,17 @@
             window.location = location;
             //console.log(data.id); //selected datum object
         });
-        
+
         // Site Notice logic
         $('#siteNotice').hide();
         var cookID = $('#siteNotice button').attr('id');
         var seen = $.cookie('siteNotice');
-        
+
         if(seen == null || seen != cookID) {
             $('#siteNotice').show(); }
-        
+
         $('#siteNotice button').click(function(event) {
            $.cookie('siteNotice', cookID, { path: '<?= BASE_PATH ?>' });
         });
-    }); 
+    });
     </script>
