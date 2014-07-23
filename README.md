@@ -9,7 +9,7 @@ lpStore is currently hosted here: http://blitzmann.it.cx/lpStore
 Requirements
 ---
 * PHP 5.4 (may work on earlier versions, but `short_open_tag` must be enabled for themes to work)
-* [emdr-py] (https://github.com/blitzmann/emdr-py) (or any other script which does that same thing)
+* [emdr-py] (https://github.com/blitzmann/emdr-py) (or any other EMDR consumer that stores data in Redis)
 * [Redis](http://redis.io/) - 2 databases
     * A database to share with emdr. The application **will not** work without this.
     * Other database is optional and specifically for lpStore caching. The application **will** work without this.
