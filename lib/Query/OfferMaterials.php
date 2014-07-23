@@ -8,9 +8,11 @@ class Query_OfferMaterials {
 
         # Redis DB specifically for BPC Material caching.
         # @todo: Set this as a singleton class?
-        $this->bpcCache = new Redis();
-        $this->bpcCache->connect('localhost', 6379);
-        $this->bpcCache->select(Config::lpStoreRedis);
+        if (Config::lpStoreRedis !== False) {
+            $this->bpcCache = new Redis();
+            $this->bpcCache->connect('localhost', 6379);
+            $this->bpcCache->select(Config::lpStoreRedis);
+        }
     }
 
     /*
@@ -23,13 +25,17 @@ class Query_OfferMaterials {
         @return Returns array of rows
     */
     function execute() {
-        $key   = get_class().':'.$this->typeID.','.$this->qty;
-        $cache = json_decode($this->bpcCache->get($key), true);
+        if (Config::lpStoreRedis) {
+            $key   = get_class().':'.$this->typeID.','.$this->qty;
+            $cache = json_decode($this->bpcCache->get($key), true);
 
-        if (empty($cache) || empty($cache['manDetails']) || $cache['version'] != Db::$dbName) {
-            $cache = array('version'=>Db::$dbName, 'manDetails'=>$this->performQuery());
-            $this->bpcCache->set($key, json_encode($cache));
+            if (empty($cache) || empty($cache['manDetails']) || $cache['version'] != Db::$dbName) {
+                $cache = array('version'=>Db::$dbName, 'manDetails'=>$this->performQuery());
+                $this->bpcCache->set($key, json_encode($cache));
+            }
         }
+        else {
+            $cache = array('version'=>Db::$dbName, 'manDetails'=>$this->performQuery()); }
 
         # set price info for manufacturing materials
         foreach ($cache['manDetails'] AS &$manItem) {

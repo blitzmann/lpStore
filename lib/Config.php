@@ -3,11 +3,11 @@
 abstract class Config {
 
     const emdrRedis    = 0; # database for emdr-py
-    const lpStoreRedis = 1; # database for lpStore
+    const lpStoreRedis = 6; # database for lpStore (int or False)
     const emdrVersion  = 1;
 
     # config files. Samples included in inc/ directory
-    const dsnDetails   = '/home/http/private/db-eve-latest.ini';
+    const dsnDetails   = '/home/http/private/eve-dev.ini';
     const authDetails  = '/home/http/private/auth-eve.ini';
 
     static $themes = array('clean');
