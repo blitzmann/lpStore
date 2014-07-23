@@ -13,12 +13,12 @@ Requirements
 * [Redis](http://redis.io/) - 2 databases
     * A database to share with emdr. The application **will not** work without this.
     * Other database is optional and specifically for lpStore caching. The application **will** work without this.
-* [phpredis](https://github.com/nicolasff/phpredis)
+* [phpredis](https://github.com/nicolasff/phpredis) PHP extension
 * MariaDB with [OQGRAPH computational engine](http://openquery.com.au/node/23) (MariaDB has this bundled from 10.0.7-beta, or before 5.5 release). OQGRAPH is not neccessary for basic functionality of application, however a few features will not work without it (filtering offers by group and solar system pathfinding). Load database with:
     * [EVE Static Database Dump](https://www.fuzzwork.co.uk/dump/mysql-latest.tar.bz2)
     * [LP Database](https://forums.eveonline.com/default.aspx?g=posts&m=2508255)
     * [eve-oqgraph](https://github.com/blitzmann/eve_oqgraph/)
-* Savant3 (http://phpsavant.com/download/)
+* [Savant3] (http://phpsavant.com/download/)
     
 Features
 ---
