@@ -52,7 +52,7 @@ class Emdr {
         $emdr = Emdr::getInstance();
         $string = 'emdr-'.Config::emdrVersion.'-'.self::$regionID.'-'.$typeID;
         
-        $data = $emdr->get($string);
+        $data = '{"orders": {"generatedAt": 1, "sell":[50000,13], "buy": [30000, 43]}, "history": []}'; //$emdr->get($string);
         self::$cache[self::$regionID][$typeID] = $data;
         return $data;
     }
