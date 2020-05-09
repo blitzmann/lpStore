@@ -5,13 +5,13 @@
         <div class='col-lg-8 col-md-offset-2'>
             <div id='pri_blk'>
                 <?php foreach ($this->primary as $f):  ?>
-                    <a href='<?= BASE_PATH ?>faction/<?= $f['factionID'] ?>/'><img src='http://image.eveonline.com/Alliance/<?= $f['factionID'] ?>_128.png' alt='Faction Icon' /></a>
+                    <a href='<?= BASE_PATH ?>faction/<?= $f['factionID'] ?>/'><img src='http://image.eveonline.com/Corporation/<?= $f['factionID'] ?>_128.png' alt='Faction Icon' /></a>
                 <?php endforeach; ?>
             </div>
             <hr />
             <div id='sec_blk'>
                 <?php foreach ($this->secondary as $f):  ?>
-                    <a href='<?= BASE_PATH ?>faction/<?= $f['factionID'] ?>/'><img src="http://image.eveonline.com/Alliance/<?= $f['factionID'] ?>_128.png" width='96' height='96' alt='Faction Icon' /></a>
+                    <a href='<?= BASE_PATH ?>faction/<?= $f['factionID'] ?>/'><img src="http://image.eveonline.com/Corporation/<?= $f['factionID'] ?>_128.png" width='96' height='96' alt='Faction Icon' /></a>
                 <?php endforeach; ?>
             </div>
         </div>
