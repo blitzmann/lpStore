@@ -1,6 +1,6 @@
 <?php
 // This file handles requests for JSON data
-# @todo: if query is required, don't exit. Pass exception / display error 
+# @todo: if query is required, don't exit. Pass exception / display error
 require_once "config.php";
 
 if (isset($_GET['request'])) {
@@ -36,7 +36,7 @@ if (isset($_GET['request'])) {
         default:
             break;
     }
-    
+
     exit();
 }
 

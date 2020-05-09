@@ -6,7 +6,7 @@ require_once 'Savant3.php';
 # taken from http://stackoverflow.com/a/12583387/788054
 # TBS cannot use DEFINE(), so these are variables
 define('ABS_PATH', str_replace('\\', '/', dirname(__FILE__)) . '/');
-define('BASE_PATH', '/'.substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/');
+define('BASE_PATH',str_replace(DIRECTORY_SEPARATOR, "/", substr(dirname(__FILE__),strlen($_SERVER['DOCUMENT_ROOT'])).'/'));
 
 # to be deprecated - currently strongly discouraged in official documentation -gg
 #function __autoload($class) {
@@ -35,6 +35,7 @@ Emdr::setRegion(Prefs::get('region'));
 
 # If price of Tritanium is more than 12 hours old, then something has happened with EMDR consumer
 # Set template variable to display warning to user when this happens
+
 if (time() - (new Price(Emdr::get(34)))->generatedAt > 60*60*12) {
     $tpl->emdrDown = true; }
 
